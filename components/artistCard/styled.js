@@ -1,17 +1,17 @@
 import styled from 'styled-components'
 
-const Container = styled.div`
-    background-color: rgb(10,10,10);
-    width:400px;
-    padding:30px;
-    border-radius:10px;
-    margin:10px;
+const ContainerArtist = styled.div`
+    position:relative;
 `
 
 const ArtistImage = styled.img`
-    max-height:200px;
-    max-width: 200px;
-    border-radius:200px;
+   // max-height: ${props => props.imageSizeLarge ? "430px" : "200px"};
+   // max-width: ${props => props.imageSizeLarge ? "430px" : "200px"};
+   // border-radius:${props => props.imageSizeLarge ? "430px" : "200px"};
+    max-height: 200px;
+   max-width: 200px;
+   z-index:1;
+   //border-radius:200px;
 
     :hover{
         opacity:0.6;
@@ -19,11 +19,12 @@ const ArtistImage = styled.img`
 `
 
 const ArtistPosition = styled.p`
-    font-size:32px;
+    font-size:30px;
     color: #fff;
     margin:0;
     text-align: center;
 
+/*
     ::after{
         content: "";
         display: block;
@@ -33,12 +34,13 @@ const ArtistPosition = styled.p`
         background: white;
         border-radius: 5px;
     }
+    */
 `
 
 const ArtistName = styled.p`
     font-size:16px;
     color: #47ffbb;
-    margin:10px;
+    margin:0px;
     text-align: center;
     cursor: pointer;
 
@@ -53,4 +55,4 @@ const TimePlayed = styled.p`
     margin:0;
 `
 
-export { Container, ArtistName, TimePlayed, ArtistImage, ArtistPosition}
+export { ContainerArtist, ArtistName, TimePlayed, ArtistImage, ArtistPosition}

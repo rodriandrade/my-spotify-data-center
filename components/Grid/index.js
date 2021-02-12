@@ -6,6 +6,7 @@ const Grid = ({children, ...props}) => {
         <GridContainer
             colGap={props.colGap}
             rowGap={props.rowGap}
+            columns={props.columns}
         >
             {children}
         </GridContainer>

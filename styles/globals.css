@@ -5,25 +5,59 @@ body {
   padding: 0;
   margin: 0;
   font-family: 'Poppins', sans-serif; 
-  background-color: rgb(10,10,10);
+  background-color: rgba(10,10,10, 0.5);
+  color:white;
+  background-image:url(/background.png);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-blend-mode: multiply;
+  scroll-behavior: smooth;
 }
 
 button{
     padding:10px 50px;
     border: none;
-    color: black;
+    color: #47ffbb;
     font-family: Poppins;
     font-size: 16px;
     font-weight: bold;
-    background-color: #47ffbb;
+    background-color: rgb(10,10,10);
     border-radius:5px;
-    margin:10px;
+    margin:0px;
     cursor: pointer;
+    border-bottom:1px solid #47ffbb;
+    width:250px;
 }
 
 a {
   color: inherit;
   text-decoration: none;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+text{
+  font-size: 16px !important;
+  fill: #fff !important;
+  font-family: Poppins !important;
 }
 
 /*

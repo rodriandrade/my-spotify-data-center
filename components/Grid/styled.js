@@ -2,12 +2,13 @@ import styled from 'styled-components'
 
 const GridContainer = styled.div`
     display: grid;
-    grid-template-columns:repeat(10, 1fr);
-    background-color: rgb(10,10,10);
+    //grid-template-columns:repeat(12, 1fr);
+    grid-template-columns: ${(props) => (props.columns ? "repeat(10, 1fr)" : "repeat(12, 1fr)")};
+    //background-color: rgb(10,10,10);
     grid-column-gap: ${props => props.colGap || 30}px;
     grid-row-gap: ${props => props.rowGap || 40}px;
-    width:1200px;
-    justify-items: center;
+    width:100%;
+    //justify-items: center;
 `
 
 const ColContainer = styled.div`

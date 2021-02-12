@@ -64,7 +64,6 @@ const TrackName = styled.p`
     margin:10px;
     text-align: center;
     cursor: pointer;
-    z-index:4;
 
     :hover{
         text-decoration: underline 3px solid;
@@ -76,7 +75,6 @@ const ArtistName = styled.p`
     color: #fff;
     margin:0;
     text-align: center;
-    z-index:4;
 `
 
 export { Container, TrackName, ArtistName, TrackImage, TrackPosition, PlayOnSpotify, ImageContainer}
