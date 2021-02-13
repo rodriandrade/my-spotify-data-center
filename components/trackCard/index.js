@@ -13,28 +13,45 @@ const TrackCard = props =>{
     
     const position = props.index + 1;
 
+    const getNewToken = async () =>{
+        const responseRefreshToken = await axios.get(`https://my-spotify-data-center-server.vercel.app/refresh_token`, {
+            params: {
+              'refresh_token': props.refreshToken
+            }
+          });
+        console.log(responseRefreshToken.data.access_token);
+        props.setToken(responseRefreshToken.data.access_token)
+    }
+
     const openModal = () =>{
         setModalIsOpen(!modalIsOpen)
     }
 
     useEffect(() => {
         const fetchDevices = async () =>{
-            const responseUserDevicesCheck = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
-              headers: {
-              'Authorization': 'Bearer ' + props.token
-              }
-            });
-            const devicesCheck = responseUserDevicesCheck.data.devices;
-            if(devicesCheck.length == 0){
-                setActiveDevices(false)
-            } else{
-                setActiveDevices(true)
+            try{
+                const responseUserDevicesCheck = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
+                headers: {
+                'Authorization': 'Bearer ' + props.token
+                }
+                });
+                const devicesCheck = responseUserDevicesCheck.data.devices;
+                if(devicesCheck.length == 0){
+                    setActiveDevices(false)
+                } else{
+                    setActiveDevices(true)
+                }
+            } catch(error){
+                if (error.response.status === 401) {
+                    getNewToken();
+                }
             }
         }
         fetchDevices();
     }, [])
 
     const playTrack = async () =>{
+        try{
         const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
                 headers: {
                 'Authorization': 'Bearer ' + props.token
@@ -76,9 +93,15 @@ const TrackCard = props =>{
             }
             */
         }
+        } catch(error){
+            if (error.response.status === 401) {
+                getNewToken();
+            }
+        }
     }
 
     const checkPlayTrack = (responseUserDevices) =>{
+        try {
         const devices = responseUserDevices.data.devices;
         if(devices.length == 0){
             setActiveDevices(false);
@@ -102,6 +125,11 @@ const TrackCard = props =>{
             });
             } else{
                 console.log("No hay devices activos")
+            }
+        }
+        } catch(error){
+            if (error.response.status === 401) {
+                getNewToken();
             }
         }
     }
@@ -130,7 +158,7 @@ const TrackCard = props =>{
                     </a>
                 </ImageContainer>
                 {!!position && <TrackPosition>{position}</TrackPosition>}
-                <Link href={{pathname: `/track/${id}`, query: { token: props.token, id: id }, }}>
+                <Link href={{pathname: `/track/${id}`, query: { token: props.token, id: id, refreshToken: props.refreshToken }, }}>
                     <TrackName>{name}</TrackName>
                 </Link>
                 <ArtistName>{artistsNames.join(", ")}</ArtistName>

@@ -12,6 +12,7 @@ import NavMenu from '../../components/NavMenu'
 export default function Track() {
     const router = useRouter()
     const token = router.query.token;
+    const refresh_token = router.query.refreshToken;
     const id = router.query.id;
 
     const [track, setTrack] = useState([]);
@@ -22,6 +23,18 @@ export default function Track() {
 
     const [save, setSave] = useState()
 
+    const [newToken, setNewToken] = useState(token);
+
+    const getNewToken = async () =>{
+        const responseRefreshToken = await axios.get(`https://my-spotify-data-center-server.vercel.app/refresh_token`, {
+            params: {
+              'refresh_token': refresh_token
+            }
+          });
+        console.log(responseRefreshToken.data.access_token);
+        setNewToken(responseRefreshToken.data.access_token)
+      }
+
     console.log(id);
 
     useEffect(() => {
@@ -31,21 +44,21 @@ export default function Track() {
             try {
                 const responseTrack = await axios.get(`https://api.spotify.com/v1/tracks/${id}`, {
                     headers: {
-                    'Authorization': 'Bearer ' + token
+                    'Authorization': 'Bearer ' + newToken
                     }
                 });
                 
                 
                 const responseAudioFeatures = await axios.get(`https://api.spotify.com/v1/audio-features/${id}`, {
                     headers: {
-                    'Authorization': 'Bearer ' + token
+                    'Authorization': 'Bearer ' + newToken
                     }
                 });
                 
 
                 const responseSavedTrack = await axios.get(`https://api.spotify.com/v1/me/tracks/contains?ids=${id}`, {
                     headers: {
-                    'Authorization': 'Bearer ' + token
+                    'Authorization': 'Bearer ' + newToken
                     }
                 });
 
@@ -66,7 +79,7 @@ export default function Track() {
 
                 const responseRecommendations = await axios.get(`https://api.spotify.com/v1/recommendations?market=US&seed_artists=${artist}&seed_tracks=${id}&min_energy=0.4&min_popularity=50`, {
                     headers: {
-                    'Authorization': 'Bearer ' + token
+                    'Authorization': 'Bearer ' + newToken
                     }
                 });
 
@@ -81,25 +94,25 @@ export default function Track() {
         
         fetchData()
         
-    }, [token, newRec, id])
+    }, [newToken, newRec, id])
 
     const handleSave = async () => {
         const base_url = `https://api.spotify.com/v1/me/tracks?ids=${id}`
           axios({
             method: save === "true" ? 'delete' : 'put',
             url: base_url,
-            headers: { 'Authorization': 'Bearer ' + token }
+            headers: { 'Authorization': 'Bearer ' + newToken }
           })
         setSave(save === "true" ? 'false' : 'true')
     }
 
     const createPlaylistWithRecommendations = async () => {
-        if(token){
+        if(newToken){
 
           try {
               const responseUserProfile = await axios.get(`https://api.spotify.com/v1/me`, {
                   headers: {
-                  'Authorization': 'Bearer ' + token
+                  'Authorization': 'Bearer ' + newToken
                   }
               });
               console.log(responseUserProfile)
@@ -113,7 +126,7 @@ export default function Track() {
                   description: 'New playlist description',
                   public: false
                 },
-                headers: { 'Authorization': 'Bearer ' + token }
+                headers: { 'Authorization': 'Bearer ' + newToken }
               })
               .then(function (response) {
                 const tracksURI = [];
@@ -126,7 +139,7 @@ export default function Track() {
                   method: 'post',
                   url: base_url_playlist,
                   data: tracksURI,
-                  headers: { 'Authorization': 'Bearer ' + token }
+                  headers: { 'Authorization': 'Bearer ' + newToken }
                 })
                 .then(function (response) {
                   //console.log(response);
@@ -170,7 +183,7 @@ export default function Track() {
                 <button onClick={() => setNewRec(!newRec)}>Refresh recommendations</button>
                 <button onClick={createPlaylistWithRecommendations}>Create playlist</button>
                 <Grid colGap={30} rowGap={40} columns>
-                    {recommendations.map((track) => (<TrackCard key={track._id} data={track} token={token} gridSize={2}/>))}
+                    {recommendations.map((track) => (<TrackCard key={track._id} data={track} token={newToken} gridSize={2}/>))}
                 </Grid>
             </Inner>
         </div>

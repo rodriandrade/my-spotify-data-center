@@ -12,6 +12,7 @@ import NavMenu from '../../components/NavMenu'
 export default function Artist() {
     const router = useRouter()
     const token = router.query.token;
+    const refresh_token = router.query.refreshToken;
     const id = router.query.id;
 
     // State relacionados al artista
@@ -33,14 +34,26 @@ export default function Artist() {
     // State relacionados a las canciones del historial de escucha del usuario
     const [tracksRecentlyPlayed, setTracksRecentlyPlayed] = useState([]);
 
+    const [newToken, setNewToken] = useState(token);
+
+    const getNewToken = async () =>{
+        const responseRefreshToken = await axios.get(`https://my-spotify-data-center-server.vercel.app/refresh_token`, {
+            params: {
+              'refresh_token': refresh_token
+            }
+          });
+        console.log(responseRefreshToken.data.access_token);
+        setNewToken(responseRefreshToken.data.access_token)
+      }
+
     useEffect(() => {
         const fetchData = async () => {
-            if(token){
+            if(newToken){
                 try {
                     // Traer artista
                     const responseArtist = await axios.get(`https://api.spotify.com/v1/artists/${id}`, {
                         headers: {
-                        'Authorization': 'Bearer ' + token
+                        'Authorization': 'Bearer ' + newToken
                         }
                     });
                     setArtist(responseArtist.data);
@@ -51,7 +64,7 @@ export default function Artist() {
                     // Traer los 10 temas más populares del artista
                     const responseArtistTopTracks = await axios.get(`https://api.spotify.com/v1/artists/${id}/top-tracks?market=ES`, {
                         headers: {
-                        'Authorization': 'Bearer ' + token
+                        'Authorization': 'Bearer ' + newToken
                         }
                     });
                     setArtistTopTracks(responseArtistTopTracks.data.tracks);
@@ -60,7 +73,7 @@ export default function Artist() {
                     // Traer artistas relacionados
                     const responseRelatedArtists = await axios.get(`https://api.spotify.com/v1/artists/${id}/related-artists`, {
                         headers: {
-                        'Authorization': 'Bearer ' + token
+                        'Authorization': 'Bearer ' + newToken
                         }
                     });
                     setRelatedArtists(responseRelatedArtists.data.artists);
@@ -68,7 +81,7 @@ export default function Artist() {
                     // Artistas seguidos por el usuario (para chequear si el usuario sigue al artista)
                     const responseUserFollowedArtists = await axios.get(`https://api.spotify.com/v1/me/following/contains?type=artist&ids=${id}`, {
                         headers: {
-                        'Authorization': 'Bearer ' + token
+                        'Authorization': 'Bearer ' + newToken
                         }
                     });
                     setFollow(responseUserFollowedArtists.data.toString());
@@ -78,7 +91,7 @@ export default function Artist() {
                     // Buscar si el artista aparece entre los 50 artistas de las últimas 4 semanas
                     const responseArtistFourWeeks = await axios.get(`https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=50`, {
                         headers: {
-                        'Authorization': 'Bearer ' + token
+                        'Authorization': 'Bearer ' + newToken
                         }
                     });
                     const artistPositionFourWeeks = responseArtistFourWeeks.data.items.findIndex((artist, index) =>{
@@ -93,7 +106,7 @@ export default function Artist() {
                     // Buscar si el artista aparece entre los 50 artistas de los últimos 6 meses
                     const responseArtistSixMonths = await axios.get(`https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=50`, {
                         headers: {
-                        'Authorization': 'Bearer ' + token
+                        'Authorization': 'Bearer ' + newToken
                         }
                     });
                     const artistPositionSixMonths = responseArtistSixMonths.data.items.findIndex((artist, index) =>{
@@ -108,7 +121,7 @@ export default function Artist() {
                     // Buscar si el artista aparece entre los 50 artistas de los artistas más escuchados "lifetime"
                     const responseArtistSeveralYears = await axios.get(`https://api.spotify.com/v1/me/top/artists?time_range=long_term&limit=50`, {
                         headers: {
-                        'Authorization': 'Bearer ' + token
+                        'Authorization': 'Bearer ' + newToken
                         }
                     });
                     const artistPositionSeveralYears = responseArtistSeveralYears.data.items.findIndex((artist, index) =>{
@@ -125,7 +138,7 @@ export default function Artist() {
                     // Four weeks
                     const responseTracksFourWeeks = await axios.get(`https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=50`, {
                         headers: {
-                        'Authorization': 'Bearer ' + token
+                        'Authorization': 'Bearer ' + newToken
                         }
                     });
                     const allTracksFourWeeks = responseTracksFourWeeks.data.items;
@@ -145,7 +158,7 @@ export default function Artist() {
                     // Six months
                     const responseTracksSixMonths = await axios.get(`https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=50`, {
                         headers: {
-                        'Authorization': 'Bearer ' + token
+                        'Authorization': 'Bearer ' + newToken
                         }
                     });
                     const allTracksSixMonths = responseTracksSixMonths.data.items;
@@ -165,7 +178,7 @@ export default function Artist() {
                     // Several years
                     const responseTracksSeveralYears = await axios.get(`https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=50`, {
                         headers: {
-                        'Authorization': 'Bearer ' + token
+                        'Authorization': 'Bearer ' + newToken
                         }
                     });
                     const allTracksSeveralYears = responseTracksSeveralYears.data.items;
@@ -186,7 +199,7 @@ export default function Artist() {
 
                     const responseRecentlyPlayed = await axios.get(`https://api.spotify.com/v1/me/player/recently-played?limit=50`, {
                         headers: {
-                        'Authorization': 'Bearer ' + token
+                        'Authorization': 'Bearer ' + newToken
                         }
                     });
                     let artistRepetitionRecentlyPlayed = [];
@@ -202,6 +215,9 @@ export default function Artist() {
 
                 } catch (error) {
                     console.error('este es mi error',error);
+                    if (error.response.status === 401) {
+                        getNewToken(); 
+                    }
                 }
             }
         }
@@ -209,14 +225,19 @@ export default function Artist() {
     }, [id])
 
     const handleFollow = async () => {
-
+        try{
         const base_url = `https://api.spotify.com/v1/me/following?type=artist&ids=${id}`
           axios({
             method: follow === "true" ? 'delete' : 'put',
             url: base_url,
-            headers: { 'Authorization': 'Bearer ' + token }
+            headers: { 'Authorization': 'Bearer ' + newToken }
           })
         setFollow(follow === "true" ? 'false' : 'true')
+        } catch(error){
+            if (error.response.status === 401) {
+                getNewToken(); 
+            }
+        }
     }
 
     return (
@@ -249,12 +270,12 @@ export default function Artist() {
 
                 <Title size="h4">Artist Top Tracks on Spotify</Title>
                 <Grid colGap={30} rowGap={40} columns>
-                    {artistTopTracks && artistTopTracks.map((track, index) => (<TrackCard key={track._id} data={track} token={token} index={index} gridSize={2}/>))}
+                    {artistTopTracks && artistTopTracks.map((track, index) => (<TrackCard key={track._id} data={track} token={newToken} index={index} gridSize={2}/>))}
                 </Grid>
 
                 <Title size="h4">Related Artists</Title>
                 <Grid colGap={30} rowGap={40} columns>
-                    {relatedArtists && relatedArtists.map((artist) => (<ArtistCard key={artist._id} data={artist} gridSize={2} token={token}/>))}
+                    {relatedArtists && relatedArtists.map((artist) => (<ArtistCard key={artist._id} data={artist} gridSize={2} token={newToken}/>))}
                 </Grid>
             </Inner>
         </div>

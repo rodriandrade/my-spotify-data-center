@@ -31,17 +31,10 @@ const Home = () =>{
         return hashParams;
         }
       }
-    
-      var params = getHashParams();
-      /*
-      if(params){
-        let access_token = params.access_token
-        return access_token
-      }
-      */
 
-      console.log(params);
-      console.log("Hola")
+      var params = getHashParams();
+
+      const [token, setToken] = useState('');
 
       const [selected, setSelected] = useState(false);
       const [timePeriod, setTimePeriod] = useState('past 4 weeks')
@@ -90,36 +83,43 @@ const Home = () =>{
       // Descriptions 
       const [recommendationsDescription, setRecommendationsDescription] = useState('We prepare a list of recommendations based in your most listened track in the past 4 weeks.')
 
+      const getNewToken = async () =>{
+        const responseRefreshToken = await axios.get(`https://my-spotify-data-center-server.vercel.app/refresh_token`, {
+            params: {
+              'refresh_token': params.refresh_token
+            }
+          });
+        console.log(responseRefreshToken.data.access_token);
+        setToken(responseRefreshToken.data.access_token)
+      }
+
+      useEffect(() => {
+        const getToken = () =>{
+          if(params.access_token){
+            const access_token = params.access_token;
+            console.log(access_token);
+            setToken(access_token)
+          }
+        }
+        getToken();
+      }, [])
+
       useEffect(() => {
         const fetchData = async () => {
   
-            if(params.access_token){
+            if(token){
               const access_token = params.access_token;
 
-            
               try {
 
-                
-                  axios({
-                    method: 'get',
-                    url: 'https://my-spotify-data-center-server.vercel.app/refresh_token',
-                    data: {
-                      'refresh_token': params.refresh_token
-                    },
-                  })
-                  .then(function (response) {
-                    let access_token_new = response.access_token;
-                    console.log(access_token_new)
-                  });
-                  
-
+                  console.log(params.refresh_token);
+                  console.log(token)
                   //////////////////////////////////////////////////////////////////////////////////////////////////////
                   
                   // PLAYLISTS DATA
-                  console.log("Ya estamos en el useEffect");
                   const responsePlaylists = await axios.get(`https://api.spotify.com/v1/me/playlists?limit=50`, {
                     headers: {
-                      'Authorization': 'Bearer ' + access_token
+                      'Authorization': 'Bearer ' + token
                     }
                   });
                   setPlaylists(responsePlaylists.data.items);
@@ -130,10 +130,9 @@ const Home = () =>{
 
                   const responsePlaying = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
                     headers: {
-                      'Authorization': 'Bearer ' + access_token
+                      'Authorization': 'Bearer ' + token
                     }
                   });
-                  console.log(responsePlaying.data);
                   setPlaying(responsePlaying.data.item);
                   
                   //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -142,7 +141,7 @@ const Home = () =>{
 
                   const responseArtists = await axios.get(`https://api.spotify.com/v1/me/top/artists?time_range=${artistsTerm}&limit=50`, {
                     headers: {
-                      'Authorization': 'Bearer ' + access_token
+                      'Authorization': 'Bearer ' + token
                     }
                   });
                   setArtists(responseArtists.data.items)
@@ -163,7 +162,7 @@ const Home = () =>{
 
                   const responseTracks = await axios.get(`https://api.spotify.com/v1/me/top/tracks?time_range=${tracksTerm}&limit=50`, {
                     headers: {
-                      'Authorization': 'Bearer ' + access_token
+                      'Authorization': 'Bearer ' + token
                     }
                   });
                   setTracks(responseTracks.data.items);
@@ -181,7 +180,7 @@ const Home = () =>{
 
                   const responseRecentlyPlayed = await axios.get(`https://api.spotify.com/v1/me/player/recently-played?limit=50`, {
                     headers: {
-                      'Authorization': 'Bearer ' + access_token
+                      'Authorization': 'Bearer ' + token
                     }
                   });
                   setRecentlyPlayed(responseRecentlyPlayed.data.items);
@@ -215,7 +214,7 @@ const Home = () =>{
 
                   const responseUser = await axios.get(`https://api.spotify.com/v1/me`, {
                     headers: {
-                      'Authorization': 'Bearer ' + access_token
+                      'Authorization': 'Bearer ' + token
                     }
                   });
                   setUser(responseUser.data.id)
@@ -225,19 +224,22 @@ const Home = () =>{
 
               } catch (error) {
                   console.error('este es mi error',error);
+                  if (error.response.status === 401) {
+                    getNewToken();
+                  }
               }
             }
         }
         fetchData()
-      }, [artistsTerm, tracksTerm])
+      }, [artistsTerm, tracksTerm, token])
     
       const createPlaylist = async () => {
-        if(params.access_token){
+        if(token){
           const access_token = params.access_token;
           try {
               const responseUserProfile = await axios.get(`https://api.spotify.com/v1/me`, {
                   headers: {
-                  'Authorization': 'Bearer ' + access_token
+                  'Authorization': 'Bearer ' + token
                   }
               });
     
@@ -258,7 +260,7 @@ const Home = () =>{
                   description: 'New playlist description',
                   public: false
                 },
-                headers: { 'Authorization': 'Bearer ' + access_token }
+                headers: { 'Authorization': 'Bearer ' + token }
               })
               .then(function (response) {
                 const tracksURI = [];
@@ -271,7 +273,7 @@ const Home = () =>{
                   method: 'post',
                   url: base_url_playlist,
                   data: tracksURI,
-                  headers: { 'Authorization': 'Bearer ' + access_token }
+                  headers: { 'Authorization': 'Bearer ' + token }
                 })
                 .then(function (response) {
                   //console.log(response);
@@ -280,20 +282,24 @@ const Home = () =>{
     
           } catch (error) {
               console.error('este es mi error',error);
+              if (error.response.status === 401) {
+                getNewToken(); 
+              }
           }
         }
     
         // <h2>Top genres</h2>
-        //  {params !== undefined && <TopGenres token={params.access_token} data={tracks}/>}
+        //  {params !== undefined && <TopGenres token={params.token} data={tracks}/>}
       }
 
       useEffect(() => {
         const fetchAlbums = async () =>{
-          if(params.access_token){
+          if(token){
+            try{
             const access_token = params.access_token;
             const responseTracksFourWeeks = await axios.get(`https://api.spotify.com/v1/me/top/tracks?time_range=${albumsTerm}&limit=50`, {
                 headers: {
-                  'Authorization': 'Bearer ' + access_token
+                  'Authorization': 'Bearer ' + token
                 }
             });
             //console.log(responseTracksFourWeeks.data.items);
@@ -347,6 +353,12 @@ const Home = () =>{
             let keysSortedFourWeeks = Object.keys(artistsAlbums).sort(function(a,b){return artistsAlbums[b]-artistsAlbums[a]})
             //console.log(keysSortedFourWeeks)
             setAlbums(keysSortedFourWeeks)
+            } catch(error) {
+              console.error('este es mi error',error);
+              if (error.response.status === 401) {
+                getNewToken();
+              }
+            }
           }
         }
         fetchAlbums()
@@ -354,13 +366,14 @@ const Home = () =>{
 
       useEffect(() => {
         const fetchGenres = async () =>{
-          if(params.access_token){
+          if(token){
+            try{
             const access_token = params.access_token;
             let artistsID = [];
             let artists_genres = [];
             const responseTracksGenres = await axios.get(`https://api.spotify.com/v1/me/top/tracks?time_range=${genresTerm}&limit=50`, {
                 headers: {
-                    'Authorization': 'Bearer ' + access_token
+                    'Authorization': 'Bearer ' + token
                 }
             });
             //console.log(responseTracksGenres.data.items);
@@ -374,7 +387,7 @@ const Home = () =>{
             const findGenres = artistsID.map(async (id) =>{
               const responseArtist = await axios.get(`https://api.spotify.com/v1/artists/${id}`, {
                   headers: {
-                      Authorization: "Bearer " + access_token,
+                      Authorization: "Bearer " + token,
                   },
               });
               responseArtist.data.genres.map((genre) => {
@@ -401,6 +414,12 @@ const Home = () =>{
               //console.log(orderGenres);
               setGenres(genresToShow)
             })
+            } catch(error) {
+            console.error('este es mi error',error);
+            if (error.response.status === 401) {
+              getNewToken();
+            }
+          }
           }
         }
         fetchGenres()
@@ -408,7 +427,8 @@ const Home = () =>{
     
       useEffect(() => {
         const fetchRecommendations = async() =>{
-          if(params.access_token){
+          if(token){
+            try{
             const access_token = params.access_token;
             if(tracks.length > 0){
               if(recommendationsTerm === "tracks"){
@@ -424,7 +444,7 @@ const Home = () =>{
                 })
                 const responseRecommendations = await axios.get(`https://api.spotify.com/v1/recommendations?limit=50&market=US&seed_tracks=${getIds}&min_energy=0.4&min_popularity=50`, {
                           headers: {
-                          'Authorization': 'Bearer ' + access_token
+                          'Authorization': 'Bearer ' + token
                           }
                 });
                 setRecommendations(responseRecommendations.data.tracks);
@@ -433,7 +453,7 @@ const Home = () =>{
               else if(recommendationsTerm === "genres"){
                 const responseRecommendations = await axios.get(`https://api.spotify.com/v1/recommendations?limit=50&market=US&seed_genres=${genres}&min_energy=0.4&min_popularity=50`, {
                   headers: {
-                  'Authorization': 'Bearer ' + access_token
+                  'Authorization': 'Bearer ' + token
                   }
                 });
                 console.log(responseRecommendations)
@@ -454,25 +474,32 @@ const Home = () =>{
                   console.log(getArtistsIds);
                   const responseRecommendations = await axios.get(`https://api.spotify.com/v1/recommendations?limit=50&market=US&seed_artists=${getArtistsIds}&min_energy=0.4&min_popularity=50`, {
                             headers: {
-                            'Authorization': 'Bearer ' + access_token
+                            'Authorization': 'Bearer ' + token
                             }
                   });
                   setRecommendations(responseRecommendations.data.tracks);
                   setRecommendationsDescription(`We prepare a list of recommendations based in your most listened artists in the past 4 weeks, which includes`)
               }
             }
+            } catch(error) {
+              console.error('este es mi error',error);
+              if (error.response.status === 401) {
+                getNewToken();
+              }
+            }
           }
+          
         }
         fetchRecommendations();
       }, [tracks, recommendationsTerm, newRec])
       
       const createPlaylistWithRecommendations = async () => {
-        if(params.access_token){
+        if(token){
           const access_token = params.access_token;
           try {
               const responseUserProfile = await axios.get(`https://api.spotify.com/v1/me`, {
                   headers: {
-                  'Authorization': 'Bearer ' + access_token
+                  'Authorization': 'Bearer ' + token
                   }
               });
               console.log(responseUserProfile)
@@ -491,7 +518,7 @@ const Home = () =>{
                   description: 'New playlist description',
                   public: false
                 },
-                headers: { 'Authorization': 'Bearer ' + access_token }
+                headers: { 'Authorization': 'Bearer ' + token }
               })
               .then(function (response) {
                 const tracksURI = [];
@@ -504,7 +531,7 @@ const Home = () =>{
                   method: 'post',
                   url: base_url_playlist,
                   data: tracksURI,
-                  headers: { 'Authorization': 'Bearer ' + access_token }
+                  headers: { 'Authorization': 'Bearer ' + token }
                 })
                 .then(function (response) {
                   //console.log(response);
@@ -512,6 +539,9 @@ const Home = () =>{
               });
           } catch (error) {
               console.error('este es mi error',error);
+              if (error.response.status === 401) {
+                getNewToken();
+              }
           }
         }        
       }
@@ -546,6 +576,7 @@ const Home = () =>{
           </Head>
 
           <NavMenu />
+          <ParticlesBackground />
           <Inner>
             
           <section id="home_section">
@@ -554,7 +585,7 @@ const Home = () =>{
                 <ContainerHero>
                   <Title size="h1">Welcome to your Spotify Data Center</Title>
                   {user && <Text>Hi, {user}</Text> }
-                  {!user && <a href="https://my-spotify-data-center-server.vercel.app/login">
+                  {!user && <a href="http://localhost:8888/login">
                     <button>Login with Spotify</button>
                   </a>}
                   {user && <Title>Right now you are listening to:</Title>}
@@ -583,7 +614,7 @@ const Home = () =>{
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
                 <Grid>
-                  {artists.map((artist, index) => (<ArtistCard key={artist.id} data={artist} index={index} token={params.access_token} gridSize={3} />))}
+                  {artists.map((artist, index) => (<ArtistCard key={artist.id} data={artist} index={index} token={token} gridSize={3} refreshToken={params.refresh_token}/>))}
                 </Grid>
               </Col>
             </Grid>
@@ -611,8 +642,8 @@ const Home = () =>{
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
                 <Grid>
-                  {tracksTopTen.map((track, index) => (<TrackCard key={track.id} data={track} index={index} token={params.access_token} gridSize={3}/>))}
-                  {tracks.map((track, index) => (<TrackCard key={track.id} data={track} index={index} token={params.access_token} gridSize={3}/>))}
+                  {tracksTopTen.map((track, index) => (<TrackCard key={track.id} data={track} index={index} token={token} gridSize={3} setToken={setToken}/>))}
+                  {tracks.map((track, index) => (<TrackCard key={track.id} data={track} index={index} token={token} refreshToken={params.refresh_token} gridSize={3} setToken={setToken}/>))}
                 </Grid>
               </Col>
             </Grid>
@@ -638,7 +669,7 @@ const Home = () =>{
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
                 <Grid>
-                  {albums.map((album, index) => (<AlbumCard key={album.id} data={album} index={index} token={params.access_token} gridSize={3} imageSizeLarge />))}
+                  {albums.map((album, index) => (<AlbumCard key={album.id} data={album} index={index} token={token} gridSize={3} imageSizeLarge />))}
                 </Grid>
               </Col>
             </Grid>
@@ -682,7 +713,7 @@ const Home = () =>{
               <Col desktop={12} tablet={6} mobile={12}>
                 <Grid colGap={30} rowGap={10}>
                   <Text>You listen {minutesListened} minutes in the last {streamsDays} days</Text>
-                  {recentlyPlayed.map((track) => (<RecentlyPlayedCard key={track.id} data={track} token={params.access_token} />))}
+                  {recentlyPlayed.map((track) => (<RecentlyPlayedCard key={track.id} data={track} token={token} />))}
                 </Grid>
               </Col>
             </Grid>
@@ -728,7 +759,7 @@ const Home = () =>{
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
                 <Grid>
-                {tracks && recommendations.map((track, index) => (<TrackCard key={track.id} data={track} token={params.access_token} gridSize={3}/>))}
+                {tracks && recommendations.map((track, index) => (<TrackCard key={track.id} data={track} token={token} gridSize={3}/>))}
                 </Grid>
               </Col>
             </Grid>
