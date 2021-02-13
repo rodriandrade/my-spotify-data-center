@@ -554,7 +554,7 @@ const Home = () =>{
                 <ContainerHero>
                   <Title size="h1">Welcome to your Spotify Data Center</Title>
                   {user && <Text>Hi, {user}</Text> }
-                  {!user && <a href="http://localhost:8888">
+                  {!user && <a href="https://my-spotify-data-center-server.vercel.app/login">
                     <button>Login with Spotify</button>
                   </a>}
                   {user && <Title>Right now you are listening to:</Title>}
