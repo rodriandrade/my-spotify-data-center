@@ -99,10 +99,10 @@ const Home = () =>{
             
               try {
 
-                /*
+                
                   axios({
                     method: 'get',
-                    url: 'http://localhost:8888/refresh_token',
+                    url: 'https://my-spotify-data-center-server.vercel.app/refresh_token',
                     data: {
                       'refresh_token': params.refresh_token
                     },
@@ -111,7 +111,7 @@ const Home = () =>{
                     let access_token_new = response.access_token;
                     console.log(access_token_new)
                   });
-                  */
+                  
 
                   //////////////////////////////////////////////////////////////////////////////////////////////////////
                   
