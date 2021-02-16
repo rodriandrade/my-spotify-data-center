@@ -148,9 +148,5 @@ app.get('/refresh_token', function(req, res) {
   });
 });
 
-app.get('/test', function(req, res) {
-  res.json("Hola");
-});
-
 console.log('Listening on 8888');
 app.listen(8888);

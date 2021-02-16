@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 const Container = styled.div`
+/*
     display: flex;
     flex-direction: row; 
     justify-content: space-between;
@@ -11,7 +12,21 @@ const Container = styled.div`
     position:fixed;
     top:0;
     background-color: rgb(0,0,0);
-    width:100%;
+    width:10%;
+    height:100vh;
+    */
+   position: fixed;
+    -webkit-transform-origin: left top;
+    transform-origin: left top;
+    -webkit-transform: rotate(
+-90deg
+) translateX(-100%);
+    transform: rotate(
+-90deg
+) translateX(-100%);
+    width: 100vh;
+    height: 20px;
+    background-color: white;
 
     @media (max-width: 480px) {
         width:100%;

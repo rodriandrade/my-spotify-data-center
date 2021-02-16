@@ -362,7 +362,7 @@ const Home = () =>{
           }
         }
         fetchAlbums()
-      }, [albumsTerm])
+      }, [albumsTerm, token])
 
       useEffect(() => {
         const fetchGenres = async () =>{
@@ -423,7 +423,7 @@ const Home = () =>{
           }
         }
         fetchGenres()
-      }, [genresTerm])
+      }, [genresTerm, token])
     
       useEffect(() => {
         const fetchRecommendations = async() =>{
@@ -491,7 +491,7 @@ const Home = () =>{
           
         }
         fetchRecommendations();
-      }, [tracks, recommendationsTerm, newRec])
+      }, [tracks, recommendationsTerm, newRec, token])
       
       const createPlaylistWithRecommendations = async () => {
         if(token){
@@ -576,16 +576,16 @@ const Home = () =>{
           </Head>
 
           <NavMenu />
-          <ParticlesBackground />
+         
           <Inner>
-            
+          
           <section id="home_section">
             <Grid colGap={30} rowGap={40}>
               <Col desktop={12} tablet={6} mobile={12}>
                 <ContainerHero>
                   <Title size="h1">Welcome to your Spotify Data Center</Title>
                   {user && <Text>Hi, {user}</Text> }
-                  {!user && <a href="http://localhost:8888/login">
+                  {!user && <a href="https://my-spotify-data-center-server.vercel.app/login">
                     <button>Login with Spotify</button>
                   </a>}
                   {user && <Title>Right now you are listening to:</Title>}
@@ -594,7 +594,7 @@ const Home = () =>{
               </Col>
             </Grid>
           </section>
-
+          
           {user ?
           <section id="artists_section">             
             <Grid colGap={30} rowGap={40}>

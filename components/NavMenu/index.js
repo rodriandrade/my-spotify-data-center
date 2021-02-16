@@ -3,8 +3,9 @@ import BurgerMenu from '../BurgerMenu'
 import React, {useState} from 'react'
 import NavMenuMobile from '../NavMenuMobile'
 import Inner from '../Inner'
+import Link from 'next/link'
 
-const NavMenu = () => {
+const NavMenu = props => {
 
     const [open, setOpen] = useState(false)
     /*
@@ -35,7 +36,17 @@ const NavMenu = () => {
                         </div>
                         <nav>
                             <Menu>
-                                <List><a href="#home_section">Home</a></List>
+
+                                <List>
+                                    <Link href={
+                                        {pathname: `/#access_token=${props.token}&refresh_token=${props.refreshToken}`, 
+                                        query: { token: props.token, refreshToken: props.refreshToken }, }
+                                        }>
+                                        <a href="#home_section">Home</a>
+                                    </Link>
+                                </List>
+
+
                                 <List><a href="#artists_section">Artists</a></List>
                                 <List><a href="#tracks_section">Tracks</a></List>
                                 <List><a href="#albums_section">Albums</a></List>
