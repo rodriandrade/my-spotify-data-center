@@ -158,7 +158,7 @@ export default function Track() {
 
     return (
         <div>
-            <NavMenu />
+           
             <Inner>
  
                 <Container>

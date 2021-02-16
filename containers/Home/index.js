@@ -575,8 +575,6 @@ const Home = () =>{
             <link rel="icon" href="/favicon.ico" />
           </Head>
 
-          <NavMenu />
-         
           <Inner>
           
           <section id="home_section">

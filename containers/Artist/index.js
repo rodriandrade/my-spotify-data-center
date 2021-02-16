@@ -242,7 +242,7 @@ export default function Artist() {
 
     return (
         <div>
-            <NavMenu />
+            
             <Inner>
                 <Grid colGap={30} rowGap={40}>
                     <Col desktop={12} tablet={6} mobile={12}>
