@@ -1,16 +1,49 @@
 import styled from 'styled-components'
 
+const TimePlayed = styled.p`
+    font-size:14px;
+    color: #fff;
+    margin:0;
+`
+
+
+const CurrentlyPlayingCont = styled.div`
+    background-color: rgba(20,20,20,1);
+    width:100%;
+    height:25px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+
+    :hover{
+        opacity:0.6;
+    }
+
+    &:hover ${TimePlayed} {
+        color: #000;
+    }
+`
+
 const Container = styled.div`
-    background-color: rgb(10,10,10);
-    width:400px;
-    padding:30px;
-    border-radius:10px;
-    margin:10px;
+    background-color: rgba(10,10,10,1);
+    width:100%;
+    height:100px;
+    position: fixed;
+    display:flex;
+    flex-direction:column;
+    left:0;
+    bottom:0;
+    justify-content:center;
+    align-items:center;
+    z-index:20000;
+    transition:1s;
+    transform:${(props) => (props.showPlayer ? "translate(0%, 0px)" : "translate(0%, 75px)")};
 `
 
 const TrackImage = styled.img`
-    max-height:200px;
-    max-width: 200px;
+    max-height:50px;
+    max-width: 50px;
     text-align: center;
     :hover{
         opacity:0.6;
@@ -18,7 +51,7 @@ const TrackImage = styled.img`
 `
 const ImageContainer = styled.div`
     margin:0 auto;
-    width:200px;
+    width:50px;
 `
 
 const ArtistName = styled.p`
@@ -40,10 +73,67 @@ const TrackName = styled.p`
     }
 `
 
-const TimePlayed = styled.p`
-    font-size:12px;
-    color: grey;
-    margin:0;
+const TextContainer = styled.p`
+    display:flex;
+    align-items:flex-start;
+    justify-content:flex-start;
+    flex-direction:column;
+    margin-left:20px;
 `
 
-export { Container, TrackName, TimePlayed, TrackImage, ArtistName, ImageContainer}
+const ContainerPlay = styled.div`
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    margin-left:20px;
+`
+
+
+const Cont = styled.div`
+    width:1200px;
+    display:flex;
+    justify-content:space-between;
+`
+
+const ContainerTrack = styled.div`
+    display:flex;
+    justify-content:center;
+    align-items:center;
+`
+
+const PlayState = styled.img`
+    width:25px;
+    height:25px;
+    cursor:pointer;
+`
+
+const SoundContainer = styled.div`
+    display:flex;
+    flex-direction:row;
+
+    :nth-child(1)  { left: 1px; animation-duration: 474ms; }
+    :nth-child(2)  { left: 5px; animation-duration: 433ms; }
+    :nth-child(3)  { left: 9px; animation-duration: 407ms; }
+`
+
+const SoundBar = styled.div`
+    background: #fff;
+    bottom: 1px;
+    height: 3px;
+    position: absolute;
+    width: 3px;      
+    animation: sound 0ms -800ms linear infinite alternate;
+
+    @keyframes sound {
+        0% {
+            height: 3px; 
+        }
+        100% {       
+            height: 28px;        
+        }
+    }
+`
+
+
+export { Container, TrackName, TimePlayed, TrackImage, ArtistName, ImageContainer, TextContainer, ContainerPlay, Cont, ContainerTrack, PlayState, CurrentlyPlayingCont, SoundBar, SoundContainer}

@@ -8,6 +8,10 @@ const Container = styled.div`
     margin:10px;
 `
 
+const ContainerTrack = styled.div`
+    position:relative;
+`
+
 const TrackImage = styled.img`
     max-height:200px;
     max-width: 200px;
@@ -40,10 +44,15 @@ const ImageContainer = styled.div`
 `
 
 const TrackPosition = styled.p`
-    font-size:32px;
+    //font-size:32px;
+    font-size:60px;
     color: #fff;
     margin:0;
     text-align: center;
+    font-weight:bold;
+    position:absolute;
+    top:125px;
+    left:10px;
 
     /*
     ::after{
@@ -79,4 +88,4 @@ const ArtistName = styled.p`
     z-index:4;
 `
 
-export { Container, TrackName, ArtistName, TrackImage, TrackPosition, PlayOnSpotify, ImageContainer}
+export { Container, TrackName, ArtistName, TrackImage, TrackPosition, PlayOnSpotify, ImageContainer, ContainerTrack}

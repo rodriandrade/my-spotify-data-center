@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import {Grid, Col} from '../Grid'
-import {TrackImage, TrackName, TrackPosition, ArtistName, PlayOnSpotify, ImageContainer} from './styled'
+import {TrackImage, TrackName, TrackPosition, ArtistName, PlayOnSpotify, ImageContainer, ContainerTrack} from './styled'
 import axios from 'axios'
 import React, {useState, useEffect} from 'react'
 import Modal from '../Modal'
@@ -109,6 +109,8 @@ const TrackCard = props =>{
             setActiveDevices(true)
             const deviceID = responseUserDevices.data.devices[0].id
             if(deviceID){
+            console.log("Holis");
+            console.log("El ID es" + id)
             const requestData = {
                 "uris": [`spotify:track:${id}`],
                 "position_ms": 0
@@ -122,6 +124,7 @@ const TrackCard = props =>{
             })
             .then(function (response) {
                 //console.log(response);
+                props.setPlayingRightNow(id);
             });
             } else{
                 console.log("No hay devices activos")
@@ -149,6 +152,7 @@ const TrackCard = props =>{
 
     return(
         <Col desktop={props.gridSize} tablet={6} mobile={12}>
+            <ContainerTrack>
             <div>
                 {!activeDevices && <Modal modalIsOpen={modalIsOpen} setModalIsOpen={setModalIsOpen} />}
                 <ImageContainer onClick={openModal}>
@@ -163,6 +167,7 @@ const TrackCard = props =>{
                 </Link>
                 <ArtistName>{artistsNames.join(", ")}</ArtistName>
             </div>
+            </ContainerTrack>
         </Col>
     )
 }

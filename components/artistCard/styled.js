@@ -4,6 +4,14 @@ const ContainerArtist = styled.div`
     position:relative;
 `
 
+const Overlay = styled.div`
+    max-height: 200px;
+    max-width: 200px;
+    //background-color:blue;
+    position:absolute;
+    z-index:200;
+`
+
 const ArtistImage = styled.img`
    // max-height: ${props => props.imageSizeLarge ? "430px" : "200px"};
    // max-width: ${props => props.imageSizeLarge ? "430px" : "200px"};
@@ -19,10 +27,15 @@ const ArtistImage = styled.img`
 `
 
 const ArtistPosition = styled.p`
-    font-size:30px;
+    font-size:60px;
+    //font-size:30px;
     color: #fff;
     margin:0;
     text-align: center;
+    font-weight:bold;
+    position:absolute;
+    top:125px;
+    left:10px;
 
 /*
     ::after{
@@ -40,7 +53,7 @@ const ArtistPosition = styled.p`
 const ArtistName = styled.p`
     font-size:16px;
     color: #47ffbb;
-    margin:0px;
+    margin-top:20px;
     text-align: center;
     cursor: pointer;
 
@@ -55,4 +68,11 @@ const TimePlayed = styled.p`
     margin:0;
 `
 
-export { ContainerArtist, ArtistName, TimePlayed, ArtistImage, ArtistPosition}
+const ImageContainer = styled.div`
+    width:200px;  
+    height:200px;
+    position: relative;
+    //background-color:yellow;
+`
+
+export { ContainerArtist, ArtistName, TimePlayed, ArtistImage, ArtistPosition, Overlay, ImageContainer}

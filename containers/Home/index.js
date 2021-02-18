@@ -61,8 +61,11 @@ const Home = () =>{
       // Historial de reproducción y reproduciendo actualmente
       const [recentlyPlayed, setRecentlyPlayed] = useState([]);
       const [playing, setPlaying] = useState([]);
+      const [playingData, setPlayingData] = useState([]);
       const [minutesListened, setMinutesListened] = useState('')
       const [streamsDays, setStreamsDay] = useState('')
+
+      const [playingRightNow, setPlayingRightNow] = useState([]);
 
       // Playlists
       const [playlists, setPlaylists] = useState([]);
@@ -89,7 +92,6 @@ const Home = () =>{
               'refresh_token': params.refresh_token
             }
           });
-        console.log(responseRefreshToken.data.access_token);
         setToken(responseRefreshToken.data.access_token)
       }
 
@@ -97,12 +99,27 @@ const Home = () =>{
         const getToken = () =>{
           if(params.access_token){
             const access_token = params.access_token;
-            console.log(access_token);
             setToken(access_token)
           }
         }
         getToken();
       }, [])
+
+      /*
+      useEffect(() => {
+        setTimeout(function
+        const responsePlaying = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
+                    headers: {
+                      'Authorization': 'Bearer ' + token
+                    }
+                  });
+                  console.log("Me ejecute")
+                  console.log(responsePlaying.data.item);
+                  setPlaying(responsePlaying.data.item);
+          }, 2000);
+        
+      }, [playingRightNow])
+      */
 
       useEffect(() => {
         const fetchData = async () => {
@@ -111,9 +128,6 @@ const Home = () =>{
               const access_token = params.access_token;
 
               try {
-
-                  console.log(params.refresh_token);
-                  console.log(token)
                   //////////////////////////////////////////////////////////////////////////////////////////////////////
                   
                   // PLAYLISTS DATA
@@ -123,17 +137,21 @@ const Home = () =>{
                     }
                   });
                   setPlaylists(responsePlaylists.data.items);
+                 
 
                   //////////////////////////////////////////////////////////////////////////////////////////////////////
                   
                   // CURRENTLY PLAYING DATA
-
+                  console.log("Se hizo de nuevo el fetch");
                   const responsePlaying = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
                     headers: {
                       'Authorization': 'Bearer ' + token
                     }
                   });
+                  console.log("ACTUALIZA3")
+                  console.log(responsePlaying.data.item);
                   setPlaying(responsePlaying.data.item);
+                  setPlayingData(responsePlaying.data)
                   
                   //////////////////////////////////////////////////////////////////////////////////////////////////////
                   
@@ -231,7 +249,7 @@ const Home = () =>{
             }
         }
         fetchData()
-      }, [artistsTerm, tracksTerm, token])
+      }, [artistsTerm, tracksTerm, token, playingRightNow])
     
       const createPlaylist = async () => {
         if(token){
@@ -409,7 +427,7 @@ const Home = () =>{
               //console.log(orderGenres);
               //console.log(orderValues);
               const genresToShow = orderGenres.filter((genre, index) =>{
-                return index < 5
+                return index < 8
               })
               //console.log(orderGenres);
               setGenres(genresToShow)
@@ -566,6 +584,8 @@ const Home = () =>{
         return recommendationsTerm === buttonTerm;
       }
 
+
+
       return (
         
         <div>
@@ -574,7 +594,7 @@ const Home = () =>{
             <title>Create Next App</title>
             <link rel="icon" href="/favicon.ico" />
           </Head>
-
+          <ParticlesBackground />
           <Inner>
           
           <section id="home_section">
@@ -586,8 +606,7 @@ const Home = () =>{
                   {!user && <a href="https://my-spotify-data-center-server.vercel.app/login">
                     <button>Login with Spotify</button>
                   </a>}
-                  {user && <Title>Right now you are listening to:</Title>}
-                  {playing && <CurrentlyPlayingCard data={playing} />}
+                  {playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} />}
                 </ContainerHero>
               </Col>
             </Grid>
@@ -640,8 +659,8 @@ const Home = () =>{
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
                 <Grid>
-                  {tracksTopTen.map((track, index) => (<TrackCard key={track.id} data={track} index={index} token={token} gridSize={3} setToken={setToken}/>))}
-                  {tracks.map((track, index) => (<TrackCard key={track.id} data={track} index={index} token={token} refreshToken={params.refresh_token} gridSize={3} setToken={setToken}/>))}
+                  {tracksTopTen.map((track, index) => (<TrackCard key={track.id} data={track} index={index} token={token} gridSize={3} setToken={setToken} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow}/>))}
+                  {tracks.map((track, index) => (<TrackCard key={track.id} data={track} index={index} token={token} refreshToken={params.refresh_token} gridSize={3} setToken={setToken} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow}/>))}
                 </Grid>
               </Col>
             </Grid>
@@ -718,6 +737,7 @@ const Home = () =>{
           </section>
           : null }
 
+          {/*
           {user ?
           <section>             
             <Grid colGap={30} rowGap={40}>
@@ -734,6 +754,7 @@ const Home = () =>{
             </Grid>
           </section>  
           : null }
+          */}
 
           {user ?
           <section id="recommendations_section">             
@@ -757,7 +778,7 @@ const Home = () =>{
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
                 <Grid>
-                {tracks && recommendations.map((track, index) => (<TrackCard key={track.id} data={track} token={token} gridSize={3}/>))}
+                {tracks && recommendations.map((track, index) => (<TrackCard key={track.id} data={track} token={token} gridSize={3} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} />))}
                 </Grid>
               </Col>
             </Grid>

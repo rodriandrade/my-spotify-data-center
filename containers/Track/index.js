@@ -8,6 +8,7 @@ import Inner from '../../components/Inner'
 import { TrackImage, TrackName, TrackGenres, Container, ContainerImage, ContainerInfo, ArtistName } from './styled'
 import BarChart from "../../components/BarChart";
 import NavMenu from '../../components/NavMenu'
+import Modal from '../../components/Modal'
 
 export default function Track() {
     const router = useRouter()
@@ -20,6 +21,8 @@ export default function Track() {
     const [recommendations, setRecommendations] = useState([]);
     const [newRec, setNewRec] = useState(false)
     const [artistsNames, setArtistsNames] = useState([]);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [playlistModalState, setPlaylistModalState] = useState('');
 
     const [save, setSave] = useState()
 
@@ -36,6 +39,10 @@ export default function Track() {
       }
 
     console.log(id);
+
+    const openModal = () =>{
+        
+    }
 
     useEffect(() => {
 
@@ -88,6 +95,9 @@ export default function Track() {
                 
             } catch (error) {
                 console.error('este es mi error',error);
+                if (error.response.status === 401) {
+                    getNewToken();
+                  }
             }
             
         }
@@ -115,6 +125,8 @@ export default function Track() {
                   'Authorization': 'Bearer ' + newToken
                   }
               });
+              setModalIsOpen(!modalIsOpen);
+              setPlaylistModalState(true);
               console.log(responseUserProfile)
               const user_id = responseUserProfile.data.id;
               const base_url = `https://api.spotify.com/v1/users/${user_id}/playlists`
@@ -147,6 +159,9 @@ export default function Track() {
               });
           } catch (error) {
               console.error('este es mi error',error);
+              if (error.response.status === 401) {
+                getNewToken();
+              }
           }
         }        
     }
@@ -160,7 +175,14 @@ export default function Track() {
         <div>
            
             <Inner>
- 
+                {!playlistModalState && 
+                <Modal 
+                    modalIsOpen={modalIsOpen} 
+                    setModalIsOpen={setModalIsOpen} 
+                    title={"Success"}
+                    text={"Your playlist was created"}
+                    buttonText={""}
+                />}
                 <Container>
                     <ContainerImage>
                         {track.album && <TrackImage src={track.album.images[0].url} />}
