@@ -1,7 +1,6 @@
-import {TrackImage, TrackName, ArtistName, ImageContainer, Container, TextContainer, ContainerPlay, Cont, ContainerTrack, PlayState, CurrentlyPlayingCont, SoundBar, SoundContainer} from './styled'
+import {TrackImage, TrackName, ArtistName, ImageContainer, Container, TextContainer, ContainerPlay, Cont, ContainerTrack, PlayState, CurrentlyPlayingCont, SoundBar, SoundContainer, TimePlayed} from './styled'
 import Link from 'next/link'
 import Inner from '../Inner'
-import { TimePlayed } from '../artistCard/styled'
 import axios from 'axios'
 import React, {useEffect, useState} from 'react'
 

@@ -1,20 +1,22 @@
 import styled from 'styled-components'
 
 const TimePlayed = styled.p`
-    font-size:14px;
-    color: #fff;
+    font-size:16px;
+    color: #000;
     margin:0;
 `
 
 
 const CurrentlyPlayingCont = styled.div`
-    background-color: rgba(20,20,20,1);
+    background-color: #47ffbb;
     width:100%;
     height:25px;
     display:flex;
     justify-content:center;
     align-items:center;
     cursor:pointer;
+    margin:0;
+    padding:0;
 
     :hover{
         opacity:0.6;
@@ -29,6 +31,7 @@ const Container = styled.div`
     background-color: rgba(10,10,10,1);
     width:100%;
     height:100px;
+    margin:0;
     position: fixed;
     display:flex;
     flex-direction:column;

@@ -12,7 +12,7 @@ const ArtistCard = props =>{
                 <ImageContainer>
                 <a href={external_urls.spotify} target="_blank">
                     <Overlay></Overlay>
-                    <ArtistImage src={images[0].url} alt={name} imageSizeLarge />
+                    <ArtistImage src={images[2].url} alt={name} imageSizeLarge />
                 </a>
                 </ImageContainer>
                 {!!position && <ArtistPosition>{position}</ArtistPosition>}                

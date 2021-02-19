@@ -388,7 +388,8 @@ const Home = () =>{
             try{
             const access_token = params.access_token;
             let artistsID = [];
-            let artists_genres = [];
+            
+            let more = [];
             const responseTracksGenres = await axios.get(`https://api.spotify.com/v1/me/top/tracks?time_range=${genresTerm}&limit=50`, {
                 headers: {
                     'Authorization': 'Bearer ' + token
@@ -401,7 +402,8 @@ const Home = () =>{
                   artistsID.push(artist.id)
               })
             })
-            
+
+            let artists_genres = [];
             const findGenres = artistsID.map(async (id) =>{
               const responseArtist = await axios.get(`https://api.spotify.com/v1/artists/${id}`, {
                   headers: {
@@ -409,9 +411,12 @@ const Home = () =>{
                   },
               });
               responseArtist.data.genres.map((genre) => {
-                artists_genres.push(genre);
+                more.push(genre);
               });
+              artists_genres.push(more);
+            
 
+              console.log(artists_genres);
               //console.log(artists_genres);
 
               const countGenres = artists_genres.reduce((obj, genre) =>{
@@ -606,7 +611,7 @@ const Home = () =>{
                   {!user && <a href="https://my-spotify-data-center-server.vercel.app/login">
                     <button>Login with Spotify</button>
                   </a>}
-                  {playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} />}
+                  {user && playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} />}
                 </ContainerHero>
               </Col>
             </Grid>

@@ -16,10 +16,10 @@ const ArtistImage = styled.img`
    // max-height: ${props => props.imageSizeLarge ? "430px" : "200px"};
    // max-width: ${props => props.imageSizeLarge ? "430px" : "200px"};
    // border-radius:${props => props.imageSizeLarge ? "430px" : "200px"};
-    max-height: 200px;
-   max-width: 200px;
+   min-height: 200px;
+   min-width:200px;
    z-index:1;
-   //border-radius:200px;
+   border-radius:200px;
 
     :hover{
         opacity:0.6;
@@ -34,8 +34,10 @@ const ArtistPosition = styled.p`
     text-align: center;
     font-weight:bold;
     position:absolute;
-    top:125px;
-    left:10px;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, 25%);
+    text-shadow: 0px 0px 11px rgba(0, 0, 0, 1);
 
 /*
     ::after{
@@ -52,13 +54,15 @@ const ArtistPosition = styled.p`
 
 const ArtistName = styled.p`
     font-size:16px;
-    color: #47ffbb;
-    margin-top:20px;
+    //color: #47ffbb;
+    color: #fff;
+    margin-top:40px;
     text-align: center;
     cursor: pointer;
+    text-transform: uppercase;
 
     :hover{
-        text-decoration: underline 3px solid;
+        text-decoration: underline 3px solid #47ffbb;
     }
 `
 
@@ -69,9 +73,10 @@ const TimePlayed = styled.p`
 `
 
 const ImageContainer = styled.div`
-    width:200px;  
-    height:200px;
-    position: relative;
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    border-radius:200px;
     //background-color:yellow;
 `
 

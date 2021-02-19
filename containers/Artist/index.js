@@ -68,7 +68,7 @@ export default function Artist() {
                         }
                     });
                     setArtistTopTracks(responseArtistTopTracks.data.tracks);
-                    console.log(responseArtistTopTracks.data.tracks)
+                    console.log(responseArtistTopTracks)
 
                     // Traer artistas relacionados
                     const responseRelatedArtists = await axios.get(`https://api.spotify.com/v1/artists/${id}/related-artists`, {

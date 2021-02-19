@@ -51,8 +51,12 @@ const TrackPosition = styled.p`
     text-align: center;
     font-weight:bold;
     position:absolute;
-    top:125px;
-    left:10px;
+    //top:125px;
+    //left:10px;
+    top:45%;
+    left:50%;
+    transform: translate(-50%, 25%);
+    text-shadow: 0px 0px 11px rgba(0, 0, 0, 1);
 
     /*
     ::after{
