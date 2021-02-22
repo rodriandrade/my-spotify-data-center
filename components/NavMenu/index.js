@@ -30,10 +30,11 @@ const NavMenu = props => {
                 <BurgerMenu open={open} setOpen={setOpen}/>
                 <NavMenuMobile open={open} setOpen={setOpen} />
                 <Container>
-                    <CenterContainer>
+                    {/*<CenterContainer>
                         <div>
                             <a href="#home_section">My Spotify Data Center</a>
                         </div>
+                        */}
                         <nav>
                             <Menu>
 
@@ -45,17 +46,13 @@ const NavMenu = props => {
                                         <a href="#home_section">Home</a>
                                     </Link>
                                 </List>
-
-
                                 <List><a href="#artists_section">Artists</a></List>
                                 <List><a href="#tracks_section">Tracks</a></List>
-                                <List><a href="#albums_section">Albums</a></List>
-                                <List><a href="#genres_section">Genres</a></List>
-                                <List><a href="#recently-played_section">Listening History</a></List>
-                                <List><a href="#recommendations_section">Recommendations</a></List>
+                                <List><a href="#tracks_section">Albums</a></List>
+
                             </Menu>
                         </nav>
-                    </CenterContainer>
+                    {/*</CenterContainer>*/}
                 </Container>
             </header>
         </div>

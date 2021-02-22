@@ -41,9 +41,10 @@ const Container = styled.div`
     padding:20px;
     padding-left:0;
     border-radius:10px;
-    margin:40px 0;
+    margin:0 0 40px 0;
     display: flex;
     flex-direction: row;
+    padding-top:50px;
 `
 
 const TrackImage = styled.img`

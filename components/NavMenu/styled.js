@@ -12,21 +12,15 @@ const Container = styled.div`
     position:fixed;
     top:0;
     background-color: rgb(0,0,0);
-    width:10%;
-    height:100vh;
+    width:100%;
     */
-   position: fixed;
-    -webkit-transform-origin: left top;
-    transform-origin: left top;
-    -webkit-transform: rotate(
--90deg
-) translateX(-100%);
-    transform: rotate(
--90deg
-) translateX(-100%);
-    width: 100vh;
-    height: 20px;
-    background-color: white;
+   width:100vh;    
+  height:100px;
+  position:fixed;
+  background:rgba(5,5,5, 0.7);
+  border-bottom: 1px solid rgb(20, 20, 20);
+  -webkit-transform-origin: left top;
+  -webkit-transform:rotate(-90deg) translateX(-100%);
 
     @media (max-width: 480px) {
         width:100%;
@@ -40,14 +34,21 @@ const Container = styled.div`
 `
 
 const List = styled.li`
-    display: inline-block;
+margin-right:60px;
+  float:right;
+  height:100%;
+  line-height:60px;
 
-    a{
+  a{
         padding:0 10px;
         text-decoration: none;
         color:#47ffbb;
         transition:0.3s;
     }
+/*
+    display: inline-block;
+
+    
     
     a:hover{
         text-decoration: underline 1px solid black;
@@ -57,6 +58,7 @@ const List = styled.li`
     @media (max-width: 480px) {
         display:none;
     }
+    */
 
 `
 

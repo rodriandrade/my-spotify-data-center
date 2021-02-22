@@ -282,6 +282,7 @@ export default function Artist() {
         <div>
             
             <ParticlesBackground />
+            <NavMenu />
             <Inner>
                 <Grid colGap={30} rowGap={40}>
                     {playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} /> }
@@ -370,10 +371,10 @@ export default function Artist() {
                     {relatedArtists && relatedArtists.map((artist) => (<ArtistCard key={artist._id} data={artist} gridSize={2} token={newToken}/>))}
                 </Grid>
 
-               
+                <Footer /> 
             </Inner>
             
-            <Footer />
+            
         </div>
     )
 }

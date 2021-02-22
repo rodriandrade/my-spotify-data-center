@@ -32,9 +32,10 @@ const Container = styled.div`
     padding:20px;
     padding-left:0;
     border-radius:10px;
-    margin:40px 0;
+    margin:0px 0 40px 0;
     display: flex;
     flex-direction: row;
+    padding-top:50px;
 `
 
 const TrackImage = styled.img`
@@ -108,13 +109,14 @@ const TrackInfo = styled.p`
 const ContainerAlbum = styled.div`
     display:flex;
     flex-direction:row;
-    border-radius:10px;
     align-items:center;
-    background-color: rgba(15,15,15);
+    background-color: rgba(15,15,15,0.6);
     border-radius:10px;
     padding:10px;
     margin-top:15px;
+    width:80%;
     cursor:pointer;
+    border-bottom:3px solid #47ffbb;
 
     :hover{
         opacity:0.7;

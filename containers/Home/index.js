@@ -600,23 +600,34 @@ const Home = () =>{
             <title>Create Next App</title>
             <link rel="icon" href="/favicon.ico" />
           </Head>
-          
+          <NavMenu />
           <Inner>
           
+          {!user ? 
           <section id="home_section">
             <Grid colGap={30} rowGap={40}>
               <Col desktop={12} tablet={6} mobile={12}>
                 <ContainerHero>
                   <Title size="h1">Welcome to your Spotify Data Center</Title>
-                  {user && <Text>Hi, {user}</Text> }
                   {!user && <a href="http://localhost:8888/login">
                     <button>Login with Spotify</button>
                   </a>}
-                  {user && playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} />}
                 </ContainerHero>
               </Col>
             </Grid>
           </section>
+          : 
+          <section id="home_section">
+            <Grid colGap={30} rowGap={40}>
+              <Col desktop={12} tablet={6} mobile={12}>
+                <ContainerHero>
+                  <Title size="h1">Hi, {user} :)</Title>
+
+                  {user && playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} />}
+                </ContainerHero>
+              </Col>
+            </Grid>
+          </section>}
           
           {user ?
           <section id="artists_section">             
@@ -642,7 +653,7 @@ const Home = () =>{
               </Col>
             </Grid>
           </section>  
-          : null }
+          : <p>Loading...</p> }
 
           {user ?
           <section id="tracks_section">             
@@ -671,7 +682,7 @@ const Home = () =>{
               </Col>
             </Grid>
           </section>
-          : null }
+          : <p>Loading...</p> }
 
           {user ?
           <section id="albums_section">             
@@ -697,7 +708,7 @@ const Home = () =>{
               </Col>
             </Grid>
           </section>  
-          : null }
+          : <p>Loading...</p> }
 
           {user ?
           <section id="genres_section">             
@@ -723,7 +734,7 @@ const Home = () =>{
               </Col>
             </Grid>
           </section>  
-          : null }
+          : <p>Loading...</p> }
 
           {user ?
           <section id="recently-played_section">             
@@ -741,7 +752,7 @@ const Home = () =>{
               </Col>
             </Grid>
           </section>
-          : null }
+          : <p>Loading...</p> }
 
           {/*
           {user ?
@@ -789,12 +800,10 @@ const Home = () =>{
               </Col>
             </Grid>
           </section>
-          : null }
-          
+          : <p>Loading...</p> }
+           <Footer />
           </Inner>
 
-          <Footer />
-            
         </div>
       )
 }

@@ -252,7 +252,7 @@ export default function Track() {
     return (
         <div>
            
-           
+           <NavMenu />
             <Inner>
                 {!playlistModalState && 
                 <Modal 
@@ -353,8 +353,9 @@ export default function Track() {
                 <Grid colGap={30} rowGap={40} columns>
                     {recommendations.map((track) => (<TrackCard key={track._id} data={track} token={newToken} gridSize={2}/>))}
                 </Grid>
+                <Footer />
             </Inner>
-            <Footer />
+            
         </div>
     )
 }

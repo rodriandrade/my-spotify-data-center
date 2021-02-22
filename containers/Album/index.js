@@ -206,7 +206,7 @@ export default function Album() {
             })
             .then(function (response) {
                 //console.log(response);
-                props.setPlayingRightNow(id);
+                //props.setPlayingRightNow(id);
             });
             } else{
                 console.log("No hay devices activos")
@@ -222,6 +222,7 @@ export default function Album() {
 
     return (
         <div>
+            <NavMenu />
             <Inner>
 
             <Container>
@@ -262,8 +263,10 @@ export default function Album() {
                     {tracks && tracks.map(track => <TracklistCard data={track} token={newToken} />)}
                 </Col>
               </Grid>
+
+              <Footer />
             </Inner>
-            <Footer />
+           
         </div>
     )
 }
