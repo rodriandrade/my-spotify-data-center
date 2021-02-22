@@ -16,7 +16,17 @@ const ArtistCard = props =>{
                 </a>
                 </ImageContainer>
                 {!!position && <ArtistPosition>{position}</ArtistPosition>}                
-                <Link href={{pathname: `/artist/${name}`, query: { token: props.token, id: id, refreshToken: props.refreshToken },}}>
+                <Link 
+                    href={
+                        {
+                        pathname: `/artist/${name}`, 
+                        query: { 
+                            token: props.token, 
+                            id: id, 
+                            refreshToken: props.refreshToken 
+                        },
+                    }
+                }>
                     <ArtistName>{name}</ArtistName>
                 </Link>
             </ContainerArtist>

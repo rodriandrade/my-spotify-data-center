@@ -19,9 +19,10 @@ const TitleText = styled.h1`
   }};
     font-family: 'Poppins', sans-serif; 
     color: #fff;
-    margin-top:160px;
-    margin-bottom:20px;
+    //margin-top:160px;
+    //margin-bottom:20px;
     text-align:left;
+    margin: ${(props) => (props.margin ? props.margin : "160px 0 20px 0")};
 `
 
 export default TitleText

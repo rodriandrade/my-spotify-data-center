@@ -1,10 +1,10 @@
 import TitleText from './styled'
 
 const Title = ({children, ...props}) =>{
-    const {size} = props;
+    const {size, margin} = props;
     return(
         <>
-        <TitleText size={size}>{children}</TitleText>
+        <TitleText size={size} margin={margin}>{children}</TitleText>
         </>
     )
 }

@@ -14,6 +14,7 @@ body {
   scroll-behavior: smooth;
 }
 
+/*
 button{
     padding:10px 50px;
     border: none;
@@ -25,9 +26,10 @@ button{
     border-radius:5px;
     margin:0px;
     cursor: pointer;
-    border-bottom:1px solid #47ffbb;
-    width:250px;
+    border:1px solid #47ffbb;
+    width:200px;
 }
+*/
 
 a {
   color: inherit;

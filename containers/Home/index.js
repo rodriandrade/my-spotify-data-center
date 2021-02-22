@@ -15,6 +15,7 @@ import ParticlesBackground from '../../components/ParticlesBackground'
 import Inner from '../../components/Inner'
 import Typical from 'react-typical'
 import NavMenu from '../../components/NavMenu'
+import Footer from '../../components/Footer'
 
 import {TitleTest, ContainerArtists, Text, ContainerLeftColumn, ContainerHero, Button, MostListened} from './styled'
 
@@ -142,14 +143,14 @@ const Home = () =>{
                   //////////////////////////////////////////////////////////////////////////////////////////////////////
                   
                   // CURRENTLY PLAYING DATA
-                  console.log("Se hizo de nuevo el fetch");
+                  //console.log("Se hizo de nuevo el fetch");
                   const responsePlaying = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
                     headers: {
                       'Authorization': 'Bearer ' + token
                     }
                   });
-                  console.log("ACTUALIZA3")
-                  console.log(responsePlaying.data.item);
+                  //console.log("ACTUALIZA3")
+                  //console.log(responsePlaying.data.item);
                   setPlaying(responsePlaying.data.item);
                   setPlayingData(responsePlaying.data)
                   
@@ -416,7 +417,7 @@ const Home = () =>{
               artists_genres.push(more);
             
 
-              console.log(artists_genres);
+              //console.log(artists_genres);
               //console.log(artists_genres);
 
               const countGenres = artists_genres.reduce((obj, genre) =>{
@@ -479,7 +480,7 @@ const Home = () =>{
                   'Authorization': 'Bearer ' + token
                   }
                 });
-                console.log(responseRecommendations)
+                //console.log(responseRecommendations)
                 setRecommendationsArtistsNames(genres);
                 setRecommendations(responseRecommendations.data.tracks);
                 setRecommendationsDescription(`We prepare a list of recommendations based in your most listened genres in the past 4 weeks, which includes`)
@@ -494,7 +495,7 @@ const Home = () =>{
                   const getArtistsIds = moreArtists.map(track=>{
                     return track.id
                   })
-                  console.log(getArtistsIds);
+                  //console.log(getArtistsIds);
                   const responseRecommendations = await axios.get(`https://api.spotify.com/v1/recommendations?limit=50&market=US&seed_artists=${getArtistsIds}&min_energy=0.4&min_popularity=50`, {
                             headers: {
                             'Authorization': 'Bearer ' + token
@@ -525,7 +526,7 @@ const Home = () =>{
                   'Authorization': 'Bearer ' + token
                   }
               });
-              console.log(responseUserProfile)
+              //console.log(responseUserProfile)
               const user_id = responseUserProfile.data.id;
               const base_url = `https://api.spotify.com/v1/users/${user_id}/playlists`
               const playlistName = {
@@ -599,7 +600,7 @@ const Home = () =>{
             <title>Create Next App</title>
             <link rel="icon" href="/favicon.ico" />
           </Head>
-          <ParticlesBackground />
+          
           <Inner>
           
           <section id="home_section">
@@ -608,7 +609,7 @@ const Home = () =>{
                 <ContainerHero>
                   <Title size="h1">Welcome to your Spotify Data Center</Title>
                   {user && <Text>Hi, {user}</Text> }
-                  {!user && <a href="https://my-spotify-data-center-server.vercel.app/login">
+                  {!user && <a href="http://localhost:8888/login">
                     <button>Login with Spotify</button>
                   </a>}
                   {user && playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} />}
@@ -691,7 +692,7 @@ const Home = () =>{
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
                 <Grid>
-                  {albums.map((album, index) => (<AlbumCard key={album.id} data={album} index={index} token={token} gridSize={3} imageSizeLarge />))}
+                  {albums.map((album, index) => (<AlbumCard key={album.id} data={album} index={index} token={token} gridSize={3} imageSizeLarge refreshToken={params.refresh_token} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} />))}
                 </Grid>
               </Col>
             </Grid>
@@ -792,6 +793,7 @@ const Home = () =>{
           
           </Inner>
 
+          <Footer />
             
         </div>
       )

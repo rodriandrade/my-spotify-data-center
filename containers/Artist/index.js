@@ -6,8 +6,11 @@ import TrackCard from '../../components/trackCard'
 import {Grid, Col} from '../../components/Grid'
 import Title from '../../components/Title'
 import Inner from '../../components/Inner'
-import {Container, ContainerInfo, ContainerImage, ArtistImage, ArtistName, ArtistGenres} from './styled'
+import {Container, ContainerInfo, ContainerImage, ArtistImage, ArtistName, ArtistGenres, Position, ArtistInfo, ArtistInfoCont, Button, GenresContainer} from './styled'
 import NavMenu from '../../components/NavMenu'
+import Footer from '../../components/Footer'
+import ParticlesBackground from '../../components/ParticlesBackground'
+import CurrentlyPlayingCard from '../../components/CurrentlyPlayingCard'
 
 export default function Artist() {
     const router = useRouter()
@@ -31,6 +34,10 @@ export default function Artist() {
     const [tracksSixMonths, setTracksSixMonths] = useState([]);
     const [tracksSeveralYears, setTracksSeveralYears] = useState([]);
 
+    const [playing, setPlaying] = useState([]);
+    const [playingData, setPlayingData] = useState([]);
+    const [playingRightNow, setPlayingRightNow] = useState([]);
+
     // State relacionados a las canciones del historial de escucha del usuario
     const [tracksRecentlyPlayed, setTracksRecentlyPlayed] = useState([]);
 
@@ -50,6 +57,18 @@ export default function Artist() {
         const fetchData = async () => {
             if(newToken){
                 try {
+
+                    const responsePlaying = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
+                    headers: {
+                      'Authorization': 'Bearer ' + token
+                    }
+                    });
+                    console.log("ACTUALIZA3")
+                    console.log(responsePlaying.data.item);
+                    setPlaying(responsePlaying.data.item);
+                    setPlayingData(responsePlaying.data);
+
+
                     // Traer artista
                     const responseArtist = await axios.get(`https://api.spotify.com/v1/artists/${id}`, {
                         headers: {
@@ -57,7 +76,7 @@ export default function Artist() {
                         }
                     });
                     setArtist(responseArtist.data);
-
+                    console.log(responseArtist)
                     // Nombre del artista para buscarlo entre los 50 artistas más escuchados
                     const artistName = responseArtist.data.name;
                     
@@ -240,17 +259,9 @@ export default function Artist() {
         }
     }
 
-    return (
-        <div>
-            
-            <Inner>
-                <Grid colGap={30} rowGap={40}>
-                    <Col desktop={12} tablet={6} mobile={12}>
-                        <Container>
-                            <ContainerImage>
-                               {artist.images && <ArtistImage src={artist.images[0].url} />}
-                            </ContainerImage>
-                            <ContainerInfo>
+    /*
+
+    <ContainerInfo>
                                 <ArtistName>{artist.name}</ArtistName>
                                 {artist.genres && <ArtistGenres>{artist.genres.join(", ")}</ArtistGenres>}
                                 {!!follow && <button onClick={handleFollow}>{follow === 'true' ? 'unfollow' : 'follow'}</button> }  
@@ -264,7 +275,89 @@ export default function Artist() {
 
                                 {!!tracksRecentlyPlayed && <ArtistGenres>{tracksRecentlyPlayed.length} times {artist.name} appeared in your last 50 streams</ArtistGenres>}
                             </ContainerInfo>
+
+    */
+
+    return (
+        <div>
+            
+            <ParticlesBackground />
+            <Inner>
+                <Grid colGap={30} rowGap={40}>
+                    {playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} /> }
+                    <Col desktop={12} tablet={6} mobile={12}>
+                        <Container>
+                            <ContainerImage>
+                               {artist.images && <ArtistImage src={artist.images[0].url} />}
+                            </ContainerImage>
+                            <ContainerInfo>
+                                <ArtistName>{artist.name}</ArtistName>
+                                {!!follow && <Button onClick={handleFollow}>{follow === 'true' ? 'following' : 'follow'}</Button> }  
+                            </ContainerInfo>
                         </Container>
+                    </Col>
+                </Grid>
+
+                <Grid colGap={30} rowGap={40}>
+                    <Col desktop={4} tablet={6} mobile={12}>
+                        <Title size="h4" margin="0 0 0 0">Genres</Title>
+                        <GenresContainer>
+                            {artist.genres && artist.genres.map(genre => <ArtistGenres>{genre}</ArtistGenres>)}
+                        </GenresContainer>
+                    </Col>
+                    
+                    <Col desktop={4} tablet={6} mobile={12}>
+                        <Title size="h4" margin="0 0 0 0">Popularity</Title>
+                        {artist.popularity && <Position><strong>{artist.popularity} / 100</strong></Position>}
+                    </Col>
+                    
+                    <Col desktop={4} tablet={6} mobile={12}>
+                        <Title size="h4" margin="0 0 0 0">Followers</Title>
+                        {artist.genres && <Position><strong>{artist.followers.total}</strong></Position>}
+                    </Col>
+                </Grid>
+
+                <Title size="h4" margin="60px 0 0 0">{artist.name} appeareances in your artist ranking</Title>
+                <Grid colGap={30} rowGap={40}>
+                    <Col desktop={4} tablet={6} mobile={12}>
+                        {!!artistFourWeeks && <ArtistInfoCont>
+                            <Position>#<strong>{artistFourWeeks}</strong></Position>
+                            <ArtistInfo>In your most listened artists list for the <strong>past 4 weeks</strong>.</ArtistInfo>
+                        </ArtistInfoCont>}
+                    </Col>
+                    <Col desktop={4} tablet={6} mobile={12}>
+                        {!!artistSixMonths &&<ArtistInfoCont>
+                            <Position>#<strong>{artistSixMonths}</strong></Position>
+                            <ArtistInfo>In your most listened artists list for the <strong>past 6 months</strong>.</ArtistInfo>
+                        </ArtistInfoCont>}
+                    </Col>
+                    <Col desktop={4} tablet={6} mobile={12}>
+                        {!!artistSeveralYears && <ArtistInfoCont>
+                            <Position>#<strong>{artistSeveralYears}</strong></Position>
+                            <ArtistInfo>In your most listened artists list for the <strong>past several years</strong>.</ArtistInfo>
+                        </ArtistInfoCont>}
+                    </Col>
+                </Grid>
+
+                <Title size="h4" margin="60px 0 0 0">{artist.name}'s tracks appeareances in your tracks ranking</Title>
+                <Grid colGap={30} rowGap={40}>
+                    <Col desktop={4} tablet={6} mobile={12}>
+                        {tracksFourWeeks.length > 0 &&<ArtistInfoCont>
+                            <Position><strong>{tracksFourWeeks.length}</strong></Position>
+                            <ArtistInfo>times appeared in your top 50 tracks from the <strong>past 4 weeks</strong>.</ArtistInfo>
+                        </ArtistInfoCont>}
+                    </Col>
+                    <Col desktop={4} tablet={6} mobile={12}>
+                        {tracksSixMonths.length > 0 &&<ArtistInfoCont>
+                            <Position><strong>{tracksSixMonths.length}</strong></Position>
+                            <ArtistInfo>times appeared in your top 50 tracks from the <strong>past 6 months</strong>.</ArtistInfo>
+                        </ArtistInfoCont>}
+                    </Col>
+                    <Col desktop={4} tablet={6} mobile={12}>
+                        {tracksSeveralYears.length > 0 &&<ArtistInfoCont>
+                            <Position><strong>{tracksSeveralYears.length}</strong></Position>
+                            <ArtistInfo>times appeared in your top 50 tracks <strong>lifetime</strong>.</ArtistInfo>
+                        </ArtistInfoCont>}
                     </Col>
                 </Grid>
 
@@ -272,12 +365,15 @@ export default function Artist() {
                 <Grid colGap={30} rowGap={40} columns>
                     {artistTopTracks && artistTopTracks.map((track, index) => (<TrackCard key={track._id} data={track} token={newToken} index={index} gridSize={2}/>))}
                 </Grid>
-
                 <Title size="h4">Related Artists</Title>
                 <Grid colGap={30} rowGap={40} columns>
                     {relatedArtists && relatedArtists.map((artist) => (<ArtistCard key={artist._id} data={artist} gridSize={2} token={newToken}/>))}
                 </Grid>
+
+               
             </Inner>
+            
+            <Footer />
         </div>
     )
 }
