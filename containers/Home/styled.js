@@ -11,6 +11,17 @@ const TitleTest = styled.h1`
 const ContainerLeftColumn = styled.div`
     position:sticky;
     top:20px;
+
+    /*
+    ::before{
+        content:"Tracks";
+        display:block;
+        top:0;
+        font-size:40px;
+        font-weight:bold;
+        margin-bottom:15px;
+    }
+    */
 `
 
 const ContainerHero = styled.div`
@@ -27,7 +38,7 @@ const Text = styled.p`
     font-family: 'Poppins', sans-serif;
     text-align:left;
     color:#fff;
-    margin:0px 0;
+    margin:${(props) => (props.margin ? props.margin : "0 0 0 0")};
     margin-bottom:30px;
 `
 
@@ -38,6 +49,22 @@ const MostListened = styled.span`
     color:#47ffbb;
     margin:0px 0;
     margin-bottom:30px;
+`
+
+const MainButton = styled.button`
+    padding:10px;
+    border: none;
+    color: #fff;
+    font-family: Poppins;
+    font-size: 16px;
+    //font-weight: bold;
+    background-color: rgb(10,10,10,1);
+    border-radius:5px;
+    margin-top:10px;
+    cursor: pointer;
+    border:1px solid #47ffbb;
+    height:50px;
+    margin-left:0;
 `
 
 const Button = styled.button`
@@ -55,4 +82,17 @@ const Button = styled.button`
     width:250px;
 `
 
-export {TitleTest, Text, ContainerLeftColumn, ContainerHero, Button, MostListened}
+const RefreshIcon = styled.img`
+    width:30px;
+    height:30px;
+    text-align:right;
+`
+
+const IconContainer = styled.div`
+    display:flex;
+    justify-content:flex-end;
+    align-items:flex-end;
+    margin: 280px 0 20px 0;
+`
+
+export {TitleTest, Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshIcon, IconContainer, MainButton}

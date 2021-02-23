@@ -12,24 +12,27 @@ const CurrentlyPlayingCard = props =>{
     const [showPlayer, setShowPlayer] = useState(true)
     const [icon, setIcon] = useState('/pause.svg');
 
+    // Token
+    const [token, setToken] = useState(props.token);
+
     const getNewToken = async () =>{
         const responseRefreshToken = await axios.get(`https://my-spotify-data-center-server.vercel.app/refresh_token`, {
             params: {
               'refresh_token': props.refreshToken
             }
           });
-        console.log(responseRefreshToken.data.access_token);
-        props.setToken(responseRefreshToken.data.access_token)
+        //console.log(responseRefreshToken.data.access_token);
+        setToken(responseRefreshToken.data.access_token)
     }
  
     const player = async () => {
         const responsePlayingCheck = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
             headers: {
-                'Authorization': 'Bearer ' + props.token
+                'Authorization': 'Bearer ' + token
             }
         });
         let isPlayingCheck = responsePlayingCheck.data.is_playing;
-        console.log(isPlayingCheck);
+        //console.log(isPlayingCheck);
         if(isPlaying && isPlayingCheck){
             try{
                 setIsPlaying(false);
@@ -37,16 +40,16 @@ const CurrentlyPlayingCard = props =>{
                 axios({
                     method: "put",
                     url: `https://api.spotify.com/v1/me/player/pause`,
-                    headers: { Authorization: "Bearer " + props.token },
+                    headers: { Authorization: "Bearer " + token },
                 }).then(function (response) {
-                    console.log(response);
+                    //console.log(response);
                 });
                 const responsePlaying = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
                         headers: {
-                        'Authorization': 'Bearer ' + props.token
+                        'Authorization': 'Bearer ' + token
                         }
                 });
-                console.log(responsePlaying);
+                //console.log(responsePlaying);
                 setProgress(responsePlaying.data.progress_ms)
             } catch(error){
                 if (error.response.status === 401) {
@@ -67,9 +70,9 @@ const CurrentlyPlayingCard = props =>{
                         },
                         "position_ms": progress
                     },
-                    headers: { Authorization: "Bearer " + props.token },
+                    headers: { Authorization: "Bearer " + token },
                 }).then(function (response) {
-                    console.log(response);
+                    //console.log(response);
                 });
             } catch(error){
                 if (error.response.status === 401) {
@@ -88,33 +91,35 @@ const CurrentlyPlayingCard = props =>{
 
     return(
         <div>
-        <Container showPlayer={showPlayer} >
-            <CurrentlyPlayingCont onClick={ ()=> setShowPlayer(!showPlayer) }>
-                <TimePlayed>Currently Playing</TimePlayed>
-            </CurrentlyPlayingCont>
-            <Cont>
-                <ContainerTrack>
-                {props.data.length !== 0 &&
-                    <a href={external_urls.spotify} target="_blank">
-                        <ImageContainer>
-                            <TrackImage src={album.images[1].url} alt="playing" />
-                        </ImageContainer>
-                    </a>
-                }
-                <TextContainer>
-                    <Link href={{pathname: `/track/${id}`, query: { token: props.token, id: id }, }}>
-                        <TrackName>{name}</TrackName>
-                    </Link>
-                    <ArtistName>{artistsNames.join(", ")}</ArtistName>
-                </TextContainer>
-            </ContainerTrack>
-            <ContainerPlay>
-                <PlayState src={icon} alt="pause_button" onClick={player}/>
-                <SoundContainer>
-                </SoundContainer>
-            </ContainerPlay>
-            </Cont>
-        </Container>
+        <Inner>
+            <Container showPlayer={showPlayer} >
+                <CurrentlyPlayingCont onClick={ ()=> setShowPlayer(!showPlayer) }>
+                    <TimePlayed>Currently Playing</TimePlayed>
+                </CurrentlyPlayingCont>
+                <Cont>
+                    <ContainerTrack>
+                    {props.data.length !== 0 &&
+                        <a href={external_urls.spotify} target="_blank">
+                            <ImageContainer>
+                                <TrackImage src={album.images[1].url} alt="playing" />
+                            </ImageContainer>
+                        </a>
+                    }
+                    <TextContainer>
+                        <Link href={{pathname: `/track/${id}`, query: { token: props.token, id: id }, }}>
+                            <TrackName>{name}</TrackName>
+                        </Link>
+                        <ArtistName>{artistsNames.join(", ")}</ArtistName>
+                    </TextContainer>
+                </ContainerTrack>
+                <ContainerPlay>
+                    <PlayState src={icon} alt="pause_button" onClick={player}/>
+                    <SoundContainer>
+                    </SoundContainer>
+                </ContainerPlay>
+                </Cont>
+            </Container>
+        </Inner>
         </div>
     )
 }

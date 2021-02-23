@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import {Grid, Col} from '../Grid'
-import {TrackImage, TrackName, TrackPosition, ArtistName, PlayOnSpotify, ImageContainer, ContainerTrack} from './styled'
+import {TrackImage, TrackName, TrackPosition, ArtistName, PlayOnSpotify, ImageContainer, ContainerTrack, TextContainer, Text} from './styled'
 import axios from 'axios'
 import React, {useState, useEffect} from 'react'
 import Modal from '../Modal'
@@ -10,6 +10,9 @@ const TrackCard = props =>{
     const {genres, name, album, external_urls, id, artists} = props.data
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [activeDevices, setActiveDevices] = useState('');
+
+    // Token
+    const [token, setToken] = useState(props.token);
     
     const position = props.index + 1;
 
@@ -19,8 +22,7 @@ const TrackCard = props =>{
               'refresh_token': props.refreshToken
             }
           });
-        console.log(responseRefreshToken.data.access_token);
-        props.setToken(responseRefreshToken.data.access_token)
+        setToken(responseRefreshToken.data.access_token)
     }
 
     const openModal = () =>{
@@ -32,7 +34,7 @@ const TrackCard = props =>{
             try{
                 const responseUserDevicesCheck = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
                 headers: {
-                'Authorization': 'Bearer ' + props.token
+                'Authorization': 'Bearer ' + token
                 }
                 });
                 const devicesCheck = responseUserDevicesCheck.data.devices;
@@ -54,44 +56,16 @@ const TrackCard = props =>{
         try{
         const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
                 headers: {
-                'Authorization': 'Bearer ' + props.token
+                'Authorization': 'Bearer ' + token
                 }
             });
         const devices = responseUserDevices.data.devices;
         if(devices.length == 0){
-            //console.log("No hay devices activos");
             setActiveDevices(false)
             checkPlayTrack(responseUserDevices);
-            //setIsDevice(false)
         } else{
-            //console.log("Hay un device activo.")
             setActiveDevices(true)
             checkPlayTrack(responseUserDevices);
-            //setIsDevice(true)
-            /*
-            const devices = responseUserDevices.data.devices;
-            const deviceID = responseUserDevices.data.devices[0].id
-            //console.log(deviceActive);
-            //const deviceID = deviceActive[0].id;
-            if(deviceID){
-            const requestData = {
-                "uris": [`spotify:track:${id}`],
-                "position_ms": 0
-            }
-            const base_url = `https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`;
-            axios({
-                method: 'put',
-                url: base_url,
-                data: requestData,
-                headers: { 'Authorization': 'Bearer ' + props.token }
-            })
-            .then(function (response) {
-                //console.log(response);
-            });
-            } else{
-                console.log("No hay devices activos")
-            }
-            */
         }
         } catch(error){
             if (error.response.status === 401) {
@@ -109,8 +83,8 @@ const TrackCard = props =>{
             setActiveDevices(true)
             const deviceID = responseUserDevices.data.devices[0].id
             if(deviceID){
-            console.log("Holis");
-            console.log("El ID es" + id)
+            //console.log("Holis");
+            //console.log("El ID es" + id)
             const requestData = {
                 "uris": [`spotify:track:${id}`],
                 "position_ms": 0
@@ -120,7 +94,7 @@ const TrackCard = props =>{
                 method: 'put',
                 url: base_url,
                 data: requestData,
-                headers: { 'Authorization': 'Bearer ' + props.token }
+                headers: { 'Authorization': 'Bearer ' + token }
             })
             .then(function (response) {
                 //console.log(response);
@@ -141,29 +115,24 @@ const TrackCard = props =>{
         return artist.name
     })
 
-    //console.log(artistsNames);
-    /*
-    {artists.map(artist => 
-                    <Link href={{pathname: `/artist/${artist.name}`, query: { token: props.token, id: artist.id }, }}>
-                        <ArtistName>{artist.name}</ArtistName>
-                    </Link>
-                )}
-    */
-
     return(
         <Col desktop={props.gridSize} tablet={6} mobile={12}>
             <ContainerTrack>
             <div>
                 {!activeDevices && <Modal modalIsOpen={modalIsOpen} setModalIsOpen={setModalIsOpen} />}
-                <ImageContainer onClick={openModal}>
+                <ImageContainer onClick={openModal} singleTrack={props.singleTrack}>
                     <a onClick={playTrack} target="_blank">
-                        <PlayOnSpotify onClick={openModal}>Play On Spotify</PlayOnSpotify>
-                        <TrackImage src={album.images[1].url} alt={name} onClick={openModal}/>
+                        {/*<PlayOnSpotify onClick={openModal}>Play On Spotify</PlayOnSpotify>*/}
+                        <TrackImage src={album.images[1].url} alt={name} onClick={openModal} singleTrack={props.singleTrack} />
+                        <TextContainer>
+                            <Text>Play On Spotify</Text>
+                        </TextContainer>
                     </a>
+                    {!!position && <TrackPosition>{position}</TrackPosition>}
                 </ImageContainer>
-                {!!position && <TrackPosition>{position}</TrackPosition>}
+                
                 <Link href={{pathname: `/track/${id}`, query: { token: props.token, id: id, refreshToken: props.refreshToken }, }}>
-                    <TrackName>{name}</TrackName>
+                    <TrackName margin={props.margin}>{name}</TrackName>
                 </Link>
                 <ArtistName>{artistsNames.join(", ")}</ArtistName>
             </div>

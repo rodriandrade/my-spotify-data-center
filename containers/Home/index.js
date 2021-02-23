@@ -17,7 +17,7 @@ import Typical from 'react-typical'
 import NavMenu from '../../components/NavMenu'
 import Footer from '../../components/Footer'
 
-import {TitleTest, ContainerArtists, Text, ContainerLeftColumn, ContainerHero, Button, MostListened} from './styled'
+import {TitleTest, ContainerArtists, Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshIcon, IconContainer, MainButton} from './styled'
 
 const Home = () =>{
 
@@ -58,6 +58,7 @@ const Home = () =>{
 
       // Albums
       const [albums, setAlbums] = useState([]);
+      const [totalAlbums, setTotalAlbums] = useState([]);
 
       // Historial de reproducción y reproduciendo actualmente
       const [recentlyPlayed, setRecentlyPlayed] = useState([]);
@@ -105,22 +106,6 @@ const Home = () =>{
         }
         getToken();
       }, [])
-
-      /*
-      useEffect(() => {
-        setTimeout(function
-        const responsePlaying = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
-                    headers: {
-                      'Authorization': 'Bearer ' + token
-                    }
-                  });
-                  console.log("Me ejecute")
-                  console.log(responsePlaying.data.item);
-                  setPlaying(responsePlaying.data.item);
-          }, 2000);
-        
-      }, [playingRightNow])
-      */
 
       useEffect(() => {
         const fetchData = async () => {
@@ -173,6 +158,7 @@ const Home = () =>{
                   const artistsNamesFilter = artistsNames.filter( (artist, index ) => {
                     return index < 5;
                   })
+                  console.log(artistsNamesFilter)
                   setTotalArtists(artistsNamesFilter)
 
                   //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -185,12 +171,13 @@ const Home = () =>{
                     }
                   });
                   setTracks(responseTracks.data.items);
-                  const tracksNames = tracks.map(track =>{
+                  const tracksNames = responseTracks.data.items.map(track =>{
                     return track.name
                   })
                   const tracksNamesFilter = tracksNames.filter( (artist, index ) => {
                     return index < 5;
                   })
+                  console.log(tracksNamesFilter);
                   setTotalTracks(tracksNamesFilter)
                   
                   //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -311,6 +298,7 @@ const Home = () =>{
         //  {params !== undefined && <TopGenres token={params.token} data={tracks}/>}
       }
 
+      // Albums
       useEffect(() => {
         const fetchAlbums = async () =>{
           if(token){
@@ -371,7 +359,16 @@ const Home = () =>{
             //console.log(artistsAlbums);
             let keysSortedFourWeeks = Object.keys(artistsAlbums).sort(function(a,b){return artistsAlbums[b]-artistsAlbums[a]})
             //console.log(keysSortedFourWeeks)
-            setAlbums(keysSortedFourWeeks)
+
+            // Which artists appears more than once 
+
+            const albumsNamesFilter = keysSortedFourWeeks.filter( (artist, index ) => {
+              return index < 5;
+            })
+
+            setTotalAlbums(albumsNamesFilter)
+            setAlbums(keysSortedFourWeeks);
+
             } catch(error) {
               console.error('este es mi error',error);
               if (error.response.status === 401) {
@@ -383,6 +380,7 @@ const Home = () =>{
         fetchAlbums()
       }, [albumsTerm, token])
 
+      // Genres
       useEffect(() => {
         const fetchGenres = async () =>{
           if(token){
@@ -412,9 +410,9 @@ const Home = () =>{
                   },
               });
               responseArtist.data.genres.map((genre) => {
-                more.push(genre);
+                artists_genres.push(genre);
               });
-              artists_genres.push(more);
+              //artists_genres.push(more);
             
 
               //console.log(artists_genres);
@@ -433,7 +431,7 @@ const Home = () =>{
               //console.log(orderGenres);
               //console.log(orderValues);
               const genresToShow = orderGenres.filter((genre, index) =>{
-                return index < 8
+                return index < 5
               })
               //console.log(orderGenres);
               setGenres(genresToShow)
@@ -449,6 +447,7 @@ const Home = () =>{
         fetchGenres()
       }, [genresTerm, token])
     
+      // Recommendations
       useEffect(() => {
         const fetchRecommendations = async() =>{
           if(token){
@@ -601,6 +600,7 @@ const Home = () =>{
             <link rel="icon" href="/favicon.ico" />
           </Head>
           <NavMenu />
+          <ParticlesBackground />
           <Inner>
           
           {!user ? 
@@ -610,7 +610,7 @@ const Home = () =>{
                 <ContainerHero>
                   <Title size="h1">Welcome to your Spotify Data Center</Title>
                   {!user && <a href="http://localhost:8888/login">
-                    <button>Login with Spotify</button>
+                    <MainButton>Login with Spotify</MainButton>
                   </a>}
                 </ContainerHero>
               </Col>
@@ -621,8 +621,7 @@ const Home = () =>{
             <Grid colGap={30} rowGap={40}>
               <Col desktop={12} tablet={6} mobile={12}>
                 <ContainerHero>
-                  <Title size="h1">Hi, {user} :)</Title>
-
+                  <Title size="h1" margin="0 0 0 0">Hi, {user} :)</Title>
                   {user && playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} />}
                 </ContainerHero>
               </Col>
@@ -647,7 +646,7 @@ const Home = () =>{
                 </ContainerLeftColumn>
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
-                <Grid>
+                <Grid colGap={30} rowGap={40}>
                   {artists.map((artist, index) => (<ArtistCard key={artist.id} data={artist} index={index} token={token} gridSize={3} refreshToken={params.refresh_token}/>))}
                 </Grid>
               </Col>
@@ -665,17 +664,17 @@ const Home = () =>{
             <Grid colGap={30} rowGap={40}>
               <Col desktop={3} tablet={6} mobile={12}>
                 <ContainerLeftColumn>
-                  {totalTracks && <Text>You listen to these tracks for the most part in the past 4 weeks! You spend a lot of time listening to {totalTracks.join(", ")}</Text>}
+                  {totalTracks && <Text>You listen to these tracks for the most part in the past 4 weeks! You spend a lot of time listening to <MostListened>{totalTracks.join(", ")}</MostListened></Text>}
                   <Text>Show artists by:</Text>
                   <Button activeButton={handleTracksButton('short_term')} onClick={ () => setTracksTerm('short_term')}>Past 4 weeks</Button>
                   <Button activeButton={handleTracksButton('medium_term')} onClick={ () => setTracksTerm('medium_term')}>6 months</Button>
                   <Button activeButton={handleTracksButton('long_term')} onClick={ () => setTracksTerm('long_term')}>Several years</Button>
-                  <Text>Do you want to create a playlist with your 50 favorites tracks?</Text>
-                  <button onClick={createPlaylist}>Create playlist</button>
+                  <Text margin="30px 0 0 0">Do you want to create a playlist with your 50 favorites tracks?</Text>
+                  <MainButton onClick={createPlaylist}>Create playlist</MainButton>
                 </ContainerLeftColumn>
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
-                <Grid>
+                <Grid colGap={30} rowGap={40}>
                   {tracksTopTen.map((track, index) => (<TrackCard key={track.id} data={track} index={index} token={token} gridSize={3} setToken={setToken} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow}/>))}
                   {tracks.map((track, index) => (<TrackCard key={track.id} data={track} index={index} token={token} refreshToken={params.refresh_token} gridSize={3} setToken={setToken} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow}/>))}
                 </Grid>
@@ -694,7 +693,7 @@ const Home = () =>{
             <Grid colGap={30} rowGap={40}>
               <Col desktop={3} tablet={6} mobile={12}>
                 <ContainerLeftColumn>
-                  <Text>You listen these artists for the most part in the past 4 weeks! You spend a lot of time listening to {totalArtists.join(", ")}</Text>
+                  <Text>You listen these albums for the most part in the past 4 weeks! You spend a lot of time listening to <MostListened>{totalAlbums.join(", ")}</MostListened></Text>
                   <Text>Show artists by:</Text>
                   <Button activeButton={handleAlbumsButton('short_term')} onClick={ () => setAlbumsTerm('short_term')}>Past 4 weeks</Button>
                   <Button activeButton={handleAlbumsButton('medium_term')} onClick={ () => setAlbumsTerm('medium_term')}>6 months</Button>
@@ -702,7 +701,7 @@ const Home = () =>{
                 </ContainerLeftColumn>
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
-                <Grid>
+                <Grid colGap={30} rowGap={40}>
                   {albums.map((album, index) => (<AlbumCard key={album.id} data={album} index={index} token={token} gridSize={3} imageSizeLarge refreshToken={params.refresh_token} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} />))}
                 </Grid>
               </Col>
@@ -714,7 +713,7 @@ const Home = () =>{
           <section id="genres_section">             
             <Grid colGap={30} rowGap={40}>
               <Col desktop={7} tablet={6} mobile={12}>
-                  {artists && <Title size="extra-large">Your most listened genres</Title>}
+                  {artists && <Title size="extra-large">These are your favorites genres</Title>}
               </Col>
             </Grid>
             <Grid colGap={30} rowGap={40}>
@@ -728,8 +727,10 @@ const Home = () =>{
                 </ContainerLeftColumn>
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
-                <Grid>
-                  {genres && genres.map(genre => (<p>{genre}</p>))}
+                <Grid colGap={30} rowGap={40}>
+                  {genres && genres.map(genre => 
+                    <p>{genre}</p>)
+                    }
                 </Grid>
               </Col>
             </Grid>
@@ -744,9 +745,13 @@ const Home = () =>{
               </Col>
             </Grid>
             <Grid colGap={30} rowGap={40}>
-              <Col desktop={12} tablet={6} mobile={12}>
-                <Grid colGap={30} rowGap={10}>
+              <Col desktop={3} tablet={6} mobile={12}>
+                <ContainerLeftColumn>
                   <Text>You listen {minutesListened} minutes in the last {streamsDays} days</Text>
+                </ContainerLeftColumn>
+              </Col>
+              <Col desktop={9} tablet={6} mobile={12}>
+                <Grid colGap={10} rowGap={10}>
                   {recentlyPlayed.map((track) => (<RecentlyPlayedCard key={track.id} data={track} token={token} />))}
                 </Grid>
               </Col>
@@ -779,6 +784,13 @@ const Home = () =>{
               <Col desktop={6} tablet={6} mobile={12}>
                   {artists && <Title size="extra-large">Recommendations</Title>}
               </Col>
+              {/*
+              <Col desktop={6} tablet={6} mobile={12}>
+                <IconContainer>
+                    <RefreshIcon src="/refresh.svg" />
+                </IconContainer>
+              </Col>
+              */}
             </Grid>
             <Grid colGap={30} rowGap={40}>
               <Col desktop={3} tablet={6} mobile={12}>
@@ -789,18 +801,19 @@ const Home = () =>{
                   <Button activeButton={handleRecommendationsButton('artists')} onClick={ () => setRecommendationsTerm('artists')}>By Artists</Button>
                   <Button activeButton={handleRecommendationsButton('genres')} onClick={ () => setRecommendationsTerm('genres')}>By Genre</Button>
                   <Button onClick={() => setNewRec(!newRec)}>Refresh recommendations</Button>
-                  <Text>Do you want to create a playlist with your 50 favorites tracks?</Text>
-                  <button onClick={createPlaylistWithRecommendations}>Create playlist</button>
+                  <Text margin="30px 0 0 0">Do you want to create a playlist with your 50 favorites tracks?</Text>
+                  <MainButton onClick={createPlaylistWithRecommendations}>Create playlist</MainButton>
                 </ContainerLeftColumn>
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
-                <Grid>
-                {tracks && recommendations.map((track, index) => (<TrackCard key={track.id} data={track} token={token} gridSize={3} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} />))}
+                <Grid colGap={30} rowGap={40}>
+                {tracks && recommendations.map((track, index) => (<TrackCard key={track.id} data={track} token={token} gridSize={3} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} margin="20px 0 5px 0" />))}
                 </Grid>
               </Col>
             </Grid>
           </section>
           : <p>Loading...</p> }
+
            <Footer />
           </Inner>
 

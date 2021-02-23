@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import {Grid, Col} from '../Grid'
-import {TrackImage, TrackName, TrackPosition, ArtistName, PlayOnSpotify, ImageContainer} from './styled'
+import {TrackImage, TrackName, TrackPosition, ArtistName, PlayOnSpotify, ImageContainer, TextContainer, Text} from './styled'
 import axios from 'axios'
 import React, {useState, useEffect} from 'react'
 
@@ -10,27 +10,42 @@ const AlbumCard = props =>{
     const [artistsNames, setArtistsNames] = useState([]);
     const [tracks, setTracks] = useState([]);
     
+    console.log(props.data);
+    
     // Play track from album
     const [activeDevices, setActiveDevices] = useState('');
+
+    // Token
+    const [token, setToken] = useState(props.token);
+
+    const getNewToken = async () =>{
+        const responseRefreshToken = await axios.get(`https://my-spotify-data-center-server.vercel.app/refresh_token`, {
+            params: {
+              'refresh_token': props.refreshToken
+            }
+          });
+        //console.log(responseRefreshToken.data.access_token);
+        setToken(responseRefreshToken.data.access_token)
+    }
 
     useEffect(() => {
         const fetchAlbumToShow = async () =>{
             const responseAlbum = await axios.get(`https://api.spotify.com/v1/search?q=${props.data}&type=album&limit=1`, {
                 headers: {
-                    'Authorization': 'Bearer ' + props.token
+                    'Authorization': 'Bearer ' + token
                 }
             });
 
             const responseAlbumTracks = await axios.get(`https://api.spotify.com/v1/albums/${responseAlbum.data.albums.items[0].id}`, {
                     headers: {
-                    'Authorization': 'Bearer ' + props.token
+                    'Authorization': 'Bearer ' + token
                     }
             }); 
             setTracks(responseAlbumTracks.data.tracks.items);
             setAlbumToShow(responseAlbum.data.albums.items[0])
 
             //setTracks(responseAlbum.data.tracks.items);
-            console.log(responseAlbum);
+            //console.log(responseAlbum);
             const artistInfo = responseAlbum.data.albums.items[0].artists;
             if(artistInfo){
                 const artistsNamesToShow = artistInfo.map(artist =>{
@@ -46,7 +61,7 @@ const AlbumCard = props =>{
         try{
         const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
                 headers: {
-                'Authorization': 'Bearer ' + props.token
+                'Authorization': 'Bearer ' + token
                 }
             });
         const devices = responseUserDevices.data.devices;
@@ -58,11 +73,9 @@ const AlbumCard = props =>{
             checkPlayTrack(responseUserDevices);
         }
         } catch(error){
-            /*
             if (error.response.status === 401) {
                 getNewToken();
             }
-            */
         }
     }
   
@@ -76,7 +89,7 @@ const AlbumCard = props =>{
               setActiveDevices(true)
               const deviceID = responseUserDevices.data.devices[0].id
               if(deviceID){
-              console.log("Holis");
+              //console.log("Holis");
               const trackID = tracks[0].id
               const requestData = {
                   "uris": [`spotify:track:${trackID}`],
@@ -87,7 +100,7 @@ const AlbumCard = props =>{
                   method: 'put',
                   url: base_url,
                   data: requestData,
-                  headers: { 'Authorization': 'Bearer ' + props.token }
+                  headers: { 'Authorization': 'Bearer ' + token }
               })
               .then(function (response) {
                   //console.log(response);
@@ -98,11 +111,9 @@ const AlbumCard = props =>{
               }
           }
           } catch(error){
-              /*
               if (error.response.status === 401) {
                   getNewToken();
               }
-              */
           }
         }
     }
@@ -111,10 +122,12 @@ const AlbumCard = props =>{
       <Col desktop={props.gridSize} tablet={6} mobile={12}>
         <div>
           <ImageContainer>
-            {albumToShow.images && (
-              <TrackImage onClick={playTrack} src={albumToShow.images[1].url} alt={name} />
-            )}
+              {albumToShow.images && <TrackImage onClick={playTrack} src={albumToShow.images[1].url} alt={name} />}
+              <TextContainer>
+                  <Text>Play On Spotify</Text>
+              </TextContainer>
           </ImageContainer>
+          
           <Link
             href={{
               pathname: `/album/${albumToShow.name}`,

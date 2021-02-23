@@ -2,6 +2,7 @@ import React from 'react'
 import {GridContainer, ColContainer } from './styled'
 
 const Grid = ({children, ...props}) => {
+
     return(
         <GridContainer
             colGap={props.colGap}

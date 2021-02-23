@@ -1,5 +1,34 @@
 import styled from 'styled-components'
 
+const TextContainer = styled.div`
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .5s ;
+    background-color:rgb(0,0,0,0.8);
+    cursor:pointer;
+`
+
+const Text = styled.p`
+    position: absolute; 
+    top:50%;
+    left:50%;
+    color: rgb(12,12,12);
+    text-align:center;
+    font-size:20px;
+    opacity:1; 
+    margin:0;
+    width:100%;
+    cursor:pointer;
+    transform: translate(-50%, -50%);
+    color:#fff;
+`
+
 const Container = styled.div`
     background-color: rgb(10,10,10);
     width:400px;
@@ -15,6 +44,8 @@ const ContainerTrack = styled.div`
 const TrackImage = styled.img`
     max-height:200px;
     max-width: 200px;
+    //max-height: ${(props) => (props.singleTrack ? "100%" : "200px")};
+    //max-width: ${(props) => (props.singleTrack ? "100%" : "200px")};
     cursor: pointer;    
     opacity:1;
 `
@@ -30,10 +61,17 @@ const PlayOnSpotify = styled.p`
 `
 
 const ImageContainer = styled.div`
+    //max-height: ${(props) => (props.singleTrack ? "100%" : "200px")};
+    //max-width: ${(props) => (props.singleTrack ? "100%" : "200px")};
     width:200px;  
     height:200px;
     position: relative;
+    margin:0 auto;
+    &:hover ${TextContainer} {
+        opacity: 1;
+    }
 
+    /*
     &:hover ${PlayOnSpotify} {
         opacity: 1;
     }
@@ -41,6 +79,7 @@ const ImageContainer = styled.div`
     &:hover ${TrackImage} {
         opacity: 0.1;
     }
+    */
 `
 
 const TrackPosition = styled.p`
@@ -53,7 +92,7 @@ const TrackPosition = styled.p`
     position:absolute;
     //top:125px;
     //left:10px;
-    top:45%;
+    top:67%;
     left:50%;
     transform: translate(-50%, 25%);
     text-shadow: 0px 0px 11px rgba(0, 0, 0, 1);
@@ -73,23 +112,26 @@ const TrackPosition = styled.p`
 
 const TrackName = styled.p`
     font-size:16px;
-    color: #47ffbb;
-    margin:10px;
+    //color: #47ffbb;
+    color: #fff;
+    text-transform:uppercase;
+    margin: ${(props) => (props.margin ? props.margin : "40px 0 5px 0")};
     text-align: center;
     cursor: pointer;
     z-index:4;
 
     :hover{
-        text-decoration: underline 3px solid;
+        text-decoration: underline 3px solid #47ffbb;
     }
 `
 
 const ArtistName = styled.p`
-    font-size:12px;
-    color: #fff;
+    font-size:14px;
+    //color: #fff;
+    color:#47ffbb;
     margin:0;
     text-align: center;
     z-index:4;
 `
 
-export { Container, TrackName, ArtistName, TrackImage, TrackPosition, PlayOnSpotify, ImageContainer, ContainerTrack}
+export { Container, TrackName, ArtistName, TrackImage, TrackPosition, PlayOnSpotify, ImageContainer, ContainerTrack, Text, TextContainer}

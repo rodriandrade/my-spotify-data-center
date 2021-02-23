@@ -5,8 +5,8 @@ const GridContainer = styled.div`
     //grid-template-columns:repeat(12, 1fr);
     grid-template-columns: ${(props) => (props.columns ? "repeat(10, 1fr)" : "repeat(12, 1fr)")};
     //background-color: rgb(10,10,10);
-    grid-column-gap: ${props => props.colGap || 30}px;
-    grid-row-gap: ${props => props.rowGap || 40}px;
+    grid-column-gap: ${props => props.colGap || 0}px;
+    grid-row-gap: ${props => props.rowGap || 0}px;
     width:100%;
     //justify-items: center;
 `

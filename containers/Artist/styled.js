@@ -91,5 +91,24 @@ const ArtistInfo = styled.p`
     color:#fff; 
     margin:0;
 `
+const NoDataTitle = styled.h1`
+    font-size:72px;
+    color:rgba(100,100,100,1);
+    margin:0;
+`
 
-export {ContainerInfo, ContainerImage, Container, ArtistImage, ArtistName, ArtistGenres, Position, ArtistInfo, ArtistInfoCont, Button, GenresContainer}
+const NoDataContainer = styled.div`
+    display:flex;
+    //background-color:rgba(20,20,20, 0.5);
+    flex-direction:column;
+    //border-radius:10px;
+    //padding:20px;
+`
+
+const NoDataInfo = styled.p`
+    font-size:16px;
+    color:rgba(100,100,100,1);
+    margin:0;
+`
+
+export {ContainerInfo, ContainerImage, Container, ArtistImage, ArtistName, ArtistGenres, Position, ArtistInfo, ArtistInfoCont, Button, GenresContainer, NoDataContainer, NoDataInfo, NoDataTitle}

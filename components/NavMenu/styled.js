@@ -34,25 +34,34 @@ const Container = styled.div`
 `
 
 const List = styled.li`
-margin-right:60px;
-  float:right;
-  height:100%;
-  line-height:60px;
+    margin-right:20px;
+    float:right;
+    height:100%;
+    line-height:60px;
+    list-style-type: none;
+    text-decoration:none;
 
-  a{
-        padding:0 10px;
-        text-decoration: none;
-        color:#47ffbb;
-        transition:0.3s;
+
+    a{
+            padding:0 10px;
+            text-decoration: none;
+            color:#fff;
+            transition:0.3s;
+            list-style-type: none;
+            text-decoration:none;
+
     }
-/*
+
+    a:hover{
+        text-decoration: underline 1px solid #47ffbb;
+    }
+
+    /*
     display: inline-block;
 
     
     
-    a:hover{
-        text-decoration: underline 1px solid black;
-    }
+    
 
 
     @media (max-width: 480px) {
@@ -63,6 +72,8 @@ margin-right:60px;
 `
 
 const Menu = styled.ul`
+    list-style-type: none;
+    text-decoration:none;
 /*
     @media (max-width: 480px) {
         padding:0;

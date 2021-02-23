@@ -8,22 +8,7 @@ import Link from 'next/link'
 const NavMenu = props => {
 
     const [open, setOpen] = useState(false)
-    /*
-    <Container>
-                <div>
-                    <h2>Gabriel Piantanida</h2>
-                </div>
-                <nav>
-                    <ul>
-                        <List><a href="">Home</a></List>
-                        <List><a href="#servicios_section">Sobre mi</a></List>
-                        <List><a href="#relatos_section">Relatos</a></List>
-                        <List><a href="#multimedia_section">Contenido Multimedia</a></List>
-                    </ul>
-                </nav>
-            </Container>
-    */
-
+    
     return(
         <div>
             <header>
@@ -49,6 +34,8 @@ const NavMenu = props => {
                                 <List><a href="#artists_section">Artists</a></List>
                                 <List><a href="#tracks_section">Tracks</a></List>
                                 <List><a href="#tracks_section">Albums</a></List>
+                                <List><a href="#tracks_section">Genres</a></List>
+                                <List><a href="#tracks_section">Recommendations</a></List>
 
                             </Menu>
                         </nav>

@@ -5,11 +5,11 @@ import { linearGradientDef } from '@nivo/core'
 
 const BarChart = props => {
 
-    console.log(props.audioFeatures)
+    //console.log(props.audioFeatures)
     const { danceability, energy, speechiness, acousticness, instrumentalness, liveness, valence } = props.audioFeatures;
     const values = [danceability, energy, speechiness, acousticness, instrumentalness, liveness, valence];
     //const newValues = [];
-    console.log(values);
+    //console.log(values);
         const newValues = values.map((value) => {
             if (Math.floor(value) !== value){
                 let decimalValue = value.toString().split(".")[1].length || 0;
@@ -34,7 +34,7 @@ const BarChart = props => {
                 }
             }
         });
-    console.log(newValues);
+    //console.log(newValues);
 
     const data = [
         {

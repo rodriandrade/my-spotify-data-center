@@ -5,13 +5,15 @@ import TrackCard from '../../components/trackCard'
 import {Grid, Col} from '../../components/Grid'
 import Title from '../../components/Title'
 import Inner from '../../components/Inner'
-import {ContainerAlbum, Subtitle, AlbumInfo, ContainerInfo, ContainerImage, ContainerAlbumName, Button, TrackImage, RecommendationsButtonsContainer, TrackName, Container, ArtistName, Icon} from './styled'
+import {ContainerAlbum, Subtitle, AlbumInfo, ContainerInfo, ContainerImage, ContainerAlbumName, Button, TrackImage, RecommendationsButtonsContainer, TrackName, Container, ArtistName, Icon, TextContainer, Text} from './styled'
 import BarChart from "../../components/BarChart";
 import NavMenu from '../../components/NavMenu'
 import Modal from '../../components/Modal'
 import ParticlesBackground from '../../components/ParticlesBackground'
 import Footer from '../../components/Footer'
 import TracklistCard from '../../components/TracklistCard'
+import Link from 'next/link'
+import CurrentlyPlayingCard from '../../components/CurrentlyPlayingCard'
 
 export default function Album() {
     const router = useRouter()
@@ -35,6 +37,11 @@ export default function Album() {
     // Get new token
     const [newToken, setNewToken] = useState(token);
 
+    // Player
+    const [playing, setPlaying] = useState([]);
+    const [playingData, setPlayingData] = useState([]);
+    const [playingRightNow, setPlayingRightNow] = useState([]);
+
     const getNewToken = async () =>{
         const responseRefreshToken = await axios.get(`https://my-spotify-data-center-server.vercel.app/refresh_token`, {
             params: {
@@ -51,6 +58,20 @@ export default function Album() {
             
             if(token){
             try {
+
+                const responsePlaying = await axios.get(
+                  `https://api.spotify.com/v1/me/player/currently-playing`,
+                  {
+                    headers: {
+                      Authorization: "Bearer " + token,
+                    },
+                  }
+                );
+                console.log("ACTUALIZA3");
+                console.log(responsePlaying.data.item);
+                setPlaying(responsePlaying.data.item);
+                setPlayingData(responsePlaying.data);
+                
                 const responseAlbum = await axios.get(`https://api.spotify.com/v1/albums/${id}`, {
                     headers: {
                     'Authorization': 'Bearer ' + token
@@ -221,52 +242,66 @@ export default function Album() {
   }
 
     return (
-        <div>
-            <NavMenu />
-            <Inner>
+      <div>
+        <NavMenu />
+        <Inner>
+        {playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} /> }
+        {tracks ? 
+          <Container>
+            <ContainerImage>
+              {!!album.images && <TrackImage onClick={playTrack} src={cover} />}
+              <TextContainer>
+                  <Text>Play On Spotify</Text>
+              </TextContainer>
+            </ContainerImage>
+            <ContainerAlbumName>
+              <TrackName>{album.name}</TrackName>
+              <ArtistName>{artistName}</ArtistName>
+              <RecommendationsButtonsContainer>
+                {save && (
+                  <Button onClick={handleSave}>
+                    <Icon src={saveIcon} alt="save_button" />
+                    {save === "true" ? "unsave" : "save"}
+                  </Button>
+                )}
+              </RecommendationsButtonsContainer>
+            </ContainerAlbumName>
+          </Container>
+          : <p>Loading...</p>}
 
-            <Container>
-                    <ContainerImage>
-                        {!!album.images && <TrackImage onClick={playTrack} src={cover}/>}
-                    </ContainerImage>
-                    <ContainerAlbumName>
-                        <TrackName>{album.name}</TrackName> 
-                        <ArtistName>{artistName}</ArtistName>
-                        <RecommendationsButtonsContainer>
-                          {save && <Button onClick={handleSave}><Icon src={saveIcon} alt="save_button" />{save === 'true' ? 'unsave' : 'save'}</Button> }
-                        </RecommendationsButtonsContainer> 
-                    </ContainerAlbumName>
-                </Container>
-
-              <Grid colGap={30} rowGap={40}>
-                <Col desktop={2} tablet={6} mobile={12}>
-                  <ContainerAlbum>
-                    <ContainerInfo>
-                      <Subtitle>Type</Subtitle>
-                      <AlbumInfo>{album.album_type}</AlbumInfo>
-                    </ContainerInfo>
-                    <ContainerInfo>
-                      <Subtitle>Release Date</Subtitle>
-                      <AlbumInfo>{album.release_date}</AlbumInfo>
-                    </ContainerInfo>
-                    <ContainerInfo>
-                      <Subtitle>Label</Subtitle>
-                      <AlbumInfo>{album.label}</AlbumInfo>
-                    </ContainerInfo>
-                    <ContainerInfo>
-                      <Subtitle>Popularity</Subtitle>
-                      <AlbumInfo>{album.popularity}/100</AlbumInfo>
-                    </ContainerInfo>
-                  </ContainerAlbum>
-                </Col>
-                <Col desktop={10} tablet={6} mobile={12}>
-                    {tracks && tracks.map(track => <TracklistCard data={track} token={newToken} />)}
-                </Col>
-              </Grid>
-
-              <Footer />
-            </Inner>
-           
-        </div>
-    )
+          {tracks ? 
+          <Grid colGap={30} rowGap={40}>
+            <Col desktop={2} tablet={6} mobile={12}>
+              <ContainerAlbum>
+                <ContainerInfo>
+                  <Subtitle>Type</Subtitle>
+                  <AlbumInfo>{album.album_type}</AlbumInfo>
+                </ContainerInfo>
+                <ContainerInfo>
+                  <Subtitle>Release Date</Subtitle>
+                  <AlbumInfo>{album.release_date}</AlbumInfo>
+                </ContainerInfo>
+                <ContainerInfo>
+                  <Subtitle>Label</Subtitle>
+                  <AlbumInfo>{album.label}</AlbumInfo>
+                </ContainerInfo>
+                <ContainerInfo>
+                  <Subtitle>Popularity</Subtitle>
+                  <AlbumInfo>{album.popularity}/100</AlbumInfo>
+                </ContainerInfo>
+              </ContainerAlbum>
+            </Col>
+            <Col desktop={10} tablet={6} mobile={12}>
+              {tracks &&
+                tracks.map((track) => (
+                  <TracklistCard data={track} token={newToken} refresh_token={refresh_token}/>
+                ))}
+            </Col>
+          </Grid>
+          : <p>Loading...</p>}
+          
+          <Footer />
+        </Inner>
+      </div>
+    );
 }

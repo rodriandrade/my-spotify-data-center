@@ -77,6 +77,7 @@ const ImageContainer = styled.div`
     height: 200px;
     overflow: hidden;
     border-radius:200px;
+    margin:0 auto;
     //background-color:yellow;
 `
 

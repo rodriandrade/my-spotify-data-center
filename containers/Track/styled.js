@@ -1,5 +1,34 @@
 import styled from 'styled-components'
 
+const TextContainer = styled.div`
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 220px;
+    width: 220px;
+    opacity: 0;
+    transition: .5s ;
+    background-color:rgb(0,0,0,0.8);
+    cursor:pointer;
+`
+
+const Text = styled.p`
+    position: absolute; 
+    top:50%;
+    left:50%;
+    color: rgb(12,12,12);
+    text-align:center;
+    font-size:20px;
+    opacity:1; 
+    margin:0;
+    width:100%;
+    cursor:pointer;
+    transform: translate(-50%, -50%);
+    color:#fff;
+`
+
 const ContainerInfo = styled.div`
     display: flex; 
     flex-direction: column; 
@@ -21,10 +50,13 @@ const RecommendationsButtonsContainer = styled.div`
 `
 
 const ContainerImage = styled.div`
-    display: flex; 
-    flex-direction: row; 
-    justify-content: center; 
-    align-items: center;
+    width:220px;  
+    height:220px;
+    position: relative;
+    
+    &:hover ${TextContainer} {
+        opacity: 1;
+    }
 `
 
 const Container = styled.div`
@@ -80,7 +112,7 @@ const Button = styled.button`
     cursor: pointer;
     border:1px solid #47ffbb;
     height:50px;
-    margin-left:20px;
+    margin-left:${(props) => (props.margin ? "0px" : "20px")};
 `
 
 const Position = styled.h1`
@@ -130,4 +162,24 @@ const ContainerAlbumInfo = styled.div`
     margin-left:20px;
 `   
 
-export {ContainerInfo, ContainerImage, Container, TrackImage, TrackName, TrackGenres, ArtistName, RecommendationsContainer, Button, RecommendationsButtonsContainer, Icon, Position, TrackInfo, TrackInfoCont, ContainerAlbum, ContainerAlbumImage, ContainerAlbumInfo}
+const NoDataTitle = styled.h1`
+    font-size:72px;
+    color:rgba(100,100,100,1);
+    margin:0;
+`
+
+const NoDataContainer = styled.div`
+    display:flex;
+    //background-color:rgba(20,20,20, 0.5);
+    flex-direction:column;
+    //border-radius:10px;
+    //padding:20px;
+`
+
+const NoDataInfo = styled.p`
+    font-size:16px;
+    color:rgba(100,100,100,1);
+    margin:0;
+`
+
+export {ContainerInfo, ContainerImage, Container, TrackImage, TrackName, TrackGenres, ArtistName, RecommendationsContainer, Button, RecommendationsButtonsContainer, Icon, Position, TrackInfo, TrackInfoCont, ContainerAlbum, ContainerAlbumImage, ContainerAlbumInfo, Text, TextContainer, NoDataContainer, NoDataInfo, NoDataTitle}

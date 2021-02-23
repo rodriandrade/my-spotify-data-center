@@ -78,6 +78,7 @@ const Button = styled.button`
     background-color: #47ffbb;
     color: black;
     border: none;
+    padding:20px;
 `
 
 export { Container, CloseButton, InfoContainer, InfoText, InfoTitle, Button }
