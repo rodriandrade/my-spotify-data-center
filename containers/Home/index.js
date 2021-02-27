@@ -17,7 +17,7 @@ import Typical from 'react-typical'
 import NavMenu from '../../components/NavMenu'
 import Footer from '../../components/Footer'
 
-import {TitleTest, ContainerArtists, Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshIcon, IconContainer, MainButton} from './styled'
+import {Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshIcon, IconContainer, MainButton, LoadingImage, LoadingContainer, LoadingText} from './styled'
 
 const Home = () =>{
 
@@ -87,6 +87,22 @@ const Home = () =>{
 
       // Descriptions 
       const [recommendationsDescription, setRecommendationsDescription] = useState('We prepare a list of recommendations based in your most listened track in the past 4 weeks.')
+
+      // Loading
+      const [pickLoadingText, setPickLoadingText] = useState('');
+
+      let loadingIntro = [];
+
+      useEffect(() => {
+        const randomLoadingText = () =>{
+          const loadingText = ["Are you listening to this? Well...", "Nice data", "You have a wonderful taste", "Just loading..."]
+          const pickLoading = loadingText[Math.floor(Math.random() * 3)]
+          console.log(pickLoading);
+          loadingIntro.push(pickLoading);
+        }
+        randomLoadingText();
+      }, [])
+      
 
       const getNewToken = async () =>{
         const responseRefreshToken = await axios.get(`https://my-spotify-data-center-server.vercel.app/refresh_token`, {
@@ -158,7 +174,7 @@ const Home = () =>{
                   const artistsNamesFilter = artistsNames.filter( (artist, index ) => {
                     return index < 5;
                   })
-                  console.log(artistsNamesFilter)
+                  //console.log(artistsNamesFilter)
                   setTotalArtists(artistsNamesFilter)
 
                   //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -177,7 +193,7 @@ const Home = () =>{
                   const tracksNamesFilter = tracksNames.filter( (artist, index ) => {
                     return index < 5;
                   })
-                  console.log(tracksNamesFilter);
+                  //console.log(tracksNamesFilter);
                   setTotalTracks(tracksNamesFilter)
                   
                   //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -232,6 +248,12 @@ const Home = () =>{
                   console.error('este es mi error',error);
                   if (error.response.status === 401) {
                     getNewToken();
+                  }
+                  if (error.response.status === 500) {
+                    console.log(error);
+                  }
+                  if (error.response.status === 504) {
+                      console.log(error);
                   }
               }
             }
@@ -290,6 +312,12 @@ const Home = () =>{
               console.error('este es mi error',error);
               if (error.response.status === 401) {
                 getNewToken(); 
+              }
+              if (error.response.status === 500) {
+                console.log(error);
+              }
+              if (error.response.status === 504) {
+                console.log(error);
               }
           }
         }
@@ -374,6 +402,12 @@ const Home = () =>{
               if (error.response.status === 401) {
                 getNewToken();
               }
+              if (error.response.status === 500) {
+                console.log(error);
+              }
+              if (error.response.status === 504) {
+                console.log(error);
+              }
             }
           }
         }
@@ -437,11 +471,17 @@ const Home = () =>{
               setGenres(genresToShow)
             })
             } catch(error) {
-            console.error('este es mi error',error);
-            if (error.response.status === 401) {
-              getNewToken();
+                console.error('este es mi error',error);
+                if (error.response.status === 401) {
+                  getNewToken();
+                }
+                if (error.response.status === 500) {
+                  console.log(error);
+                }
+                if (error.response.status === 504) {
+                  console.log(error);
+                }
             }
-          }
           }
         }
         fetchGenres()
@@ -509,6 +549,12 @@ const Home = () =>{
               if (error.response.status === 401) {
                 getNewToken();
               }
+              if (error.response.status === 500) {
+                console.log(error);
+              }
+              if (error.response.status === 504) {
+                console.log(error);
+              }
             }
           }
           
@@ -565,6 +611,12 @@ const Home = () =>{
               if (error.response.status === 401) {
                 getNewToken();
               }
+              if (error.response.status === 500) {
+                console.log(error);
+              }
+              if (error.response.status === 504) {
+                console.log(error);
+              }
           }
         }        
       }
@@ -589,7 +641,8 @@ const Home = () =>{
         return recommendationsTerm === buttonTerm;
       }
 
-
+      
+      
 
       return (
         
@@ -599,11 +652,12 @@ const Home = () =>{
             <title>Create Next App</title>
             <link rel="icon" href="/favicon.ico" />
           </Head>
-          <NavMenu />
+
+          <NavMenu access_token={token} />
           <ParticlesBackground />
           <Inner>
-          
-          {!user ? 
+
+          {!token ? 
           <section id="home_section">
             <Grid colGap={30} rowGap={40}>
               <Col desktop={12} tablet={6} mobile={12}>
@@ -616,8 +670,10 @@ const Home = () =>{
               </Col>
             </Grid>
           </section>
-          : 
-          <section id="home_section">
+          : null}
+          
+          {user ? 
+            <section id="home_section">
             <Grid colGap={30} rowGap={40}>
               <Col desktop={12} tablet={6} mobile={12}>
                 <ContainerHero>
@@ -626,7 +682,12 @@ const Home = () =>{
                 </ContainerHero>
               </Col>
             </Grid>
-          </section>}
+          </section>
+          : 
+          <LoadingContainer>
+            <LoadingImage src="/loading.gif" alt="loading" />
+            <LoadingText>Just loading...</LoadingText>
+          </LoadingContainer>}
           
           {user ?
           <section id="artists_section">             
@@ -638,7 +699,7 @@ const Home = () =>{
             <Grid colGap={30} rowGap={40}>
               <Col desktop={3} tablet={6} mobile={12}>
                 <ContainerLeftColumn>
-                  {totalArtists && <Text>You listen to these artists for the most part in the past 4 weeks! You spend a lot of time listening to <MostListened>{totalArtists.join(", ")}</MostListened></Text>}
+                  {totalArtists && <Text>You listen to these artists for the most part in the {timePeriod}! You spend a lot of time listening to <MostListened>{totalArtists.join(", ")}</MostListened></Text>}
                   <Text>Show artists by:</Text>
                   <Button activeButton={handleArtistButton('short_term')} onClick={ () => setArtistsTerm('short_term')}>Past 4 weeks</Button>
                   <Button activeButton={handleArtistButton('medium_term')} onClick={ () => setArtistsTerm('medium_term')}>6 months</Button>
@@ -652,7 +713,7 @@ const Home = () =>{
               </Col>
             </Grid>
           </section>  
-          : <p>Loading...</p> }
+          : null }
 
           {user ?
           <section id="tracks_section">             
@@ -681,7 +742,7 @@ const Home = () =>{
               </Col>
             </Grid>
           </section>
-          : <p>Loading...</p> }
+          : null }
 
           {user ?
           <section id="albums_section">             
@@ -707,7 +768,7 @@ const Home = () =>{
               </Col>
             </Grid>
           </section>  
-          : <p>Loading...</p> }
+          : null }
 
           {user ?
           <section id="genres_section">             
@@ -735,7 +796,7 @@ const Home = () =>{
               </Col>
             </Grid>
           </section>  
-          : <p>Loading...</p> }
+          : null }
 
           {user ?
           <section id="recently-played_section">             
@@ -752,12 +813,12 @@ const Home = () =>{
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
                 <Grid colGap={10} rowGap={10}>
-                  {recentlyPlayed.map((track) => (<RecentlyPlayedCard key={track.id} data={track} token={token} />))}
+                  {recentlyPlayed.map((track) => (<RecentlyPlayedCard key={track.id} data={track} token={token} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow}/>))}
                 </Grid>
               </Col>
             </Grid>
           </section>
-          : <p>Loading...</p> }
+          : null }
 
           {/*
           {user ?
@@ -812,7 +873,7 @@ const Home = () =>{
               </Col>
             </Grid>
           </section>
-          : <p>Loading...</p> }
+          : null }
 
            <Footer />
           </Inner>

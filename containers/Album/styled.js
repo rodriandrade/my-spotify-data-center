@@ -134,4 +134,11 @@ const Icon = styled.img`
     margin-right:10px;
 `
 
-export {ContainerAlbum, Subtitle, AlbumInfo, ContainerInfo, ContainerImage, ContainerAlbumName, Button, TrackImage, RecommendationsButtonsContainer, TrackName, Container, ArtistName, Icon, Text, TextContainer}
+const RecommendationsContainer = styled.div`
+    display: flex; 
+    flex-direction: row; 
+    justify-content:space-between;
+    align-items:center;
+`
+
+export {ContainerAlbum, Subtitle, AlbumInfo, ContainerInfo, ContainerImage, ContainerAlbumName, Button, TrackImage, RecommendationsButtonsContainer, TrackName, Container, ArtistName, Icon, Text, TextContainer, RecommendationsContainer}

@@ -1,4 +1,4 @@
-import {TrackImage, TrackName, ArtistName, ImageContainer, Container, TextContainer, ContainerPlay, Cont, ContainerTrack, PlayState, CurrentlyPlayingCont, SoundBar, SoundContainer, TimePlayed} from './styled'
+import {TrackImage, TrackName, ArtistName, ImageContainer, Container, TextContainer, ContainerPlay, Cont, ContainerTrack, PlayState, CurrentlyPlayingCont, SoundBar, SoundContainer, TimePlayed, TrackSave, BlurContainer} from './styled'
 import Link from 'next/link'
 import Inner from '../Inner'
 import axios from 'axios'
@@ -11,6 +11,10 @@ const CurrentlyPlayingCard = props =>{
     const [progress, setProgress] = useState('')
     const [showPlayer, setShowPlayer] = useState(true)
     const [icon, setIcon] = useState('/pause.svg');
+
+    // Save & unsave album
+    const [saveIcon, setSaveIcon] = useState('');
+    const [save, setSave] = useState();
 
     // Token
     const [token, setToken] = useState(props.token);
@@ -55,6 +59,12 @@ const CurrentlyPlayingCard = props =>{
                 if (error.response.status === 401) {
                     getNewToken();
                 }
+                if (error.response.status === 500) {
+                    console.log(error);
+                }
+                if (error.response.status === 504) {
+                    console.log(error);
+                }
             }
         } else{
             try{
@@ -78,9 +88,48 @@ const CurrentlyPlayingCard = props =>{
                 if (error.response.status === 401) {
                     getNewToken();
                 }
+                if (error.response.status === 500) {
+                    console.log(error);
+                }
+                if (error.response.status === 504) {
+                    console.log(error);
+                }
             }
         }
     };
+
+    // Check if track is saved
+    useEffect(() => {
+        const checkSave = async () =>{
+            if(token && id){
+            const responseSavedTrack = await axios.get(`https://api.spotify.com/v1/me/tracks/contains?ids=${id}`, {
+                headers: {
+                'Authorization': 'Bearer ' + token
+                }
+            });
+            setSave(responseSavedTrack.data.toString());
+            
+            if(responseSavedTrack.data.toString() === "true"){
+                setSaveIcon('/heart.svg');
+              } else{
+                setSaveIcon('/heart_no_fill.svg');
+              }
+            }
+        }
+        checkSave();
+    }, [])
+
+    // Save or unsave track
+    const handleSave = async () => {
+        const base_url = `https://api.spotify.com/v1/me/tracks?ids=${id}`
+          axios({
+            method: save === "true" ? 'delete' : 'put',
+            url: base_url,
+            headers: { 'Authorization': 'Bearer ' + token }
+          })
+        setSave(save === "true" ? 'false' : 'true')
+        setSaveIcon(save === "true" ? '/heart_no_fill.svg' : '/heart.svg');
+    }
 
     let artistsNames = [];
     if(artists){
@@ -96,28 +145,36 @@ const CurrentlyPlayingCard = props =>{
                 <CurrentlyPlayingCont onClick={ ()=> setShowPlayer(!showPlayer) }>
                     <TimePlayed>Currently Playing</TimePlayed>
                 </CurrentlyPlayingCont>
-                <Cont>
-                    <ContainerTrack>
-                    {props.data.length !== 0 &&
-                        <a href={external_urls.spotify} target="_blank">
-                            <ImageContainer>
-                                <TrackImage src={album.images[1].url} alt="playing" />
-                            </ImageContainer>
-                        </a>
-                    }
-                    <TextContainer>
-                        <Link href={{pathname: `/track/${id}`, query: { token: props.token, id: id }, }}>
-                            <TrackName>{name}</TrackName>
-                        </Link>
-                        <ArtistName>{artistsNames.join(", ")}</ArtistName>
-                    </TextContainer>
-                </ContainerTrack>
-                <ContainerPlay>
-                    <PlayState src={icon} alt="pause_button" onClick={player}/>
-                    <SoundContainer>
-                    </SoundContainer>
-                </ContainerPlay>
-                </Cont>
+                    <SoundBar>
+                    </SoundBar>
+                    <Cont>
+                        <ContainerTrack>
+                            <SoundContainer isPlaying={isPlaying}>
+                                <div />
+                                <div />
+                                <div />
+                            </SoundContainer>
+                        {props.data.length !== 0 &&
+                            <a href={external_urls.spotify} target="_blank">
+                                <ImageContainer>
+                                    <TrackImage src={album.images[1].url} alt="playing" />
+                                </ImageContainer>
+                            </a>
+                        }
+                        <TextContainer>
+                            <Link href={{pathname: `/track/${id}`, query: { token: props.token, id: id }, }}>
+                                <TrackName>{name}</TrackName>
+                            </Link>
+                            <ArtistName>{artistsNames.join(", ")}</ArtistName>
+                        </TextContainer>
+                        {saveIcon && <TrackSave onClick={handleSave} src={saveIcon} alt="save_icon"/>}
+                        
+                    </ContainerTrack>
+                    <ContainerPlay>
+                        <PlayState src={icon} alt="pause_button" onClick={player}/>
+                    </ContainerPlay>
+                    </Cont>
+                
             </Container>
         </Inner>
         </div>

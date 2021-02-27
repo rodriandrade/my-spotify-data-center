@@ -97,6 +97,7 @@ const Cont = styled.div`
     width:1200px;
     display:flex;
     justify-content:space-between;
+    position:relative;
 `
 
 const ContainerTrack = styled.div`
@@ -114,29 +115,53 @@ const PlayState = styled.img`
 const SoundContainer = styled.div`
     display:flex;
     flex-direction:row;
+    align-items: flex-end;
+    height:20px;
+    margin-right:20px;
 
-    :nth-child(1)  { left: 1px; animation-duration: 474ms; }
-    :nth-child(2)  { left: 5px; animation-duration: 433ms; }
-    :nth-child(3)  { left: 9px; animation-duration: 407ms; }
-`
+    div{
+        background: #fff;
+        bottom: 1px;
+        height: 5px;
+        width: 5px;  
+        margin: 0 3px;  
 
-const SoundBar = styled.div`
-    background: #fff;
-    bottom: 1px;
-    height: 3px;
-    position: absolute;
-    width: 3px;      
-    animation: sound 0ms -800ms linear infinite alternate;
-
-    @keyframes sound {
-        0% {
-            height: 3px; 
+        :first-child {
+            animation: ${(props) => (props.isPlaying ? "sound-bar 0.5s infinite ease-out both" : "")};
         }
-        100% {       
-            height: 28px;        
+        :nth-child(2) {
+            animation: ${(props) => (props.isPlaying ? "sound-bar 0.6s infinite ease-out both" : "")};
+        }
+        :nth-child(3) {
+            animation: ${(props) => (props.isPlaying ? "sound-bar 0.7s infinite ease-out both" : "")};
+        }
+    }
+
+    @keyframes sound-bar{
+        0% {
+            height: 5px;
+            opacity:1;
+        }
+        50% {
+            height: 20px;
+            opacity:0.7;
+        }
+        100% {
+            height: 5px;
+            opacity:1;
         }
     }
 `
 
 
-export { Container, TrackName, TimePlayed, TrackImage, ArtistName, ImageContainer, TextContainer, ContainerPlay, Cont, ContainerTrack, PlayState, CurrentlyPlayingCont, SoundBar, SoundContainer}
+const TrackSave = styled.img`
+    max-width:20px;
+    max-height:20px;
+    margin:0 20px;
+    cursor:pointer;
+`
+
+const SoundBar = styled.div`
+`
+
+export { Container, TrackName, TimePlayed, TrackImage, ArtistName, ImageContainer, TextContainer, ContainerPlay, Cont, ContainerTrack, PlayState, CurrentlyPlayingCont, SoundBar, SoundContainer, TrackSave}

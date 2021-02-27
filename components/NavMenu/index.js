@@ -7,8 +7,15 @@ import Link from 'next/link'
 
 const NavMenu = props => {
 
-    const [open, setOpen] = useState(false)
-    
+    const [open, setOpen] = useState(false)    
+    const access_token = props.access_token;
+    const refresh_token = props.refresh_token;
+    /*
+    const hola = access_token.toString();
+    console.log(hola);
+    console.log(access_token);
+    */
+
     return(
         <div>
             <header>
@@ -24,10 +31,7 @@ const NavMenu = props => {
                             <Menu>
 
                                 <List>
-                                    <Link href={
-                                        {pathname: `/#access_token=${props.token}&refresh_token=${props.refreshToken}`, 
-                                        query: { token: props.token, refreshToken: props.refreshToken }, }
-                                        }>
+                                    <Link href={{pathname: `/`, query: { access_token: access_token, refresh_token: refresh_token }}}>
                                         <a href="#home_section">Home</a>
                                     </Link>
                                 </List>

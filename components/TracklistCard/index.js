@@ -74,6 +74,12 @@ const TracklistCard = props =>{
             if (error.response.status === 401) {
                 getNewToken();
             }
+            if (error.response.status === 500) {
+                console.log(error);
+            }
+            if (error.response.status === 504) {
+                console.log(error);
+            }
         }
     }
 
@@ -110,6 +116,12 @@ const TracklistCard = props =>{
             if (error.response.status === 401) {
                 getNewToken();
             }
+            if (error.response.status === 500) {
+                console.log(error);
+            }
+            if (error.response.status === 504) {
+                console.log(error);
+            }
         }
     }
 
@@ -117,7 +129,7 @@ const TracklistCard = props =>{
         <>
             <ContainerTrack>
                 <ContainerTrackData>
-                    <TrackSave onClick={handleSave} src={saveIcon} alt="save_icon"/>
+                    {saveIcon && <TrackSave onClick={handleSave} src={saveIcon} alt="save_icon"/>}
                     <TrackNumber>{track_number}.</TrackNumber>
                     <Link href={{pathname: `/track/${id}`, query: { token: props.token, id: id, refreshToken: props.refresh_token }, }}>
                         <TrackName>{name}</TrackName>

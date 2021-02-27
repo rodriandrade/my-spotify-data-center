@@ -237,6 +237,12 @@ export default function Artist() {
                     if (error.response.status === 401) {
                         getNewToken(); 
                     }
+                    if (error.response.status === 500) {
+                        console.log(error);
+                    }
+                    if (error.response.status === 504) {
+                        console.log(error);
+                    }
                 }
             }
         }
@@ -256,6 +262,12 @@ export default function Artist() {
             if (error.response.status === 401) {
                 getNewToken(); 
             }
+            if (error.response.status === 500) {
+                console.log(error);
+            }
+            if (error.response.status === 504) {
+                console.log(error);
+            }
         }
     }
 
@@ -263,7 +275,7 @@ export default function Artist() {
         <div>
             
             <ParticlesBackground />
-            <NavMenu />
+            <NavMenu access_token={token} refresh_token={refresh_token}/>
             <Inner>
                 {artist ? 
                 <Grid colGap={30} rowGap={40}>

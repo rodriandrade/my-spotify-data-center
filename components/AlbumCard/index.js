@@ -6,17 +6,22 @@ import React, {useState, useEffect} from 'react'
 
 const AlbumCard = props =>{
 
+    // Album Card with name
     const [albumToShow, setAlbumToShow] = useState([])
     const [artistsNames, setArtistsNames] = useState([]);
     const [tracks, setTracks] = useState([]);
-    
-    console.log(props.data);
-    
+
+    ////////////////////////////////////////////////////////////////////////////////////////
+
+    // Album Card from Recommendations
+    const [albumRecommendation, setAlbumRecommendation] = useState('')
     // Play track from album
     const [activeDevices, setActiveDevices] = useState('');
 
     // Token
     const [token, setToken] = useState(props.token);
+
+    const position = props.index + 1;
 
     const getNewToken = async () =>{
         const responseRefreshToken = await axios.get(`https://my-spotify-data-center-server.vercel.app/refresh_token`, {
@@ -30,32 +35,50 @@ const AlbumCard = props =>{
 
     useEffect(() => {
         const fetchAlbumToShow = async () =>{
-            const responseAlbum = await axios.get(`https://api.spotify.com/v1/search?q=${props.data}&type=album&limit=1`, {
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                }
-            });
-
-            const responseAlbumTracks = await axios.get(`https://api.spotify.com/v1/albums/${responseAlbum.data.albums.items[0].id}`, {
+            if(props.data){
+                const responseAlbum = await axios.get(`https://api.spotify.com/v1/search?q=${props.data}&type=album&limit=1`, {
                     headers: {
-                    'Authorization': 'Bearer ' + token
+                        'Authorization': 'Bearer ' + token
                     }
-            }); 
-            setTracks(responseAlbumTracks.data.tracks.items);
-            setAlbumToShow(responseAlbum.data.albums.items[0])
+                });
 
-            //setTracks(responseAlbum.data.tracks.items);
-            //console.log(responseAlbum);
-            const artistInfo = responseAlbum.data.albums.items[0].artists;
-            if(artistInfo){
-                const artistsNamesToShow = artistInfo.map(artist =>{
-                    return artist.name
-                })
-                setArtistsNames(artistsNamesToShow);
+                const responseAlbumTracks = await axios.get(`https://api.spotify.com/v1/albums/${responseAlbum.data.albums.items[0].id}`, {
+                        headers: {
+                        'Authorization': 'Bearer ' + token
+                        }
+                }); 
+                setTracks(responseAlbumTracks.data.tracks.items);
+                setAlbumToShow(responseAlbum.data.albums.items[0])
+
+                //setTracks(responseAlbum.data.tracks.items);
+                //console.log(responseAlbum);
+                const artistInfo = responseAlbum.data.albums.items[0].artists;
+                if(artistInfo){
+                    const artistsNamesToShow = artistInfo.map(artist =>{
+                        return artist.name
+                    })
+                    setArtistsNames(artistsNamesToShow);
+                }
             }
         }
         fetchAlbumToShow();
     }, [props.data])
+
+    useEffect(() => {
+        const fetchAlbumToShow = async () =>{
+            if(props.albumRecommendations){
+                console.log(props.albumRecommendations);
+                setAlbumRecommendation(true);
+                const responseAlbumTracks = await axios.get(`https://api.spotify.com/v1/albums/${props.albumRecommendations.id}`, {
+                        headers: {
+                        'Authorization': 'Bearer ' + token
+                        }
+                }); 
+                setTracks(responseAlbumTracks.data.tracks.items);
+            }
+        }
+        fetchAlbumToShow();
+    }, [props.albumRecommendations])
 
     const playTrack = async () =>{
         try{
@@ -76,11 +99,18 @@ const AlbumCard = props =>{
             if (error.response.status === 401) {
                 getNewToken();
             }
+            if (error.response.status === 500) {
+                console.log(error);
+            }
+            if (error.response.status === 504) {
+                console.log(error);
+              }
         }
     }
   
     const checkPlayTrack = (responseUserDevices) =>{
         if(tracks){
+            console.log("holis");
           try {
           const devices = responseUserDevices.data.devices;
           if(devices.length == 0){
@@ -114,36 +144,67 @@ const AlbumCard = props =>{
               if (error.response.status === 401) {
                   getNewToken();
               }
+              if (error.response.status === 500) {
+                console.log(error);
+              }
+              if (error.response.status === 504) {
+                console.log(error);
+              }
           }
         }
     }
 
     return (
-      <Col desktop={props.gridSize} tablet={6} mobile={12}>
-        <div>
-          <ImageContainer>
-              {albumToShow.images && <TrackImage onClick={playTrack} src={albumToShow.images[1].url} alt={name} />}
-              <TextContainer>
-                  <Text>Play On Spotify</Text>
-              </TextContainer>
-          </ImageContainer>
-          
-          <Link
-            href={{
-              pathname: `/album/${albumToShow.name}`,
-              query: {
-                token: props.token,
-                id: albumToShow.id,
-                refreshToken: props.refreshToken,
-              },
-            }}
-          >
-            {albumToShow && <TrackName>{albumToShow.name}</TrackName>}
-          </Link>
+        <>
+            {!albumRecommendation ?
+                <Col desktop={props.gridSize} tablet={6} mobile={12}>
+                    <ImageContainer onClick={playTrack}>
+                        {albumToShow.images && <TrackImage onClick={playTrack} src={albumToShow.images[1].url} alt={name} />}
+                        <TextContainer onClick={playTrack}>
+                            <Text onClick={playTrack}>Play On Spotify</Text>
+                        </TextContainer>
+                        {!!position && <TrackPosition>{position}</TrackPosition>}
+                    </ImageContainer>
+                    <Link
+                        href={{
+                        pathname: `/album/${albumToShow.name}`,
+                        query: {
+                            token: props.token,
+                            id: albumToShow.id,
+                            refreshToken: props.refreshToken,
+                        },
+                        }}
+                    >
+                        {albumToShow && <TrackName>{albumToShow.name}</TrackName>}
+                    </Link>
 
-          {artistsNames && <ArtistName>{artistsNames.join(", ")}</ArtistName>}
-        </div>
-      </Col>
+                    {artistsNames && <ArtistName>{artistsNames.join(", ")}</ArtistName>}
+                </Col>
+             :
+                <Col desktop={props.gridSize} tablet={6} mobile={12}>
+                    <ImageContainer onClick={playTrack}>
+                        {props.albumRecommendations.images && <TrackImage onClick={playTrack} src={props.albumRecommendations.images[1].url} alt={name} />}
+                        <TextContainer onClick={playTrack}>
+                            <Text onClick={playTrack}>Play On Spotify</Text>
+                        </TextContainer>
+                    </ImageContainer>
+                    <Link
+                        href={{
+                        pathname: `/album/${props.albumRecommendations.name}`,
+                        query: {
+                            token: props.token,
+                            id: props.albumRecommendations.id,
+                            refreshToken: props.refreshToken,
+                        },
+                        }}
+                    >
+                        {props.albumRecommendations && <TrackName>{props.albumRecommendations.name}</TrackName>}
+                    </Link>
+                    {props.albumRecommendations && <ArtistName>{props.albumRecommendations.artists[0].name}</ArtistName>}
+                </Col>
+            }
+        </>
+      
     );
 }
 

@@ -2,6 +2,7 @@ import {Container, TrackName, TimePlayed, ArtistName, AlbumImage, ContainerInfo,
 import Link from 'next/link'
 import {Grid, Col} from '../Grid'
 import React, {useEffect, useState} from 'react'
+import axios from 'axios'
 
 const RecentlyPlayedCard = props =>{
 
@@ -38,7 +39,6 @@ const RecentlyPlayedCard = props =>{
     const hour = playedTime.slice(0,2);
 
     const playTrack = async () =>{
-        console.log("Holanda")
         try{
         const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
                 headers: {
@@ -46,7 +46,6 @@ const RecentlyPlayedCard = props =>{
                 }
             });
         const devices = responseUserDevices.data.devices;
-        console.log(devices);
         if(devices.length == 0){
             setActiveDevices(false)
             checkPlayTrack(responseUserDevices);
@@ -55,8 +54,15 @@ const RecentlyPlayedCard = props =>{
             checkPlayTrack(responseUserDevices);
         }
         } catch(error){
+            console.log(error);
             if (error.response.status === 401) {
                 getNewToken();
+            }
+            if (error.response.status === 500) {
+                console.log(error);
+            }
+            if (error.response.status === 504) {
+                console.log(error);
             }
         }
     }
@@ -85,7 +91,7 @@ const RecentlyPlayedCard = props =>{
             })
             .then(function (response) {
                 //console.log(response);
-                //props.setPlayingRightNow(id);
+                props.setPlayingRightNow(id);
             });
             } else{
                 console.log("No hay devices activos")
@@ -94,6 +100,12 @@ const RecentlyPlayedCard = props =>{
         } catch(error){
             if (error.response.status === 401) {
                 getNewToken();
+            }
+            if (error.response.status === 500) {
+                console.log(error);
+            }
+            if (error.response.status === 504) {
+                console.log(error);
             }
         }
     }

@@ -47,6 +47,12 @@ const TrackCard = props =>{
                 if (error.response.status === 401) {
                     getNewToken();
                 }
+                if (error.response.status === 500) {
+                    console.log(error);
+                }
+                if (error.response.status === 504) {
+                    console.log(error);
+                }
             }
         }
         fetchDevices();
@@ -70,6 +76,12 @@ const TrackCard = props =>{
         } catch(error){
             if (error.response.status === 401) {
                 getNewToken();
+            }
+            if (error.response.status === 500) {
+                console.log(error);
+            }
+            if (error.response.status === 504) {
+                console.log(error);
             }
         }
     }
@@ -107,6 +119,12 @@ const TrackCard = props =>{
         } catch(error){
             if (error.response.status === 401) {
                 getNewToken();
+            }
+            if (error.response.status === 500) {
+                console.log(error);
+            }
+            if (error.response.status === 504) {
+                console.log(error);
             }
         }
     }

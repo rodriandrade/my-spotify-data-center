@@ -48,6 +48,8 @@ export default function Track() {
     // Token
     const [newToken, setNewToken] = useState(token);
 
+    const [activeDevices, setActiveDevices] = useState('');
+
     // Player
     const [playing, setPlaying] = useState([]);
     const [playingData, setPlayingData] = useState([]);
@@ -97,7 +99,6 @@ export default function Track() {
                     }
                 });
                 
-
                 const responseSavedTrack = await axios.get(`https://api.spotify.com/v1/me/tracks/contains?ids=${id}`, {
                     headers: {
                     'Authorization': 'Bearer ' + newToken
@@ -202,7 +203,13 @@ export default function Track() {
                 console.error('este es mi error',error);
                 if (error.response.status === 401) {
                     getNewToken();
-                  }
+                }
+                if (error.response.status === 500) {
+                  console.log(error);
+                }
+                if (error.response.status === 504) {
+                  console.log(error);
+                }
             }
             
         }
@@ -268,10 +275,86 @@ export default function Track() {
               if (error.response.status === 401) {
                 getNewToken();
               }
+              if (error.response.status === 500) {
+                console.log(error);
+              }
+              if (error.response.status === 504) {
+                console.log(error);
+              }
           }
         }        
     }
 
+    const playTrack = async () =>{
+      try{
+      const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
+              headers: {
+              'Authorization': 'Bearer ' + token
+              }
+          });
+      const devices = responseUserDevices.data.devices;
+      if(devices.length == 0){
+          setActiveDevices(false)
+          checkPlayTrack(responseUserDevices);
+      } else{
+          setActiveDevices(true)
+          checkPlayTrack(responseUserDevices);
+      }
+      } catch(error){
+          if (error.response.status === 401) {
+              getNewToken();
+          }
+          if (error.response.status === 500) {
+              console.log(error);
+          }
+          if (error.response.status === 504) {
+              console.log(error);
+          }
+      }
+  }
+
+  const checkPlayTrack = (responseUserDevices) =>{
+      try {
+      const devices = responseUserDevices.data.devices;
+      if(devices.length == 0){
+          setActiveDevices(false);
+      } else{
+          setActiveDevices(true)
+          const deviceID = responseUserDevices.data.devices[0].id
+          if(deviceID){
+          //console.log("Holis");
+          //console.log("El ID es" + id)
+          const requestData = {
+              "uris": [`spotify:track:${id}`],
+              "position_ms": 0
+          }
+          const base_url = `https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`;
+          axios({
+              method: 'put',
+              url: base_url,
+              data: requestData,
+              headers: { 'Authorization': 'Bearer ' + token }
+          })
+          .then(function (response) {
+              //console.log(response);
+              props.setPlayingRightNow(id);
+          });
+          } else{
+              console.log("No hay devices activos")
+          }
+      }
+      } catch(error){
+          if (error.response.status === 401) {
+              getNewToken();
+          }
+          if (error.response.status === 500) {
+              console.log(error);
+          }
+          if (error.response.status === 504) {
+              console.log(error);
+          }
+      }
+  }
     
     // {artistsNames && <ArtistName>{artistsNames.join(", ")}</ArtistName>}
     // <ArtistName>{(track.duration_ms / 60000).toPrecision(4)}</ArtistName>
@@ -281,7 +364,7 @@ export default function Track() {
     return (
         <div>
            
-           <NavMenu />
+           <NavMenu access_token={token} refresh_token={refresh_token}/>
             <Inner>
               {playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} /> }
                 {!playlistModalState && 
@@ -293,11 +376,11 @@ export default function Track() {
                     buttonText={""}
                 />}
                 <Container>
-                    <ContainerImage>
-                        {track.album && <TrackImage src={track.album.images[0].url} />}
-                        <TextContainer>
-                              <Text>Play On Spotify</Text>
-                            </TextContainer>
+                    <ContainerImage onClick={playTrack}>
+                        {track.album && <TrackImage onClick={playTrack} src={track.album.images[0].url} />}
+                        <TextContainer onClick={playTrack}>
+                            <Text onClick={playTrack}>Play On Spotify</Text>
+                        </TextContainer>
                     </ContainerImage>
                     <ContainerInfo>
                         <TrackName>{track.name}</TrackName> 
@@ -341,7 +424,7 @@ export default function Track() {
                     </Col>
                     <Col desktop={4} tablet={6} mobile={12}>
                         <Title size="h4" margin="0 0 0 0">Lenght</Title>
-                        <Position><strong>{(track.duration_ms / 60000).toPrecision(4)}</strong></Position>
+                        <Position><strong>{ (track.duration_ms / 60000).toPrecision(3) }</strong></Position>
                     </Col>
                 </Grid>
 
@@ -402,7 +485,7 @@ export default function Track() {
                 <Grid colGap={30} rowGap={40}>
                     <Col desktop={12} tablet={6} mobile={12}>
                       <RecommendationsContainer>
-                        <Title size="h3" margin="90px 0 60px 0">Recommendations</Title>
+                        <Title size="h3" margin="90px 0 60px 0">Tracks recommendations</Title>
                         <RecommendationsButtonsContainer>
                           <Button onClick={() => setNewRec(!newRec)}><Icon src="/refresh.svg" alt="refresh_icon" />Refresh recommendations</Button>
                           <Button onClick={createPlaylistWithRecommendations}>Create playlist</Button>
@@ -412,7 +495,7 @@ export default function Track() {
                 </Grid>
 
                 <Grid colGap={30} rowGap={40} columns>
-                    {recommendations.map((track) => (<TrackCard key={track._id} data={track} token={newToken} gridSize={2} singleTrack="100"/>))}
+                    {recommendations.map((track) => (<TrackCard key={track._id} data={track} token={newToken} gridSize={2} singleTrack="100" margin="20px 0 5px 0"/>))}
                 </Grid>
                 <Footer />
             </Inner>

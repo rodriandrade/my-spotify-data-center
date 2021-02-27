@@ -5,7 +5,7 @@ import TrackCard from '../../components/trackCard'
 import {Grid, Col} from '../../components/Grid'
 import Title from '../../components/Title'
 import Inner from '../../components/Inner'
-import {ContainerAlbum, Subtitle, AlbumInfo, ContainerInfo, ContainerImage, ContainerAlbumName, Button, TrackImage, RecommendationsButtonsContainer, TrackName, Container, ArtistName, Icon, TextContainer, Text} from './styled'
+import {ContainerAlbum, Subtitle, AlbumInfo, ContainerInfo, ContainerImage, ContainerAlbumName, Button, TrackImage, RecommendationsButtonsContainer, TrackName, Container, ArtistName, Icon, TextContainer, Text, RecommendationsContainer} from './styled'
 import BarChart from "../../components/BarChart";
 import NavMenu from '../../components/NavMenu'
 import Modal from '../../components/Modal'
@@ -14,6 +14,7 @@ import Footer from '../../components/Footer'
 import TracklistCard from '../../components/TracklistCard'
 import Link from 'next/link'
 import CurrentlyPlayingCard from '../../components/CurrentlyPlayingCard'
+import AlbumCard from '../../components/AlbumCard'
 
 export default function Album() {
     const router = useRouter()
@@ -37,10 +38,15 @@ export default function Album() {
     // Get new token
     const [newToken, setNewToken] = useState(token);
 
+    // Recommendations 
+    const [recommendations, setRecommendations] = useState([]);
+    const [newRec, setNewRec] = useState(false);
+
     // Player
     const [playing, setPlaying] = useState([]);
     const [playingData, setPlayingData] = useState([]);
     const [playingRightNow, setPlayingRightNow] = useState([]);
+    const [playingStatus, setPlayingStatus] = useState([]);
 
     const getNewToken = async () =>{
         const responseRefreshToken = await axios.get(`https://my-spotify-data-center-server.vercel.app/refresh_token`, {
@@ -51,6 +57,37 @@ export default function Album() {
         console.log(responseRefreshToken.data.access_token);
         setNewToken(responseRefreshToken.data.access_token)
       }
+
+    useEffect(() => {
+      const checkCurrentlyPlaying = async () =>{
+        if(token){
+          try {
+              const responsePlaying = await axios.get(
+                `https://api.spotify.com/v1/me/player/currently-playing`,
+                {
+                  headers: {
+                    Authorization: "Bearer " + token,
+                  },
+                }
+              );
+              setPlaying(responsePlaying.data.item);
+              setPlayingData(responsePlaying.data);
+          } catch (error){
+              console.error('este es mi error',error);
+              if (error.response.status === 401) {
+                  getNewToken();
+              }
+              if (error.response.status === 500) {
+                console.log(error);
+              }
+              if (error.response.status === 504) {
+                console.log(error);
+              }
+          }
+      }
+    }
+      checkCurrentlyPlaying()
+    }, [playingStatus]);
 
     useEffect(() => {
 
@@ -80,6 +117,7 @@ export default function Album() {
                 setAlbum(responseAlbum.data);
                 console.log(responseAlbum);
                 setTracks(responseAlbum.data.tracks.items);
+                const trackID = responseAlbum.data.tracks.items[0].id;
 
                 const albumCover = responseAlbum.data.images[0].url;
                 setCover(albumCover);
@@ -103,13 +141,34 @@ export default function Album() {
                   setSaveIcon('/heart_no_fill.svg');
                 }
 
+                const artistsIDS = responseAlbum.data.artists.map(artist =>{
+                  return artist.id
+                });
+
+                const responseRecommendations = await axios.get(`https://api.spotify.com/v1/recommendations?market=US&seed_artists=${artistsIDS}&seed_tracks=${trackID}&min_energy=0.4&min_popularity=50`, {
+                    headers: {
+                    'Authorization': 'Bearer ' + newToken
+                    }
+                });
+                //console.log(responseRecommendations.data.tracks)
+
+                const getAlbumsFromRecommendations = responseRecommendations.data.tracks.map(track =>{
+                  return track.album;
+                })
+                //console.log(getAlbumsFromRecommendations);
+                setRecommendations(getAlbumsFromRecommendations);
+
             } catch (error) {
-                /*
                 console.error('este es mi error',error);
                 if (error.response.status === 401) {
                     getNewToken();
-                  }
-                  */
+                }
+                if (error.response.status === 500) {
+                  console.log(error);
+                }
+                if (error.response.status === 504) {
+                  console.log(error);
+                }
             }
         }
             
@@ -117,7 +176,7 @@ export default function Album() {
         
         fetchData()
         
-    }, [id])
+    }, [id, newRec])
 
     const handleSave = async () => {
         const base_url = `https://api.spotify.com/v1/me/albums?ids=${id}`
@@ -176,6 +235,12 @@ export default function Album() {
               if (error.response.status === 401) {
                 getNewToken();
               }
+              if (error.response.status === 500) {
+                console.log(error);
+              }
+              if (error.response.status === 504) {
+                console.log(error);
+              }
           }
         }        
     }
@@ -198,6 +263,12 @@ export default function Album() {
       } catch(error){
           if (error.response.status === 401) {
               getNewToken();
+          }
+          if (error.response.status === 500) {
+            console.log(error);
+          }
+          if (error.response.status === 504) {
+            console.log(error);
           }
       }
   }
@@ -228,6 +299,7 @@ export default function Album() {
             .then(function (response) {
                 //console.log(response);
                 //props.setPlayingRightNow(id);
+                setPlayingStatus(id)
             });
             } else{
                 console.log("No hay devices activos")
@@ -237,69 +309,122 @@ export default function Album() {
             if (error.response.status === 401) {
                 getNewToken();
             }
+            if (error.response.status === 500) {
+                console.log(error);
+            }
+            if (error.response.status === 504) {
+              console.log(error);
+            }
         }
       }
   }
 
     return (
       <div>
-        <NavMenu />
+        <NavMenu access_token={token} refresh_token={refresh_token}/>
         <Inner>
-        {playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} /> }
-        {tracks ? 
-          <Container>
-            <ContainerImage>
-              {!!album.images && <TrackImage onClick={playTrack} src={cover} />}
-              <TextContainer>
-                  <Text>Play On Spotify</Text>
-              </TextContainer>
-            </ContainerImage>
-            <ContainerAlbumName>
-              <TrackName>{album.name}</TrackName>
-              <ArtistName>{artistName}</ArtistName>
-              <RecommendationsButtonsContainer>
-                {save && (
-                  <Button onClick={handleSave}>
-                    <Icon src={saveIcon} alt="save_button" />
-                    {save === "true" ? "unsave" : "save"}
-                  </Button>
+          {playing && (
+            <CurrentlyPlayingCard
+              data={playing}
+              token={token}
+              playingData={playingData}
+              playingRightNow={playingRightNow}
+              setPlayingRightNow={setPlayingRightNow}
+              setPlaying={setPlaying}
+            />
+          )}
+          {tracks ? (
+            <Container>
+              <ContainerImage onClick={playTrack}>
+                {!!album.images && (
+                  <TrackImage onClick={playTrack} src={cover} />
                 )}
-              </RecommendationsButtonsContainer>
-            </ContainerAlbumName>
-          </Container>
-          : <p>Loading...</p>}
+                <TextContainer onClick={playTrack}>
+                  <Text onClick={playTrack}>Play On Spotify</Text>
+                </TextContainer>
+              </ContainerImage>
+              <ContainerAlbumName>
+                <TrackName>{album.name}</TrackName>
+                <ArtistName>{artistName.join(', ')}</ArtistName>
+                <RecommendationsButtonsContainer>
+                  {save && (
+                    <Button onClick={handleSave}>
+                      <Icon src={saveIcon} alt="save_button" />
+                      {save === "true" ? "unsave" : "save"}
+                    </Button>
+                  )}
+                </RecommendationsButtonsContainer>
+              </ContainerAlbumName>
+            </Container>
+          ) : (
+            <p>Loading...</p>
+          )}
 
-          {tracks ? 
+          {tracks ? (
+            <Grid colGap={30} rowGap={40}>
+              <Col desktop={2} tablet={6} mobile={12}>
+                <ContainerAlbum>
+                  <ContainerInfo>
+                    <Subtitle>Type</Subtitle>
+                    {album.album_type && <AlbumInfo>{album.album_type.charAt(0).toUpperCase() + album.album_type.slice(1)}</AlbumInfo>}
+                  </ContainerInfo>
+                  <ContainerInfo>
+                    <Subtitle>Release Date</Subtitle>
+                    <AlbumInfo>{album.release_date}</AlbumInfo>
+                  </ContainerInfo>
+                  <ContainerInfo>
+                    <Subtitle>Label</Subtitle>
+                    <AlbumInfo>{album.label}</AlbumInfo>
+                  </ContainerInfo>
+                  <ContainerInfo>
+                    <Subtitle>Popularity</Subtitle>
+                    <AlbumInfo>{album.popularity}/100</AlbumInfo>
+                  </ContainerInfo>
+                </ContainerAlbum>
+              </Col>
+              <Col desktop={10} tablet={6} mobile={12}>
+                {tracks &&
+                  tracks.map((track) => (
+                    <TracklistCard
+                      data={track}
+                      token={newToken}
+                      refresh_token={refresh_token}
+                    />
+                  ))}
+              </Col>
+            </Grid>
+          ) : (
+            <p>Loading...</p>
+          )}
+
           <Grid colGap={30} rowGap={40}>
-            <Col desktop={2} tablet={6} mobile={12}>
-              <ContainerAlbum>
-                <ContainerInfo>
-                  <Subtitle>Type</Subtitle>
-                  <AlbumInfo>{album.album_type}</AlbumInfo>
-                </ContainerInfo>
-                <ContainerInfo>
-                  <Subtitle>Release Date</Subtitle>
-                  <AlbumInfo>{album.release_date}</AlbumInfo>
-                </ContainerInfo>
-                <ContainerInfo>
-                  <Subtitle>Label</Subtitle>
-                  <AlbumInfo>{album.label}</AlbumInfo>
-                </ContainerInfo>
-                <ContainerInfo>
-                  <Subtitle>Popularity</Subtitle>
-                  <AlbumInfo>{album.popularity}/100</AlbumInfo>
-                </ContainerInfo>
-              </ContainerAlbum>
-            </Col>
-            <Col desktop={10} tablet={6} mobile={12}>
-              {tracks &&
-                tracks.map((track) => (
-                  <TracklistCard data={track} token={newToken} refresh_token={refresh_token}/>
-                ))}
+            <Col desktop={12} tablet={6} mobile={12}>
+              <RecommendationsContainer>
+                <Title size="h3" margin="90px 0 60px 0">
+                  Albums recommendations
+                </Title>
+                <RecommendationsButtonsContainer>
+                  <Button onClick={() => setNewRec(!newRec)}>
+                    <Icon src="/refresh.svg" alt="refresh_icon" />
+                    Refresh recommendations
+                  </Button>
+                </RecommendationsButtonsContainer>
+              </RecommendationsContainer>
             </Col>
           </Grid>
-          : <p>Loading...</p>}
-          
+
+          <Grid colGap={30} rowGap={40} columns>
+            {recommendations.map((album) => (
+              <AlbumCard
+                key={album.id}
+                albumRecommendations={album}
+                token={newToken}
+                gridSize={2}
+                singleTrack="100"
+              />
+            ))}
+          </Grid>
+
           <Footer />
         </Inner>
       </div>

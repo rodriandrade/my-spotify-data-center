@@ -58,6 +58,7 @@ const ImageContainer = styled.div`
     width:200px;  
     height:200px;
     position: relative;
+    margin:0 auto;
 
     &:hover ${TextContainer} {
         opacity: 1;
@@ -65,10 +66,25 @@ const ImageContainer = styled.div`
 `
 
 const TrackPosition = styled.p`
+/*
     font-size:32px;
     color: #fff;
     margin:0;
     text-align: center;
+    */
+        //font-size:32px;
+    font-size:60px;
+    color: #fff;
+    margin:0;
+    text-align: center;
+    font-weight:bold;
+    position:absolute;
+    //top:125px;
+    //left:10px;
+    top:67%;
+    left:50%;
+    transform: translate(-50%, 25%);
+    text-shadow: 0px 0px 11px rgba(0, 0, 0, 1);
 
     /*
     ::after{
@@ -86,10 +102,11 @@ const TrackPosition = styled.p`
 const TrackName = styled.p`
     font-size:18px;
     color: #fff;
-    margin:20px 0 5px 0;
+    margin:40px 0 5px 0;
     text-align: center;
     cursor: pointer;
     text-transform:uppercase;
+    z-index:4;
 
     :hover{
         text-decoration: underline 3px solid #47ffbb;
@@ -101,6 +118,8 @@ const ArtistName = styled.p`
     color: #47ffbb;
     margin:0;
     text-align: center;
+    z-index:4;
+
     //text-transform:uppercase;
 `
 

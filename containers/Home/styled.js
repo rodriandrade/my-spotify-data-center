@@ -95,4 +95,24 @@ const IconContainer = styled.div`
     margin: 280px 0 20px 0;
 `
 
-export {TitleTest, Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshIcon, IconContainer, MainButton}
+const LoadingContainer = styled.div`
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    height:100vh;
+`
+
+const LoadingImage = styled.img`
+    width:150px;
+    height:150px;
+`
+
+const LoadingText = styled.span`
+    font-size:16px;
+    font-family: 'Poppins', sans-serif;
+    color:#fff;
+    margin-top:20px;
+`
+
+export {TitleTest, Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshIcon, IconContainer, MainButton, LoadingImage, LoadingText, LoadingContainer}
