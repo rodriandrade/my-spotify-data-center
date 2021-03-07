@@ -37,9 +37,9 @@ const NavMenu = props => {
                                 </List>
                                 <List><a href="#artists_section">Artists</a></List>
                                 <List><a href="#tracks_section">Tracks</a></List>
-                                <List><a href="#tracks_section">Albums</a></List>
-                                <List><a href="#tracks_section">Genres</a></List>
-                                <List><a href="#tracks_section">Recommendations</a></List>
+                                <List><a href="#albums_section">Albums</a></List>
+                                <List><a href="#genres_section">Genres</a></List>
+                                <List><a href="#recommendations_section">Recommendations</a></List>
 
                             </Menu>
                         </nav>

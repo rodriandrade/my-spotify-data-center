@@ -12,7 +12,7 @@ const ContainerLeftColumn = styled.div`
     position:sticky;
     top:20px;
 
-    /*
+/*
     ::before{
         content:"Tracks";
         display:block;
@@ -115,4 +115,13 @@ const LoadingText = styled.span`
     margin-top:20px;
 `
 
-export {TitleTest, Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshIcon, IconContainer, MainButton, LoadingImage, LoadingText, LoadingContainer}
+const LoadingContainerSection = styled.div`
+    width:100%;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+`
+
+export {TitleTest, Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshIcon, IconContainer, MainButton, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection}

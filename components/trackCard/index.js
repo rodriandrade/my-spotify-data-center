@@ -60,19 +60,19 @@ const TrackCard = props =>{
 
     const playTrack = async () =>{
         try{
-        const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
-                headers: {
-                'Authorization': 'Bearer ' + token
-                }
-            });
-        const devices = responseUserDevices.data.devices;
-        if(devices.length == 0){
-            setActiveDevices(false)
-            checkPlayTrack(responseUserDevices);
-        } else{
-            setActiveDevices(true)
-            checkPlayTrack(responseUserDevices);
-        }
+            const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
+                    headers: {
+                    'Authorization': 'Bearer ' + token
+                    }
+                });
+            const devices = responseUserDevices.data.devices;
+            if(devices.length == 0){
+                setActiveDevices(false)
+                checkPlayTrack(responseUserDevices);
+            } else{
+                setActiveDevices(true)
+                checkPlayTrack(responseUserDevices);
+            }
         } catch(error){
             if (error.response.status === 401) {
                 getNewToken();
@@ -88,34 +88,44 @@ const TrackCard = props =>{
 
     const checkPlayTrack = (responseUserDevices) =>{
         try {
-        const devices = responseUserDevices.data.devices;
-        if(devices.length == 0){
-            setActiveDevices(false);
-        } else{
-            setActiveDevices(true)
-            const deviceID = responseUserDevices.data.devices[0].id
-            if(deviceID){
-            //console.log("Holis");
-            //console.log("El ID es" + id)
-            const requestData = {
-                "uris": [`spotify:track:${id}`],
-                "position_ms": 0
-            }
-            const base_url = `https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`;
-            axios({
-                method: 'put',
-                url: base_url,
-                data: requestData,
-                headers: { 'Authorization': 'Bearer ' + token }
-            })
-            .then(function (response) {
-                //console.log(response);
-                props.setPlayingRightNow(id);
-            });
+            const devices = responseUserDevices.data.devices;
+            props.setBlink(false)
+            if(devices.length == 0){
+                setActiveDevices(false);
             } else{
-                console.log("No hay devices activos")
+                setActiveDevices(true)
+                const deviceID = responseUserDevices.data.devices[0].id
+                if(deviceID){
+                    const requestData = {
+                        "uris": [`spotify:track:${id}`],
+                        "position_ms": 0
+                    }
+                    const base_url = `https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`;
+                    axios({
+                        method: 'put',
+                        url: base_url,
+                        data: requestData,
+                        headers: { 'Authorization': 'Bearer ' + token }
+                    })
+                    .then(function (response) {
+                        console.log(response);
+                        if(props.setPlayingRightNow){
+                            props.setPlayingRightNow(id)
+                            props.setBlink(true)
+                        }
+                        if(props.setPlayerArtistPage){
+                            props.setPlayerArtistPage(id)
+                            props.setBlink(true)
+                        }
+                        if(props.setPlayerTrackPage){
+                            props.setPlayerTrackPage(id)
+                            props.setBlink(true)
+                        }
+                    });
+                } else{
+                    console.log("No hay devices activos")
+                }
             }
-        }
         } catch(error){
             if (error.response.status === 401) {
                 getNewToken();
@@ -137,7 +147,15 @@ const TrackCard = props =>{
         <Col desktop={props.gridSize} tablet={6} mobile={12}>
             <ContainerTrack>
             <div>
-                {!activeDevices && <Modal modalIsOpen={modalIsOpen} setModalIsOpen={setModalIsOpen} />}
+                {!activeDevices && 
+                <Modal 
+                modalIsOpen={modalIsOpen} 
+                setModalIsOpen={setModalIsOpen}
+                title={"No encontramos reproductores activos"}
+                text={"Para reproducir esta canción es necesario que tengas algún reproductor de Spotify abierto. Para que el dispositivo pueda ser detectado hay que empezar a reproducir una canción. Cuando lo hagas podés volver a intentar :)"}
+                buttonText={"Try again"}
+                 />
+                }
                 <ImageContainer onClick={openModal} singleTrack={props.singleTrack}>
                     <a onClick={playTrack} target="_blank">
                         {/*<PlayOnSpotify onClick={openModal}>Play On Spotify</PlayOnSpotify>*/}

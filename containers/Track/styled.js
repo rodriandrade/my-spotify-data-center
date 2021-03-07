@@ -182,4 +182,33 @@ const NoDataInfo = styled.p`
     margin:0;
 `
 
-export {ContainerInfo, ContainerImage, Container, TrackImage, TrackName, TrackGenres, ArtistName, RecommendationsContainer, Button, RecommendationsButtonsContainer, Icon, Position, TrackInfo, TrackInfoCont, ContainerAlbum, ContainerAlbumImage, ContainerAlbumInfo, Text, TextContainer, NoDataContainer, NoDataInfo, NoDataTitle}
+const LoadingContainer = styled.div`
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    height:100vh;
+`
+
+const LoadingImage = styled.img`
+    width:150px;
+    height:150px;
+`
+
+const LoadingText = styled.span`
+    font-size:16px;
+    font-family: 'Poppins', sans-serif;
+    color:#fff;
+    margin-top:20px;
+`
+
+const LoadingContainerSection = styled.div`
+    width:100%;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+`
+
+export {ContainerInfo, ContainerImage, Container, TrackImage, TrackName, TrackGenres, ArtistName, RecommendationsContainer, Button, RecommendationsButtonsContainer, Icon, Position, TrackInfo, TrackInfoCont, ContainerAlbum, ContainerAlbumImage, ContainerAlbumInfo, Text, TextContainer, NoDataContainer, NoDataInfo, NoDataTitle, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection}

@@ -41,7 +41,6 @@ const List = styled.li`
     list-style-type: none;
     text-decoration:none;
 
-
     a{
             padding:0 10px;
             text-decoration: none;

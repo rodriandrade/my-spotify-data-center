@@ -13,6 +13,7 @@ var cors = require('cors');
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 
+var tokens = [];
 var client_id = '1b015d21997143e28e0724a9646dedd3'; // Your client id
 var client_secret = '732b088b97ba44ecb86a96a290f1f8e4'; // Your secret
 var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
@@ -92,6 +93,9 @@ app.get('/callback', function(req, res) {
         var access_token = body.access_token,
             refresh_token = body.refresh_token;
 
+        tokens.push(access_token);
+        tokens.push(refresh_token);
+
         var options = {
           url: '/tokens',
           json: true
@@ -124,8 +128,9 @@ app.get('/callback', function(req, res) {
   }
 });
 
-app.post('/tokens', function(req, res) {
-  console.log(req)
+app.get('/tokens', function(req, res) {
+  res.send(tokens);
+  console.log(tokens);
 });
 
 app.get('/refresh_token', function(req, res) {

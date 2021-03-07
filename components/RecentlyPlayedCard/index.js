@@ -68,7 +68,6 @@ const RecentlyPlayedCard = props =>{
     }
 
     const checkPlayTrack = (responseUserDevices) =>{
-        console.log("holis")
         try {
         const devices = responseUserDevices.data.devices;
         if(devices.length == 0){
@@ -81,7 +80,6 @@ const RecentlyPlayedCard = props =>{
                 "uris": [`spotify:track:${id}`],
                 "position_ms": 0
             }
-            console.log("me estoy ejecutando");
             const base_url = `https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`;
             axios({
                 method: 'put',

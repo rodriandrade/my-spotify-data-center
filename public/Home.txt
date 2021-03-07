@@ -1,5 +1,4 @@
 import Head from 'next/head'
-import { useRouter } from 'next/router'
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import ArtistCard from '../../components/artistCard'
@@ -17,28 +16,11 @@ import Inner from '../../components/Inner'
 import Typical from 'react-typical'
 import NavMenu from '../../components/NavMenu'
 import Footer from '../../components/Footer'
-import LeftColumn from '../../components/LeftColumn'
-import TypingEffect from '../../components/TypingEffect'
 
 import {Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshIcon, IconContainer, MainButton, LoadingImage, LoadingContainer, LoadingText, LoadingContainerSection} from './styled'
 
 const Home = () =>{
 
-    const router = useRouter()
-
-    const [token, setToken] = useState('');
-    const [refreshToken, setRefreshToken] = useState('');
-    /*
-    if(router.query.access_token){
-      console.log("jamiroquai");
-      setToken(router.query.access_token)
-      /*
-      const token = router.query.token;
-      const refresh_token = router.query.refreshToken
-      setToken(token);
-      
-    }
-    */
     function getHashParams() {
         if (typeof window !== "undefined") {
         var hashParams = {};
@@ -53,11 +35,10 @@ const Home = () =>{
 
       var params = getHashParams();
 
+      const [token, setToken] = useState('');
+
       const [selected, setSelected] = useState(false);
-      const [timePeriodTracks, setTimePeriodTracks] = useState('You listen to these tracks for the most part in the past 4 weeks! You spend a lot of time listening to')
-      const [timePeriodArtists, setTimePeriodArtists] = useState('You listen to these artists for the most part in the past 4 weeks! You spend a lot of time listening to')
-      const [timePeriodAlbums, setTimePeriodAlbums] = useState('You listen to these albums for the most part in the past 4 weeks! You spend a lot of time listening to')
-      const [timePeriodGenres, setTimePeriodGenres] = useState('You listen to these genres for the most part in the past 4 weeks! You spend a lot of time listening to')
+      const [timePeriod, setTimePeriod] = useState('past 4 weeks')
       
       // Periodo de tiempo para traer artistas y temas. 
       const [tracksTerm, setTracksTerm] = useState('short_term');
@@ -79,7 +60,7 @@ const Home = () =>{
       const [albums, setAlbums] = useState([]);
       const [totalAlbums, setTotalAlbums] = useState([]);
 
-      // Player
+      // Historial de reproducción y reproduciendo actualmente
       const [recentlyPlayed, setRecentlyPlayed] = useState([]);
       const [playing, setPlaying] = useState([]);
       const [playingData, setPlayingData] = useState([]);
@@ -87,7 +68,6 @@ const Home = () =>{
       const [streamsDays, setStreamsDay] = useState('')
 
       const [playingRightNow, setPlayingRightNow] = useState([]);
-      const [blink, setBlink] = useState(false)
 
       // Playlists
       const [playlists, setPlaylists] = useState([]);
@@ -118,148 +98,44 @@ const Home = () =>{
         const randomLoadingText = () =>{
           const loadingText = ["Are you listening to this? Well...", "Nice data", "You have a wonderful taste", "Just loading..."]
           const pickLoading = loadingText[Math.floor(Math.random() * 3)]
+          console.log(pickLoading);
           loadingIntro.push(pickLoading);
         }
         randomLoadingText();
       }, [])
+      
 
-      // Get New Token (Refresh)
       const getNewToken = async () =>{
-        let refresh_token = '';
-        if(params.refresh_token){
-          refresh_token = params.refresh_token
-        } else if(router.query.refresh_token){
-          refresh_token = router.query.refresh_token
-        }
         const responseRefreshToken = await axios.get(`https://my-spotify-data-center-server.vercel.app/refresh_token`, {
             params: {
-              'refresh_token': refresh_token
+              'refresh_token': params.refresh_token
             }
-        });
+          });
         setToken(responseRefreshToken.data.access_token)
       }
 
-      // Get Token
       useEffect(() => {
         const getToken = () =>{
-          // token from URL
           if(params.access_token){
             const access_token = params.access_token;
-            const refresh_token = params.refresh_token;
             setToken(access_token)
-            setRefreshToken(refresh_token)
-          } else if(router.query.access_token){
-            // token from query (link)
-            const token = router.query.access_token
-            const refreshToken = router.query.refresh_token
-            setToken(token)
-            setRefreshToken(refreshToken)
           }
         }
         getToken();
-      }, [router.query.access_token])
+      }, [])
 
-      // Artists
-      useEffect(() => {
-        const fetchArtists = async () =>{
-          if(token){
-            try{
-              setArtists('');
-              if(artistsTerm === "short_term"){
-                setTimePeriodArtists('You listen to these artists for the most part in the past 4 weeks! You spend a lot of time listening to')
-              } else if(artistsTerm === "medium_term"){
-                setTimePeriodArtists('You listen to these artists for the most part in the past 6 months! You spend a lot of time listening to')
-              } else if(artistsTerm === "long_term"){
-                setTimePeriodArtists('You listen to these artists for the most part in the past several years! You spend a lot of time listening to')
-              }
-              const responseArtists = await axios.get(
-                `https://api.spotify.com/v1/me/top/artists?time_range=${artistsTerm}&limit=50`,
-                {
-                  headers: {
-                    Authorization: "Bearer " + token,
-                  },
-                }
-              );
-              setArtists(responseArtists.data.items);
-
-              // Which artists appears more than once
-
-              const artistsNames = responseArtists.data.items.map((artist) => {
-                return artist.name;
-              });
-              const artistsNamesFilter = artistsNames.filter((artist, index) => {
-                return index < 5;
-              });
-              //console.log(artistsNamesFilter)
-              setTotalArtists(artistsNamesFilter);
-            } catch (error){
-              console.error("este es mi error", error);
-              if (error.response.status === 401) {
-                getNewToken();
-              }
-              if (error.response.status === 500) {
-                console.log(error);
-              }
-              if (error.response.status === 504) {
-                console.log(error);
-              }
-            }
-          }
-        }
-        fetchArtists();
-      }, [artistsTerm, token])
-
-      // Tracks
-      useEffect(() => {
-        const fetchTracks = async () =>{
-          if(token){
-            try{
-              setTracks('')
-              if(tracksTerm === "short_term"){
-                setTimePeriodTracks('You listen to these tracks for the most part in the past 4 weeks! You spend a lot of time listening to')
-              } else if(tracksTerm === "medium_term"){
-                setTimePeriodTracks('You listen to these tracks for the most part in the past 6 months! You spend a lot of time listening to')
-              } else if(tracksTerm === "long_term"){
-                setTimePeriodTracks('You listen to these tracks for the most part in the past several years! You spend a lot of time listening to')
-              }
-              const responseTracks = await axios.get(`https://api.spotify.com/v1/me/top/tracks?time_range=${tracksTerm}&limit=50`, {
-                headers: {
-                  'Authorization': 'Bearer ' + token
-                }
-              });
-              setTracks(responseTracks.data.items);
-              const tracksNames = responseTracks.data.items.map(track =>{
-                return track.name
-              })
-              const tracksNamesFilter = tracksNames.filter( (artist, index ) => {
-                return index < 5;
-              })
-              //console.log(tracksNamesFilter);
-              setTotalTracks(tracksNamesFilter)
-            } catch (error){
-              console.error("este es mi error", error);
-              if (error.response.status === 401) {
-                getNewToken();
-              }
-              if (error.response.status === 500) {
-                console.log(error);
-              }
-              if (error.response.status === 504) {
-                console.log(error);
-              }
-            }
-          }
-        }
-        fetchTracks();
-      }, [tracksTerm, token])
-
-      // Data
       useEffect(() => {
         const fetchData = async () => {
+  
             if(token){
               const access_token = params.access_token;
 
               try {
+
+                /*
+                  setTracks('');
+                  setArtists('');
+                  */
                   //////////////////////////////////////////////////////////////////////////////////////////////////////
                   
                   // PLAYLISTS DATA
@@ -270,16 +146,61 @@ const Home = () =>{
                   });
                   setPlaylists(responsePlaylists.data.items);
                  
+
                   //////////////////////////////////////////////////////////////////////////////////////////////////////
                   
                   // CURRENTLY PLAYING DATA
+                  //console.log("Se hizo de nuevo el fetch");
                   const responsePlaying = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
                     headers: {
                       'Authorization': 'Bearer ' + token
                     }
                   });
+                  //console.log("ACTUALIZA3")
+                  //console.log(responsePlaying.data.item);
                   setPlaying(responsePlaying.data.item);
                   setPlayingData(responsePlaying.data)
+                  
+                  //////////////////////////////////////////////////////////////////////////////////////////////////////
+                  
+                  // ARTISTS DATA
+
+                  const responseArtists = await axios.get(`https://api.spotify.com/v1/me/top/artists?time_range=${artistsTerm}&limit=50`, {
+                    headers: {
+                      'Authorization': 'Bearer ' + token
+                    }
+                  });
+                  setArtists(responseArtists.data.items)
+                
+                  // Which artists appears more than once 
+
+                  const artistsNames = responseArtists.data.items.map(artist =>{
+                    return artist.name
+                  })
+                  const artistsNamesFilter = artistsNames.filter( (artist, index ) => {
+                    return index < 5;
+                  })
+                  //console.log(artistsNamesFilter)
+                  setTotalArtists(artistsNamesFilter)
+
+                  //////////////////////////////////////////////////////////////////////////////////////////////////////
+                  
+                  // TRACKS DATA
+
+                  const responseTracks = await axios.get(`https://api.spotify.com/v1/me/top/tracks?time_range=${tracksTerm}&limit=50`, {
+                    headers: {
+                      'Authorization': 'Bearer ' + token
+                    }
+                  });
+                  setTracks(responseTracks.data.items);
+                  const tracksNames = responseTracks.data.items.map(track =>{
+                    return track.name
+                  })
+                  const tracksNamesFilter = tracksNames.filter( (artist, index ) => {
+                    return index < 5;
+                  })
+                  //console.log(tracksNamesFilter);
+                  setTotalTracks(tracksNamesFilter)
                   
                   //////////////////////////////////////////////////////////////////////////////////////////////////////
                   
@@ -344,21 +265,79 @@ const Home = () =>{
             }
         }
         fetchData()
-      }, [token, playingRightNow, blink])
+      }, [artistsTerm, tracksTerm, token, playingRightNow])
     
+      const createPlaylist = async () => {
+        if(token){
+          const access_token = params.access_token;
+          try {
+              const responseUserProfile = await axios.get(`https://api.spotify.com/v1/me`, {
+                  headers: {
+                  'Authorization': 'Bearer ' + token
+                  }
+              });
+    
+              const user_id = responseUserProfile.data.id;
+              //console.log(user_id);
+              //console.log(tracksTerm)
+              const base_url = `https://api.spotify.com/v1/users/${user_id}/playlists`
+              const playlistName = {
+                'short_term': 'My Favs 50 tracks - Past 4 weeks',
+                'medium_term': 'My Favs 50 tracks - Past 6 months',
+                'long_term': 'My Favs 50 tracks - Several Years',
+              }
+              axios({
+                method: 'post',
+                url: base_url,
+                data: {
+                  name: playlistName[tracksTerm],
+                  description: 'New playlist description',
+                  public: false
+                },
+                headers: { 'Authorization': 'Bearer ' + token }
+              })
+              .then(function (response) {
+                const tracksURI = [];
+                const playlist_id = response.data.id;
+                tracks.map(track => {
+                  tracksURI.push(track.uri)
+                })
+                const base_url_playlist = `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`
+                axios({
+                  method: 'post',
+                  url: base_url_playlist,
+                  data: tracksURI,
+                  headers: { 'Authorization': 'Bearer ' + token }
+                })
+                .then(function (response) {
+                  //console.log(response);
+                });
+              });
+    
+          } catch (error) {
+              console.error('este es mi error',error);
+              if (error.response.status === 401) {
+                getNewToken(); 
+              }
+              if (error.response.status === 500) {
+                console.log(error);
+              }
+              if (error.response.status === 504) {
+                console.log(error);
+              }
+          }
+        }
+    
+        // <h2>Top genres</h2>
+        //  {params !== undefined && <TopGenres token={params.token} data={tracks}/>}
+      }
+
       // Albums
       useEffect(() => {
         const fetchAlbums = async () =>{
           if(token){
             try{
-              setAlbums('')
-              if(albumsTerm === "short_term"){
-                setTimePeriodAlbums('You listen to these albums for the most part in the past 4 weeks! You spend a lot of time listening to')
-              } else if(albumsTerm === "medium_term"){
-                setTimePeriodAlbums('You listen to these albums for the most part in the past 6 months! You spend a lot of time listening to')
-              } else if(albumsTerm === "long_term"){
-                setTimePeriodAlbums('You listen to these albums for the most part in the past several years! You spend a lot of time listening to')
-              }
+              setAlbums('');
               const access_token = params.access_token;
               const responseTracksFourWeeks = await axios.get(`https://api.spotify.com/v1/me/top/tracks?time_range=${albumsTerm}&limit=50`, {
                   headers: {
@@ -379,43 +358,32 @@ const Home = () =>{
                 return {
                   name: album.name,
                   artist: album.artists[0].name,
-                  image: album.images[0].url,
-                  id: album.id
                 }
               })
 
+              let counter = {}
+              albumsNames.forEach(function(obj) {
+                  var key = JSON.stringify(obj)
+                  counter[key] = (counter[key] || 0) + 1
+              })
+              
               const artistsAlbums = albumsNames.reduce((obj, album) =>{
                 obj[album.name] = (obj[album.name] || 0) + 1;
                 return obj
               }, {})
-
-              const keyNames = Object.keys(artistsAlbums);
               
-              const fullAlbumData = keyNames.map(album=>{
-                let data = albumsNames.find(albumName => {
-                  if(album === albumName.name){
-                    return albumName
-                  }
-                })
-                return {
-                  name: data.name,
-                  artist: data.artist,
-                  image: data.image,
-                  id: data.id,
-                  count: artistsAlbums[album]
-                }
-              })            
-
-              let sortAlbums = fullAlbumData.sort(function(a,b){return b.count - a.count})
+              //console.log(artistsAlbums);
               let keysSortedFourWeeks = Object.keys(artistsAlbums).sort(function(a,b){return artistsAlbums[b]-artistsAlbums[a]})
+              //console.log(keysSortedFourWeeks)
 
               // Which artists appears more than once 
+
               const albumsNamesFilter = keysSortedFourWeeks.filter( (artist, index ) => {
                 return index < 5;
               })
 
               setTotalAlbums(albumsNamesFilter)
-              setAlbums(sortAlbums);
+              setAlbums(keysSortedFourWeeks);
 
             } catch(error) {
               console.error('este es mi error',error);
@@ -439,75 +407,44 @@ const Home = () =>{
         const fetchGenres = async () =>{
           if(token){
             try{
-              setGenres('')
-              if(genresTerm === "short_term"){
-                setTimePeriodGenres('You listen to these genres for the most part in the past 4 weeks! You spend a lot of time listening to')
-              } else if(genresTerm === "medium_term"){
-                setTimePeriodGenres('You listen to these genres for the most part in the past 6 months! You spend a lot of time listening to')
-              } else if(genresTerm === "long_term"){
-                setTimePeriodGenres('You listen to these genres for the most part in the past several years! You spend a lot of time listening to')
-              }
-              const access_token = params.access_token;
-              let artistsID = [];
-              
-              let more = [];
-              const responseTracksGenres = await axios.get(`https://api.spotify.com/v1/me/top/tracks?time_range=${genresTerm}&limit=50`, {
+            setGenres('');
+            const access_token = params.access_token;
+            let artistsID = [];
+            
+            let more = [];
+            const responseTracksGenres = await axios.get(`https://api.spotify.com/v1/me/top/tracks?time_range=${genresTerm}&limit=50`, {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            });
+            //console.log(responseTracksGenres.data.items);
+            
+            const findArtistsIDS = responseTracksGenres.data.items.map(track =>{
+              track.artists.map(artist=>{
+                  artistsID.push(artist.id)
+              })
+            })
+
+            //setGenres(artistsID)
+
+            let artists_genres = [];
+            const findGenres = artistsID.map(async (id) =>{ 
+              //artists_genres.push(id);
+
+              const responseArtist = await axios.get(`https://api.spotify.com/v1/artists/${id}`, {
                   headers: {
-                      'Authorization': 'Bearer ' + token
-                  }
+                      Authorization: "Bearer " + token,
+                  },
               });
-              //console.log(responseTracksGenres.data.items);
-              
-              const findArtistsIDS = responseTracksGenres.data.items.map(track =>{
-                track.artists.map(artist=>{
-                    artistsID.push(artist.id)
-                })
-              })
-
-              //setGenres(artistsID)
-
-              let artists_genres = [];
-              const findGenres = artistsID.map(async (id) =>{ 
-                //artists_genres.push(id);
-
-                const responseArtist = await axios.get(`https://api.spotify.com/v1/artists/${id}`, {
-                    headers: {
-                        Authorization: "Bearer " + token,
-                    },
-                });
-                const musicGenre = responseArtist.data.genres.map((genre) => {
-                  artists_genres.push(genre);
-                  return genre
-                });
-                //artists_genres.push(more);
-                return musicGenre
-              
-                /*
-                //console.log(artists_genres);
-                //console.log(artists_genres);
-
-                const countGenres = artists_genres.reduce((obj, genre) =>{
-                  obj[genre] = (obj[genre] || 0) + 1;
-                  return obj
-                }, {})
-
-                //console.log(countGenres);
-
-                //let orderGenres = Object.keys(countGenres).sort(function(a,b){return countGenres[b]-countGenres[a]})
-                let orderGenres = Object.keys(countGenres).sort(function(a,b){return countGenres[b]-countGenres[a]})
-                let orderValues = Object.values(countGenres).sort(function(a,b){return countGenres[b]-countGenres[a]})
-                //console.log(orderGenres);
-                //console.log(orderValues);
-                const genresToShow = orderGenres.filter((genre, index) =>{
-                  return index < 5
-                })
-                //console.log(orderGenres);
-                setGenres(genresToShow)
-                */
-              })
-
-              const showGenresData = Promise.all(findGenres);
-              console.log(await showGenresData);
+              const musicGenre = responseArtist.data.genres.map((genre) => {
+                artists_genres.push(genre);
+                return genre
+              });
+              //artists_genres.push(more);
+              return musicGenre
+            
+              /*
+              //console.log(artists_genres);
               //console.log(artists_genres);
 
               const countGenres = artists_genres.reduce((obj, genre) =>{
@@ -523,16 +460,40 @@ const Home = () =>{
               //console.log(orderGenres);
               //console.log(orderValues);
               const genresToShow = orderGenres.filter((genre, index) =>{
-                return index < 20
-              })
-              //console.log(orderGenres);
-              setGenres(genresToShow)
-
-              const genresToFilter = orderGenres.filter((genre, index) =>{
                 return index < 5
               })
               //console.log(orderGenres);
-              setTotalGenres(genresToFilter)
+              setGenres(genresToShow)
+              */
+            })
+
+            const showGenresData = Promise.all(findGenres);
+            console.log(await showGenresData);
+            //console.log(artists_genres);
+
+            const countGenres = artists_genres.reduce((obj, genre) =>{
+              obj[genre] = (obj[genre] || 0) + 1;
+              return obj
+            }, {})
+
+            //console.log(countGenres);
+
+            //let orderGenres = Object.keys(countGenres).sort(function(a,b){return countGenres[b]-countGenres[a]})
+            let orderGenres = Object.keys(countGenres).sort(function(a,b){return countGenres[b]-countGenres[a]})
+            let orderValues = Object.values(countGenres).sort(function(a,b){return countGenres[b]-countGenres[a]})
+            //console.log(orderGenres);
+            //console.log(orderValues);
+            const genresToShow = orderGenres.filter((genre, index) =>{
+              return index < 50
+            })
+            //console.log(orderGenres);
+            setGenres(genresToShow)
+
+            const genresToFilter = orderGenres.filter((genre, index) =>{
+              return index < 5
+            })
+            //console.log(orderGenres);
+            setTotalGenres(genresToFilter)
             
             } catch(error) {
                 console.error('este es mi error',error);
@@ -556,59 +517,58 @@ const Home = () =>{
         const fetchRecommendations = async() =>{
           if(token){
             try{
-              setRecommendations('')
-              const access_token = params.access_token;
-              if(tracks.length > 0){
-                if(recommendationsTerm === "tracks"){
-                  const moreTracks = tracks.filter((artist, index) => {
+            const access_token = params.access_token;
+            if(tracks.length > 0){
+              if(recommendationsTerm === "tracks"){
+                const moreTracks = tracks.filter((artist, index) => {
+                  return index < 5;
+                })
+                const getNames = moreTracks.map(track=>{
+                  return track.name
+                })
+                setRecommendationsArtistsNames(getNames);
+                const getIds = moreTracks.map(track=>{
+                  return track.id
+                })
+                const responseRecommendations = await axios.get(`https://api.spotify.com/v1/recommendations?limit=50&market=US&seed_tracks=${getIds}&min_energy=0.4&min_popularity=50`, {
+                          headers: {
+                          'Authorization': 'Bearer ' + token
+                          }
+                });
+                setRecommendations(responseRecommendations.data.tracks);
+                setRecommendationsDescription(`We prepare a list of recommendations based in your most listened tracks in the past 4 weeks, which includes`)
+              } 
+              else if(recommendationsTerm === "genres"){
+                const responseRecommendations = await axios.get(`https://api.spotify.com/v1/recommendations?limit=50&market=US&seed_genres=${genres}&min_energy=0.4&min_popularity=50`, {
+                  headers: {
+                  'Authorization': 'Bearer ' + token
+                  }
+                });
+                //console.log(responseRecommendations)
+                setRecommendationsArtistsNames(genres);
+                setRecommendations(responseRecommendations.data.tracks);
+                setRecommendationsDescription(`We prepare a list of recommendations based in your most listened genres in the past 4 weeks, which includes`)
+              } else if(recommendationsTerm === "artists"){
+                  const moreArtists = artists.filter((artist, index) => {
                     return index < 5;
                   })
-                  const getNames = moreTracks.map(track=>{
-                    return track.name
+                  const getNames = moreArtists.map(artist=>{
+                    return artist.name
                   })
                   setRecommendationsArtistsNames(getNames);
-                  const getIds = moreTracks.map(track=>{
+                  const getArtistsIds = moreArtists.map(track=>{
                     return track.id
                   })
-                  const responseRecommendations = await axios.get(`https://api.spotify.com/v1/recommendations?limit=50&market=US&seed_tracks=${getIds}&min_energy=0.4&min_popularity=50`, {
+                  //console.log(getArtistsIds);
+                  const responseRecommendations = await axios.get(`https://api.spotify.com/v1/recommendations?limit=50&market=US&seed_artists=${getArtistsIds}&min_energy=0.4&min_popularity=50`, {
                             headers: {
                             'Authorization': 'Bearer ' + token
                             }
                   });
                   setRecommendations(responseRecommendations.data.tracks);
-                  setRecommendationsDescription(`We prepare a list of recommendations based in your most listened tracks in the past 4 weeks, which includes`)
-                } 
-                else if(recommendationsTerm === "genres"){
-                  const responseRecommendations = await axios.get(`https://api.spotify.com/v1/recommendations?limit=50&market=US&seed_genres=${totalGenres}&min_energy=0.4&min_popularity=50`, {
-                    headers: {
-                    'Authorization': 'Bearer ' + token
-                    }
-                  });
-                  //console.log(responseRecommendations)
-                  setRecommendationsArtistsNames(genres);
-                  setRecommendations(responseRecommendations.data.tracks);
-                  setRecommendationsDescription(`We prepare a list of recommendations based in your most listened genres in the past 4 weeks, which includes`)
-                } else if(recommendationsTerm === "artists"){
-                    const moreArtists = artists.filter((artist, index) => {
-                      return index < 5;
-                    })
-                    const getNames = moreArtists.map(artist=>{
-                      return artist.name
-                    })
-                    setRecommendationsArtistsNames(getNames);
-                    const getArtistsIds = moreArtists.map(track=>{
-                      return track.id
-                    })
-                    //console.log(getArtistsIds);
-                    const responseRecommendations = await axios.get(`https://api.spotify.com/v1/recommendations?limit=50&market=US&seed_artists=${getArtistsIds}&min_energy=0.4&min_popularity=50`, {
-                              headers: {
-                              'Authorization': 'Bearer ' + token
-                              }
-                    });
-                    setRecommendations(responseRecommendations.data.tracks);
-                    setRecommendationsDescription(`We prepare a list of recommendations based in your most listened artists in the past 4 weeks, which includes`)
-                }
+                  setRecommendationsDescription(`We prepare a list of recommendations based in your most listened artists in the past 4 weeks, which includes`)
               }
+            }
             } catch(error) {
               console.error('este es mi error',error);
               if (error.response.status === 401) {
@@ -714,10 +674,9 @@ const Home = () =>{
             <title>Create Next App</title>
             <link rel="icon" href="/favicon.ico" />
           </Head>
-          <ParticlesBackground />
 
-          {token && <NavMenu access_token={token} />}
-          
+          <NavMenu access_token={token} />
+          <ParticlesBackground />
           <Inner>
 
           {!token ? 
@@ -725,9 +684,8 @@ const Home = () =>{
             <Grid colGap={30} rowGap={40}>
               <Col desktop={12} tablet={6} mobile={12}>
                 <ContainerHero>
-                  {/*<Title size="h1" >Welcome to your Spotify Data Center</Title>*/}
-                  <TypingEffect />
-                  {!user && <a href="https://my-spotify-data-center-server-rodriandrade.vercel.app/login">
+                  <Title size="h1">Welcome to your Spotify Data Center</Title>
+                  {!user && <a href="http://localhost:8888/login">
                     <MainButton>Login with Spotify</MainButton>
                   </a>}
                 </ContainerHero>
@@ -742,8 +700,7 @@ const Home = () =>{
               <Col desktop={12} tablet={6} mobile={12}>
                 <ContainerHero>
                   <Title size="h1" margin="0 0 0 0">Hi, {user} :)</Title>
-                  <Text>Welcome to your Spotify Data Center</Text>
-                  {user && playing && <CurrentlyPlayingCard data={playing} token={token} refreshToken={refreshToken} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink}/>}
+                  {user && playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} />}
                 </ContainerHero>
               </Col>
             </Grid>
@@ -763,17 +720,6 @@ const Home = () =>{
             </Grid>
             <Grid colGap={30} rowGap={40}>
               <Col desktop={3} tablet={6} mobile={12}>
-                
-                <LeftColumn 
-                  description={timePeriodArtists}
-                  showBy="Show artists by"
-                  mostListened={totalArtists}
-                  setTypeTerm={setArtistsTerm}
-                  typeTerm={artistsTerm}
-                  handlerButton={handleArtistButton}
-                  sectionTitle="Artists"
-                />
-                {/*
                 <ContainerLeftColumn>
                   {totalArtists && <Text>You listen to these artists for the most part in the {timePeriod}! You spend a lot of time listening to <MostListened>{totalArtists.join(", ")}</MostListened></Text>}
                   <Text>Show artists by:</Text>
@@ -781,22 +727,18 @@ const Home = () =>{
                   <Button activeButton={handleArtistButton('medium_term')} onClick={ () => setArtistsTerm('medium_term')}>6 months</Button>
                   <Button activeButton={handleArtistButton('long_term')} onClick={ () => setArtistsTerm('long_term')}>Several years</Button>
                 </ContainerLeftColumn>
-                */}
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
                 <Grid colGap={30} rowGap={40}>
                   {artists ? 
-                    artists && artists.map((artist, index) => (<ArtistCard key={artist.id} data={artist} index={index} token={token} gridSize={3} refreshToken={refreshToken}/>))
-                  : 
-                    <Col desktop={12} tablet={6} mobile={12}>
-                      <LoadingContainerSection>
-                        <LoadingImage src="/loading.gif" alt="loading" />
-                        <LoadingText>Just loading...</LoadingText>
-                      </LoadingContainerSection>
-                    </Col>
+                    artists.map((artist, index) => (<ArtistCard key={artist.id} data={artist} index={index} token={token} gridSize={3} refreshToken={params.refresh_token}/>))
+                  :
+                    <div>
+                      <LoadingImage src="/loading.gif" alt="loading" />
+                      <LoadingText>Just loading...</LoadingText>
+                    </div>
                   }
                 </Grid>
-                
               </Col>
             </Grid>
           </section>  
@@ -811,20 +753,6 @@ const Home = () =>{
             </Grid>
             <Grid colGap={30} rowGap={40}>
               <Col desktop={3} tablet={6} mobile={12}>
-                <LeftColumn 
-                  description={timePeriodTracks}
-                  showBy="Show tracks by"
-                  mostListened={totalTracks}
-                  setTypeTerm={setTracksTerm}
-                  typeTerm={tracksTerm}
-                  handlerButton={handleTracksButton}
-                  token={token}
-                  refreshToken={refreshToken}
-                  createPlaylist={true}
-                  tracks={tracks}
-                  sectionTitle="Tracks"
-                />
-                {/*
                 <ContainerLeftColumn>
                   {totalTracks && <Text>You listen to these tracks for the most part in the past 4 weeks! You spend a lot of time listening to <MostListened>{totalTracks.join(", ")}</MostListened></Text>}
                   <Text>Show artists by:</Text>
@@ -834,19 +762,16 @@ const Home = () =>{
                   <Text margin="30px 0 0 0">Do you want to create a playlist with your 50 favorites tracks?</Text>
                   <MainButton onClick={createPlaylist}>Create playlist</MainButton>
                 </ContainerLeftColumn>
-                */}
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
                 <Grid colGap={30} rowGap={40}>
-                  {tracks ? 
-                    tracks && tracks.map((track, index) => (<TrackCard key={track.id} data={track} index={index} token={token} refreshToken={refreshToken} gridSize={3} setToken={setToken} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} blink={blink} setBlink={setBlink}/>))
+                  {tracks ?
+                    tracks.map((track, index) => (<TrackCard key={track.id} data={track} index={index} token={token} refreshToken={params.refresh_token} gridSize={3} setToken={setToken} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow}/>))
                   : 
-                  <Col desktop={12} tablet={6} mobile={12}>
-                    <LoadingContainerSection>
-                      <LoadingImage src="/loading.gif" alt="loading" />
-                      <LoadingText>Just loading...</LoadingText>
-                    </LoadingContainerSection>
-                  </Col>
+                  <div>
+                    <LoadingImage src="/loading.gif" alt="loading" />
+                    <LoadingText>Just loading...</LoadingText>
+                  </div>
                   }
                 </Grid>
               </Col>
@@ -863,16 +788,6 @@ const Home = () =>{
             </Grid>
             <Grid colGap={30} rowGap={40}>
               <Col desktop={3} tablet={6} mobile={12}>
-                <LeftColumn 
-                    description={timePeriodAlbums}
-                    showBy="Show albums by"
-                    mostListened={totalAlbums}
-                    setTypeTerm={setAlbumsTerm}
-                    typeTerm={albumsTerm}
-                    handlerButton={handleAlbumsButton}
-                    sectionTitle="Albums"
-                  />
-                {/*
                 <ContainerLeftColumn>
                   <Text>You listen these albums for the most part in the past 4 weeks! You spend a lot of time listening to <MostListened>{totalAlbums.join(", ")}</MostListened></Text>
                   <Text>Show artists by:</Text>
@@ -880,18 +795,17 @@ const Home = () =>{
                   <Button activeButton={handleAlbumsButton('medium_term')} onClick={ () => setAlbumsTerm('medium_term')}>6 months</Button>
                   <Button activeButton={handleAlbumsButton('long_term')} onClick={ () => setAlbumsTerm('long_term')}>Several years</Button>
                 </ContainerLeftColumn>
-                */}
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
                 <Grid colGap={30} rowGap={40}>
-                  {albums ? 
-                    albums.map((album, index) => (<AlbumCard key={album.id} data={album} index={index} token={token} gridSize={3} imageSizeLarge refreshToken={refreshToken} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setBlink={setBlink} blink={blink} />))
-                  :
+                  {albums ?
+                    albums.map((album, index) => (<AlbumCard key={album.id} data={album} index={index} token={token} gridSize={3} imageSizeLarge refreshToken={params.refresh_token} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} albumsTerm={albumsTerm}/>))
+                  : 
                   <Col desktop={12} tablet={6} mobile={12}>
-                    <LoadingContainerSection>
+                  <div>
                       <LoadingImage src="/loading.gif" alt="loading" />
                       <LoadingText>Just loading...</LoadingText>
-                    </LoadingContainerSection>
+                    </div>
                   </Col>
                   }
                 </Grid>
@@ -909,36 +823,23 @@ const Home = () =>{
             </Grid>
             <Grid colGap={30} rowGap={40}>
               <Col desktop={3} tablet={6} mobile={12}>
-                <LeftColumn 
-                    description={timePeriodGenres}
-                    showBy="Show genres by"
-                    mostListened={totalGenres}
-                    setTypeTerm={setGenresTerm}
-                    typeTerm={genresTerm}
-                    handlerButton={handleGenresButton}
-                    sectionTitle="Genres"
-                />
-                {/*
                 <ContainerLeftColumn>
-                  <Text>You listen these artists for the most part in the past 4 weeks! You spend a lot of time listening to <MostListened>{totalGenres.join(", ")}</MostListened></Text>
+                  <Text>You listen these genres for the most part in the past 4 weeks! You spend a lot of time listening to <MostListened>{totalGenres.join(", ")}</MostListened></Text>
                   <Text>Show artists by:</Text>
                   <Button activeButton={handleGenresButton('short_term')} onClick={ () => setGenresTerm('short_term')}>Past 4 weeks</Button>
                   <Button activeButton={handleGenresButton('medium_term')} onClick={ () => setGenresTerm('medium_term')}>Past 6 months</Button>
                   <Button activeButton={handleGenresButton('long_term')} onClick={ () => setGenresTerm('long_term')}>Several years</Button>
                 </ContainerLeftColumn>
-                */}
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
                 <Grid colGap={60} rowGap={40}>
-                  {genres ?
-                    genres && genres.map((genre, index) => (<TopGenresCard key={genre} genre={genre} token={token} index={index} gridSize={3} refreshToken={refreshToken} />))
-                  :
-                  <Col desktop={12} tablet={6} mobile={12}>
-                    <LoadingContainerSection>
-                      <LoadingImage src="/loading.gif" alt="loading" />
-                      <LoadingText>Just loading...</LoadingText>
-                    </LoadingContainerSection>
-                  </Col>
+                  {genres ? 
+                    genres.map((genre, index) => (<TopGenresCard key={genre} genre={genre} token={token} index={index} gridSize={3} />))
+                  : 
+                  <div>
+                    <LoadingImage src="/loading.gif" alt="loading" />
+                    <LoadingText>Just loading...</LoadingText>
+                  </div>
                   }
                 </Grid>
               </Col>
@@ -961,7 +862,7 @@ const Home = () =>{
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
                 <Grid colGap={10} rowGap={10}>
-                  {recentlyPlayed.map((track) => (<RecentlyPlayedCard key={track.id} data={track} token={token}  playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} refreshToken={refreshToken}/>))}
+                  {recentlyPlayed.map((track) => (<RecentlyPlayedCard key={track.id} data={track} token={token} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow}/>))}
                 </Grid>
               </Col>
             </Grid>
@@ -1016,16 +917,7 @@ const Home = () =>{
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
                 <Grid colGap={30} rowGap={40}>
-                  {recommendations ?
-                    tracks && recommendations.map((track, index) => (<TrackCard key={track.id} data={track} token={token} gridSize={3} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} margin="20px 0 5px 0" blink={blink} setBlink={setBlink} refreshToken={refreshToken}/>))
-                  :
-                  <Col desktop={12} tablet={6} mobile={12}>
-                    <LoadingContainerSection>
-                      <LoadingImage src="/loading.gif" alt="loading" />
-                      <LoadingText>Just loading...</LoadingText>
-                    </LoadingContainerSection>
-                  </Col>
-                  }
+                {tracks && recommendations.map((track, index) => (<TrackCard key={track.id} data={track} token={token} gridSize={3} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} margin="20px 0 5px 0" />))}
                 </Grid>
               </Col>
             </Grid>

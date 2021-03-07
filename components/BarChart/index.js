@@ -5,32 +5,24 @@ import { linearGradientDef } from '@nivo/core'
 
 const BarChart = props => {
 
-
     const { danceability, energy, speechiness, acousticness, instrumentalness, liveness, valence } = props.audioFeatures;
     const values = [danceability, energy, speechiness, acousticness, instrumentalness, liveness, valence];
-    console.log(values);
     
     const newValues = values.map((value) => {
       if (Math.floor(value) !== value) {
         let decimalValue = value.toString().split(".")[1].length || 0;
         if (decimalValue === 2) {
           return Math.round(value * 10);
-          //newValues.push(Math.round(value * 10))
         } else if (decimalValue === 3) {
           return Math.round(value * 100);
-          //newValues.push(Math.round(value * 100))
         } else if (decimalValue === 4) {
           return Math.round(value * 1000);
-          //newValues.push(Math.round(value * 1000))
         } else if (decimalValue === 5) {
           return Math.round(value * 10000);
-          //newValues.push(Math.round(value * 10000))
         } else if (decimalValue === 6) {
           return Math.round(value * 100000);
-          //newValues.push(Math.round(value * 100000))
         } else {
           return Math.round(value * 1000000);
-          //newValues.push(Math.round(value * 1000000))
         }
       }
     });
@@ -72,7 +64,6 @@ const BarChart = props => {
             "description": "is a confidence measure from 0.0 to 1.0 of whether the track is acoustic. 1.0 represents high confidence the track is acoustic."
         }
     ];
-    console.log(data);
 
     return(
     <ChartContainer>

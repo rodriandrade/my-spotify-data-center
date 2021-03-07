@@ -5,7 +5,7 @@ import TrackCard from '../../components/trackCard'
 import {Grid, Col} from '../../components/Grid'
 import Title from '../../components/Title'
 import Inner from '../../components/Inner'
-import { TrackImage, TrackName, TrackGenres, Container, ContainerImage, ContainerInfo, ArtistName, RecommendationsContainer, Button, RecommendationsButtonsContainer, Icon, Position, TrackInfo, TrackInfoCont, ContainerAlbum, ContainerAlbumImage, ContainerAlbumInfo, Text, TextContainer, NoDataContainer, NoDataInfo, NoDataTitle} from './styled'
+import { TrackImage, TrackName, TrackGenres, Container, ContainerImage, ContainerInfo, ArtistName, RecommendationsContainer, Button, RecommendationsButtonsContainer, Icon, Position, TrackInfo, TrackInfoCont, ContainerAlbum, ContainerAlbumImage, ContainerAlbumInfo, Text, TextContainer, NoDataContainer, NoDataInfo, NoDataTitle, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection} from './styled'
 import BarChart from "../../components/BarChart";
 import NavMenu from '../../components/NavMenu'
 import Modal from '../../components/Modal'
@@ -54,6 +54,14 @@ export default function Track() {
     const [playing, setPlaying] = useState([]);
     const [playingData, setPlayingData] = useState([]);
     const [playingRightNow, setPlayingRightNow] = useState([]);
+    const [blink, setBlink] = useState(false)
+    const [playerTrackPage, setPlayerTrackPage] = useState([])
+
+    // Track length
+    const [trackLength, setTrackLength] = useState('');
+
+    // Loading
+    const [loadingTime, setLoadingTime] = useState(false)
 
     const getNewToken = async () =>{
         const responseRefreshToken = await axios.get(`https://my-spotify-data-center-server.vercel.app/refresh_token`, {
@@ -65,26 +73,11 @@ export default function Track() {
         setNewToken(responseRefreshToken.data.access_token)
       }
 
-    console.log(id);
-
     useEffect(() => {
 
         const fetchData = async () => {
 
             try {
-
-                const responsePlaying = await axios.get(
-                  `https://api.spotify.com/v1/me/player/currently-playing`,
-                  {
-                    headers: {
-                      Authorization: "Bearer " + token,
-                    },
-                  }
-                );
-                console.log("ACTUALIZA3");
-                console.log(responsePlaying.data.item);
-                setPlaying(responsePlaying.data.item);
-                setPlayingData(responsePlaying.data);
 
                 const responseTrack = await axios.get(`https://api.spotify.com/v1/tracks/${id}`, {
                     headers: {
@@ -105,8 +98,6 @@ export default function Track() {
                     }
                 });
 
-                console.log(responseTrack.data);
-                console.log(responseAudioFeatures.data);
                 setAudioFeatures(responseAudioFeatures.data);
                 setSave(responseSavedTrack.data.toString()); 
                 setTrack(responseTrack.data);
@@ -118,7 +109,6 @@ export default function Track() {
                 }
 
                 let trackSaved = responseTrack.data;
-                console.log(trackSaved.artists);
                 
                 if(trackSaved){
                     const artistsNamesToShow = trackSaved.artists.map(artist =>{
@@ -136,9 +126,7 @@ export default function Track() {
                 }
 
                 const albumID = responseTrack.data.album.id;
-                console.log(albumID)
                 const albumName = responseTrack.data.album.name;
-                console.log(albumName)
                 setAlbumID(albumID);
                 setAlbumName(albumName);
                 
@@ -159,7 +147,6 @@ export default function Track() {
                   'Authorization': 'Bearer ' + newToken
                   }
                 });
-                console.log(responseTracksFourWeeks);
                 const trackPositionFourWeeks = responseTracksFourWeeks.data.items.findIndex((track, index) =>{
                   if(track.id === id){
                       return index + 1;
@@ -198,6 +185,19 @@ export default function Track() {
                   }
                 })
                 setTracksSeveralYears(trackPositionSeveralYears + 1);
+
+                const responsePlaying = await axios.get(
+                  `https://api.spotify.com/v1/me/player/currently-playing`,
+                  {
+                    headers: {
+                      Authorization: "Bearer " + newToken,
+                    },
+                  }
+                );
+                setPlaying(responsePlaying.data.item);
+                setPlayingData(responsePlaying.data);
+
+                setLoadingTime(true)
                 
             } catch (error) {
                 console.error('este es mi error',error);
@@ -216,7 +216,7 @@ export default function Track() {
         
         fetchData()
         
-    }, [newToken, newRec, id])
+    }, [newToken, newRec, id, playerTrackPage, blink])
 
     const handleSave = async () => {
         const base_url = `https://api.spotify.com/v1/me/tracks?ids=${id}`
@@ -227,6 +227,10 @@ export default function Track() {
           })
         setSave(save === "true" ? 'false' : 'true')
         setSaveIcon(save === "true" ? '/heart_no_fill.svg' : '/heart.svg');
+    }
+
+    const openModal = () =>{
+      setModalIsOpen(!modalIsOpen)
     }
 
     const createPlaylistWithRecommendations = async () => {
@@ -240,7 +244,6 @@ export default function Track() {
               });
               setModalIsOpen(!modalIsOpen);
               setPlaylistModalState(true);
-              console.log(responseUserProfile)
               const user_id = responseUserProfile.data.id;
               const base_url = `https://api.spotify.com/v1/users/${user_id}/playlists`
               axios({
@@ -336,8 +339,10 @@ export default function Track() {
               headers: { 'Authorization': 'Bearer ' + token }
           })
           .then(function (response) {
-              //console.log(response);
-              props.setPlayingRightNow(id);
+              console.log(response);
+              setPlayingRightNow(id);
+              setPlayerTrackPage(id);
+              setBlink(true)
           });
           } else{
               console.log("No hay devices activos")
@@ -355,19 +360,27 @@ export default function Track() {
           }
       }
   }
-    
-    // {artistsNames && <ArtistName>{artistsNames.join(", ")}</ArtistName>}
-    // <ArtistName>{(track.duration_ms / 60000).toPrecision(4)}</ArtistName>
-    console.log(audioFeatures)
-    console.log(audioFeatures != '');
+
+    useEffect(() => {
+      const formatLength = () =>{
+        if(track){
+          let minutes = Math.floor((track.duration_ms % 3600000) / 60000); // 1 Minutes = 60000 Milliseconds
+          let seconds = Math.floor(((track.duration_ms % 360000) % 60000) / 1000) // 1 Second = 1000 Milliseconds
+          let minutesToShow = minutes < 10 ? '0' + minutes : minutes
+          let secondsToShow = seconds < 10 ? '0' + seconds : seconds
+          setTrackLength(minutesToShow + ":" + secondsToShow)
+        }
+      }
+      formatLength()
+    }, [track])
 
     return (
         <div>
            
            <NavMenu access_token={token} refresh_token={refresh_token}/>
             <Inner>
-              {playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} /> }
-                {!playlistModalState && 
+              {playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink} setBlink={setBlink} /> }
+                {playlistModalState && 
                 <Modal 
                     modalIsOpen={modalIsOpen} 
                     setModalIsOpen={setModalIsOpen} 
@@ -375,11 +388,22 @@ export default function Track() {
                     text={"Your playlist was created"}
                     buttonText={""}
                 />}
+
+                {loadingTime ? 
                 <Container>
                     <ContainerImage onClick={playTrack}>
-                        {track.album && <TrackImage onClick={playTrack} src={track.album.images[0].url} />}
-                        <TextContainer onClick={playTrack}>
-                            <Text onClick={playTrack}>Play On Spotify</Text>
+                        {!activeDevices && 
+                          <Modal 
+                              modalIsOpen={modalIsOpen} 
+                              setModalIsOpen={setModalIsOpen}
+                              title={"No encontramos reproductores activos"}
+                              text={"Para reproducir esta canción es necesario que tengas algún reproductor de Spotify abierto. Para que el dispositivo pueda ser detectado hay que empezar a reproducir una canción. Cuando lo hagas podés volver a intentar :)"}
+                              buttonText={"Try again"}
+                          />
+                        }
+                        {track.album && <TrackImage onClick={playTrack} onClick={openModal} src={track.album.images[0].url} />}
+                        <TextContainer onClick={playTrack} onClick={openModal}>
+                            <Text onClick={playTrack} onClick={openModal}>Play On Spotify</Text>
                         </TextContainer>
                     </ContainerImage>
                     <ContainerInfo>
@@ -390,9 +414,15 @@ export default function Track() {
                         </RecommendationsButtonsContainer> 
                     </ContainerInfo>
                 </Container>
+                : 
+                <LoadingContainer>
+                  <LoadingImage src="/loading.gif" alt="loading" />
+                  <LoadingText>Just loading...</LoadingText>
+                </LoadingContainer>
+                }
 
+                {loadingTime ?
                 <Grid colGap={30} rowGap={40}>
-                  
                     <Col desktop={4} tablet={6} mobile={12}>
                         <Title size="h4" margin="0 0 0 0">Album</Title>
                         <ContainerAlbum>
@@ -424,79 +454,93 @@ export default function Track() {
                     </Col>
                     <Col desktop={4} tablet={6} mobile={12}>
                         <Title size="h4" margin="0 0 0 0">Lenght</Title>
-                        <Position><strong>{ (track.duration_ms / 60000).toPrecision(3) }</strong></Position>
+                        <Position><strong>{trackLength}</strong></Position>
                     </Col>
                 </Grid>
-
-                {tracksFourWeeks || tracksSixMonths || tracksSeveralYears ? 
-                <Title size="h4" margin="60px 0 0 0">{track.name} appeareances in your artist ranking</Title>
                 : null}
-                {tracksFourWeeks || tracksSixMonths || tracksSeveralYears ? 
-                <Grid colGap={30} rowGap={40}>
-                    {tracksFourWeeks ?
-                      <Col desktop={4} tablet={6} mobile={12}>
-                          <Position>#<strong>{tracksFourWeeks}</strong></Position> 
-                          <TrackInfo>In your most listened artists list for the <strong>past 4 weeks</strong>.</TrackInfo>  
-                      </Col>
-                      : 
-                      <Col desktop={4} tablet={6} mobile={12}>
-                        <NoDataContainer>
-                          <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
-                          <NoDataInfo>Not in your past 4 weeks ranking</NoDataInfo>  
-                        </NoDataContainer>
-                      </Col>
-                    }
-                    {tracksSixMonths ?
-                      <Col desktop={4} tablet={6} mobile={12}>
-                          <Position>#<strong>{tracksSixMonths}</strong></Position>   
-                          <TrackInfo>In your most listened artists list for the <strong>past 6 months</strong>.</TrackInfo>
-                      </Col>
-                      : 
-                      <Col desktop={4} tablet={6} mobile={12}>
-                        <NoDataContainer>
-                          <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
-                          <NoDataInfo>Not in your past 6 months ranking</NoDataInfo>  
-                        </NoDataContainer>
-                      </Col>
-                    }
-                    {tracksSeveralYears ?
-                      <Col desktop={4} tablet={6} mobile={12}>
-                          <Position>#<strong>{tracksSeveralYears}</strong></Position>   
-                          <TrackInfo>In your most listened artists list for the <strong>past several years</strong>.</TrackInfo>
-                      </Col>
-                      : 
-                      <Col desktop={4} tablet={6} mobile={12}>
-                        <NoDataContainer>
-                          <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
-                          <NoDataInfo>Not in your lifetime ranking</NoDataInfo>  
-                        </NoDataContainer>
-                      </Col>
-                    }
-                </Grid>
+
+                {loadingTime ? 
+                  <section>
+                  <Title size="h4" margin="60px 0 0 0">{track.name} appeareances in your artist ranking</Title>
+                  <Grid colGap={30} rowGap={40}>
+                      {tracksFourWeeks ?
+                        <Col desktop={4} tablet={6} mobile={12}>
+                            <Position>#<strong>{tracksFourWeeks}</strong></Position> 
+                            <TrackInfo>In your most listened artists list for the <strong>past 4 weeks</strong>.</TrackInfo>  
+                        </Col>
+                        : 
+                        <Col desktop={4} tablet={6} mobile={12}>
+                          <NoDataContainer>
+                            <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
+                            <NoDataInfo>Not in your past 4 weeks ranking</NoDataInfo>  
+                          </NoDataContainer>
+                        </Col>
+                      }
+                      {tracksSixMonths ?
+                        <Col desktop={4} tablet={6} mobile={12}>
+                            <Position>#<strong>{tracksSixMonths}</strong></Position>   
+                            <TrackInfo>In your most listened artists list for the <strong>past 6 months</strong>.</TrackInfo>
+                        </Col>
+                        : 
+                        <Col desktop={4} tablet={6} mobile={12}>
+                          <NoDataContainer>
+                            <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
+                            <NoDataInfo>Not in your past 6 months ranking</NoDataInfo>  
+                          </NoDataContainer>
+                        </Col>
+                      }
+                      {tracksSeveralYears ?
+                        <Col desktop={4} tablet={6} mobile={12}>
+                            <Position>#<strong>{tracksSeveralYears}</strong></Position>   
+                            <TrackInfo>In your most listened artists list for the <strong>past several years</strong>.</TrackInfo>
+                        </Col>
+                        : 
+                        <Col desktop={4} tablet={6} mobile={12}>
+                          <NoDataContainer>
+                            <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
+                            <NoDataInfo>Not in your lifetime ranking</NoDataInfo>  
+                          </NoDataContainer>
+                        </Col>
+                      }
+                  </Grid>
+                  </section>
                 : null}
  
-                <Title size="h3" margin="90px 0 60px 0">Audio features</Title>
-                <Grid colGap={30} rowGap={40}>
-                    <Col desktop={12} tablet={6} mobile={12}>
-                        {audioFeatures != '' && <BarChart audioFeatures={audioFeatures} />}
-                    </Col>
-                </Grid>
+                {loadingTime ?
+                  <section>
+                    <Title size="h3" margin="90px 0 60px 0">Audio features</Title>
+                    <Grid colGap={30} rowGap={40}>
+                        <Col desktop={12} tablet={6} mobile={12}>
+                            {audioFeatures != '' && <BarChart audioFeatures={audioFeatures} />}
+                        </Col>
+                    </Grid>
+                  </section>
+                : null}
 
-                <Grid colGap={30} rowGap={40}>
-                    <Col desktop={12} tablet={6} mobile={12}>
-                      <RecommendationsContainer>
-                        <Title size="h3" margin="90px 0 60px 0">Tracks recommendations</Title>
-                        <RecommendationsButtonsContainer>
-                          <Button onClick={() => setNewRec(!newRec)}><Icon src="/refresh.svg" alt="refresh_icon" />Refresh recommendations</Button>
-                          <Button onClick={createPlaylistWithRecommendations}>Create playlist</Button>
-                        </RecommendationsButtonsContainer>
-                      </RecommendationsContainer>
-                    </Col>
-                </Grid>
+                {loadingTime ? 
+                  <section>
+                    <Grid colGap={30} rowGap={40}>
+                        <Col desktop={12} tablet={6} mobile={12}>
+                          <RecommendationsContainer>
+                            <Title size="h3" margin="90px 0 60px 0">Tracks recommendations</Title>
+                            <RecommendationsButtonsContainer>
+                              <Button onClick={() => setNewRec(!newRec)}><Icon src="/refresh.svg" alt="refresh_icon" />Refresh recommendations</Button>
+                              <Button onClick={createPlaylistWithRecommendations}>Create playlist</Button>
+                            </RecommendationsButtonsContainer>
+                          </RecommendationsContainer>
+                        </Col>
+                    </Grid>
+                  </section>
+                : null}
 
-                <Grid colGap={30} rowGap={40} columns>
-                    {recommendations.map((track) => (<TrackCard key={track._id} data={track} token={newToken} gridSize={2} singleTrack="100" margin="20px 0 5px 0"/>))}
-                </Grid>
+                {loadingTime ? 
+                  <section>
+                    <Grid colGap={30} rowGap={40} columns>
+                        {recommendations.map((track) => (<TrackCard key={track._id} data={track} token={newToken} refreshToken={refresh_token} gridSize={2} singleTrack="100" margin="20px 0 5px 0" playerTrackPage={playerTrackPage} setPlayerTrackPage={setPlayerTrackPage} blink={blink} setBlink={setBlink}/>))}
+                    </Grid>
+                  </section>
+                : null}
+
                 <Footer />
             </Inner>
             

@@ -5,7 +5,7 @@ import TrackCard from '../../components/trackCard'
 import {Grid, Col} from '../../components/Grid'
 import Title from '../../components/Title'
 import Inner from '../../components/Inner'
-import {ContainerAlbum, Subtitle, AlbumInfo, ContainerInfo, ContainerImage, ContainerAlbumName, Button, TrackImage, RecommendationsButtonsContainer, TrackName, Container, ArtistName, Icon, TextContainer, Text, RecommendationsContainer} from './styled'
+import {ContainerAlbum, Subtitle, AlbumInfo, ContainerInfo, ContainerImage, ContainerAlbumName, Button, TrackImage, RecommendationsButtonsContainer, TrackName, Container, ArtistName, Icon, TextContainer, Text, RecommendationsContainer, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection} from './styled'
 import BarChart from "../../components/BarChart";
 import NavMenu from '../../components/NavMenu'
 import Modal from '../../components/Modal'
@@ -34,6 +34,7 @@ export default function Album() {
 
     // Play track from album
     const [activeDevices, setActiveDevices] = useState('');
+    const [modalIsOpen, setModalIsOpen] = useState(false);
 
     // Get new token
     const [newToken, setNewToken] = useState(token);
@@ -47,6 +48,11 @@ export default function Album() {
     const [playingData, setPlayingData] = useState([]);
     const [playingRightNow, setPlayingRightNow] = useState([]);
     const [playingStatus, setPlayingStatus] = useState([]);
+    const [playerAlbumPage, setPlayerAlbumPage] = useState([])
+    const [blink, setBlink] = useState(false)
+
+    // Loading
+    const [loadingTime, setLoadingTime] = useState(false)
 
     const getNewToken = async () =>{
         const responseRefreshToken = await axios.get(`https://my-spotify-data-center-server.vercel.app/refresh_token`, {
@@ -54,9 +60,8 @@ export default function Album() {
               'refresh_token': refresh_token
             }
           });
-        console.log(responseRefreshToken.data.access_token);
         setNewToken(responseRefreshToken.data.access_token)
-      }
+    }
 
     useEffect(() => {
       const checkCurrentlyPlaying = async () =>{
@@ -93,29 +98,19 @@ export default function Album() {
 
         const fetchData = async () => {
             
-            if(token){
+            if(newToken){
+              console.log("I'm in")
             try {
 
-                const responsePlaying = await axios.get(
-                  `https://api.spotify.com/v1/me/player/currently-playing`,
-                  {
-                    headers: {
-                      Authorization: "Bearer " + token,
-                    },
-                  }
-                );
-                console.log("ACTUALIZA3");
-                console.log(responsePlaying.data.item);
-                setPlaying(responsePlaying.data.item);
-                setPlayingData(responsePlaying.data);
-                
+                setRecommendations('')
+                console.log(token)
+                console.log(newToken)
                 const responseAlbum = await axios.get(`https://api.spotify.com/v1/albums/${id}`, {
                     headers: {
-                    'Authorization': 'Bearer ' + token
+                    'Authorization': 'Bearer ' + newToken
                     }
                 }); 
                 setAlbum(responseAlbum.data);
-                console.log(responseAlbum);
                 setTracks(responseAlbum.data.tracks.items);
                 const trackID = responseAlbum.data.tracks.items[0].id;
 
@@ -155,12 +150,28 @@ export default function Album() {
                 const getAlbumsFromRecommendations = responseRecommendations.data.tracks.map(track =>{
                   return track.album;
                 })
-                //console.log(getAlbumsFromRecommendations);
-                setRecommendations(getAlbumsFromRecommendations);
+
+                const checkRepetitions = getAlbumsFromRecommendations.reduce((p,c) => (c.name !== album.name && p.push(c),p),[])
+                
+                setRecommendations(checkRepetitions);
+
+                const responsePlaying = await axios.get(
+                  `https://api.spotify.com/v1/me/player/currently-playing`,
+                  {
+                    headers: {
+                      Authorization: "Bearer " + newToken,
+                    },
+                  }
+                );
+                setPlaying(responsePlaying.data.item);
+                setPlayingData(responsePlaying.data);
+
+                setLoadingTime(true);
 
             } catch (error) {
                 console.error('este es mi error',error);
                 if (error.response.status === 401) {
+                    console.log("I'm here")
                     getNewToken();
                 }
                 if (error.response.status === 500) {
@@ -176,7 +187,7 @@ export default function Album() {
         
         fetchData()
         
-    }, [id, newRec])
+    }, [id, newRec, playerAlbumPage, blink, newToken])
 
     const handleSave = async () => {
         const base_url = `https://api.spotify.com/v1/me/albums?ids=${id}`
@@ -276,35 +287,35 @@ export default function Album() {
   const checkPlayTrack = (responseUserDevices) =>{
       if(tracks){
         try {
-        const devices = responseUserDevices.data.devices;
-        if(devices.length == 0){
-            setActiveDevices(false);
-        } else{
-            setActiveDevices(true)
-            const deviceID = responseUserDevices.data.devices[0].id
-            if(deviceID){
-            console.log("Holis");
-            const trackID = tracks[0].id
-            const requestData = {
-                "uris": [`spotify:track:${trackID}`],
-                "position_ms": 0
-            }
-            const base_url = `https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`;
-            axios({
-                method: 'put',
-                url: base_url,
-                data: requestData,
-                headers: { 'Authorization': 'Bearer ' + token }
-            })
-            .then(function (response) {
-                //console.log(response);
-                //props.setPlayingRightNow(id);
-                setPlayingStatus(id)
-            });
-            } else{
-                console.log("No hay devices activos")
-            }
-        }
+          const devices = responseUserDevices.data.devices;
+          if(devices.length == 0){
+              setActiveDevices(false);
+          } else{
+              setActiveDevices(true)
+              const deviceID = responseUserDevices.data.devices[0].id
+              if(deviceID){
+                const trackID = tracks[0].id
+                const requestData = {
+                    "uris": [`spotify:track:${trackID}`],
+                    "position_ms": 0
+                }
+                const base_url = `https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`;
+                axios({
+                    method: 'put',
+                    url: base_url,
+                    data: requestData,
+                    headers: { 'Authorization': 'Bearer ' + token }
+                })
+                .then(function (response) {
+                    //console.log(response);
+                    setPlayingRightNow(id);
+                    setPlayingStatus(id)
+                    setBlink(true)
+                });
+              } else{
+                  console.log("No hay devices activos")
+              }
+          }
         } catch(error){
             if (error.response.status === 401) {
                 getNewToken();
@@ -319,9 +330,13 @@ export default function Album() {
       }
   }
 
+    const openModal = () =>{
+      setModalIsOpen(!modalIsOpen)
+    }
+
     return (
       <div>
-        <NavMenu access_token={token} refresh_token={refresh_token}/>
+        <NavMenu access_token={token} refresh_token={refresh_token} />
         <Inner>
           {playing && (
             <CurrentlyPlayingCard
@@ -331,21 +346,34 @@ export default function Album() {
               playingRightNow={playingRightNow}
               setPlayingRightNow={setPlayingRightNow}
               setPlaying={setPlaying}
+              blink={blink}
+              setBlink={setBlink}
             />
           )}
-          {tracks ? (
+          {loadingTime ? (
             <Container>
+              {!activeDevices && (
+                <Modal
+                  modalIsOpen={modalIsOpen}
+                  setModalIsOpen={setModalIsOpen}
+                  title={"No encontramos reproductores activos"}
+                  text={
+                    "Para reproducir esta canción es necesario que tengas algún reproductor de Spotify abierto. Para que el dispositivo pueda ser detectado hay que empezar a reproducir una canción. Cuando lo hagas podés volver a intentar :)"
+                  }
+                  buttonText={"Try again"}
+                />
+              )}
               <ContainerImage onClick={playTrack}>
                 {!!album.images && (
-                  <TrackImage onClick={playTrack} src={cover} />
+                  <TrackImage onClick={playTrack} src={cover} onClick={openModal}/>
                 )}
-                <TextContainer onClick={playTrack}>
-                  <Text onClick={playTrack}>Play On Spotify</Text>
+                <TextContainer onClick={playTrack} onClick={openModal}>
+                  <Text onClick={playTrack} onClick={openModal}>Play On Spotify</Text>
                 </TextContainer>
               </ContainerImage>
               <ContainerAlbumName>
                 <TrackName>{album.name}</TrackName>
-                <ArtistName>{artistName.join(', ')}</ArtistName>
+                <ArtistName>{artistName.join(", ")}</ArtistName>
                 <RecommendationsButtonsContainer>
                   {save && (
                     <Button onClick={handleSave}>
@@ -357,73 +385,105 @@ export default function Album() {
               </ContainerAlbumName>
             </Container>
           ) : (
-            <p>Loading...</p>
+            <LoadingContainer>
+              <LoadingImage src="/loading.gif" alt="loading" />
+              <LoadingText>Just loading...</LoadingText>
+            </LoadingContainer>
           )}
 
-          {tracks ? (
-            <Grid colGap={30} rowGap={40}>
-              <Col desktop={2} tablet={6} mobile={12}>
-                <ContainerAlbum>
-                  <ContainerInfo>
-                    <Subtitle>Type</Subtitle>
-                    {album.album_type && <AlbumInfo>{album.album_type.charAt(0).toUpperCase() + album.album_type.slice(1)}</AlbumInfo>}
-                  </ContainerInfo>
-                  <ContainerInfo>
-                    <Subtitle>Release Date</Subtitle>
-                    <AlbumInfo>{album.release_date}</AlbumInfo>
-                  </ContainerInfo>
-                  <ContainerInfo>
-                    <Subtitle>Label</Subtitle>
-                    <AlbumInfo>{album.label}</AlbumInfo>
-                  </ContainerInfo>
-                  <ContainerInfo>
-                    <Subtitle>Popularity</Subtitle>
-                    <AlbumInfo>{album.popularity}/100</AlbumInfo>
-                  </ContainerInfo>
-                </ContainerAlbum>
-              </Col>
-              <Col desktop={10} tablet={6} mobile={12}>
-                {tracks &&
-                  tracks.map((track) => (
-                    <TracklistCard
-                      data={track}
+          {loadingTime ? (
+            <section>
+              <Grid colGap={30} rowGap={40}>
+                <Col desktop={2} tablet={6} mobile={12}>
+                  <ContainerAlbum>
+                    <ContainerInfo>
+                      <Subtitle>Type</Subtitle>
+                      {album.album_type && (
+                        <AlbumInfo>
+                          {album.album_type.charAt(0).toUpperCase() +
+                            album.album_type.slice(1)}
+                        </AlbumInfo>
+                      )}
+                    </ContainerInfo>
+                    <ContainerInfo>
+                      <Subtitle>Release Date</Subtitle>
+                      <AlbumInfo>{album.release_date}</AlbumInfo>
+                    </ContainerInfo>
+                    <ContainerInfo>
+                      <Subtitle>Label</Subtitle>
+                      <AlbumInfo>{album.label}</AlbumInfo>
+                    </ContainerInfo>
+                    <ContainerInfo>
+                      <Subtitle>Popularity</Subtitle>
+                      <AlbumInfo>{album.popularity}/100</AlbumInfo>
+                    </ContainerInfo>
+                  </ContainerAlbum>
+                </Col>
+                <Col desktop={10} tablet={6} mobile={12}>
+                  {tracks &&
+                    tracks.map((track) => (
+                      <TracklistCard
+                        data={track}
+                        token={newToken}
+                        refreshToken={refresh_token}
+                        playerAlbumPage={playerAlbumPage}
+                        setPlayerAlbumPage={setPlayerAlbumPage}
+                        blink={blink}
+                        setBlink={setBlink}
+                      />
+                    ))}
+                </Col>
+              </Grid>
+            </section>
+          ) : null}
+
+          {loadingTime ? (
+            <section>
+              <Grid colGap={30} rowGap={40}>
+                <Col desktop={12} tablet={6} mobile={12}>
+                  <RecommendationsContainer>
+                    <Title size="h3" margin="90px 0 60px 0">
+                      Albums recommendations
+                    </Title>
+                    <RecommendationsButtonsContainer>
+                      <Button onClick={() => setNewRec(!newRec)}>
+                        <Icon src="/refresh.svg" alt="refresh_icon" />
+                        Refresh recommendations
+                      </Button>
+                    </RecommendationsButtonsContainer>
+                  </RecommendationsContainer>
+                </Col>
+              </Grid>
+            </section>
+          ) : null}
+
+          {loadingTime ? (
+            <section>
+              <Grid colGap={30} rowGap={40} columns>
+                {recommendations ? (
+                  recommendations.map((album) => (
+                    <AlbumCard
+                      key={album.id}
+                      albumRecommendations={album}
                       token={newToken}
-                      refresh_token={refresh_token}
+                      refreshToken={refresh_token}
+                      gridSize={2}
+                      singleTrack="100"
+                      playerAlbumPage={playerAlbumPage}
+                      setPlayerAlbumPage={setPlayerAlbumPage}
+                      blink={blink}
+                      setBlink={setBlink}
                     />
-                  ))}
-              </Col>
-            </Grid>
-          ) : (
-            <p>Loading...</p>
-          )}
-
-          <Grid colGap={30} rowGap={40}>
-            <Col desktop={12} tablet={6} mobile={12}>
-              <RecommendationsContainer>
-                <Title size="h3" margin="90px 0 60px 0">
-                  Albums recommendations
-                </Title>
-                <RecommendationsButtonsContainer>
-                  <Button onClick={() => setNewRec(!newRec)}>
-                    <Icon src="/refresh.svg" alt="refresh_icon" />
-                    Refresh recommendations
-                  </Button>
-                </RecommendationsButtonsContainer>
-              </RecommendationsContainer>
-            </Col>
-          </Grid>
-
-          <Grid colGap={30} rowGap={40} columns>
-            {recommendations.map((album) => (
-              <AlbumCard
-                key={album.id}
-                albumRecommendations={album}
-                token={newToken}
-                gridSize={2}
-                singleTrack="100"
-              />
-            ))}
-          </Grid>
+                  ))
+                ) : (
+                  <LoadingContainer>
+                    <LoadingImage src="/loading.gif" alt="loading" />
+                    <LoadingText>Just loading...</LoadingText>
+                  </LoadingContainer>
+                )}
+              </Grid>
+            </section>
+          ) : null}
 
           <Footer />
         </Inner>

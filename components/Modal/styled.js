@@ -46,7 +46,7 @@ const CloseButton = styled.img`
     width:30px;
     color: #fff;
     position:absolute;
-    top:18%;
+    top:23%;
     right:32%;
 
     @media (max-width: 480px) {
@@ -74,11 +74,20 @@ const Container = styled.div`
 `
 
 const Button = styled.button`
-    width: 240px;
+    width: 150px;
     background-color: #47ffbb;
+    border-radius: 3px;
     color: black;
     border: none;
-    padding:20px;
+    padding:10px;
+    font-size:16px;
+    cursor:pointer;
+    font-weight:600;
+    font-family: Poppins;
+
+    :hover{
+        opacity:0.7;
+    }
 `
 
 export { Container, CloseButton, InfoContainer, InfoText, InfoTitle, Button }

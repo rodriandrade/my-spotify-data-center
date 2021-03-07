@@ -43,17 +43,20 @@ a {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  /*background: #f1f1f1;*/
+  background: rgba(20,20,20, 1)
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  /*background: #888;*/
+  background: #47ffbb;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  /*background: #555;*/
+  background: #47ffbb;
 }
 
 text{
@@ -62,18 +65,30 @@ text{
   font-family: Poppins !important;
 }
 
-/*
-.bar-description{
-  color:black;
-  font-size:16px;
-  width:300px;
-  padding:10px;
+.ityped-cursor {
+  font-size: 72px;
+  opacity: 1;
+  -webkit-animation: blink 0.3s infinite;
+  -moz-animation: blink 0.3s infinite;
+  animation: blink 0.3s infinite;
+  animation-direction: alternate;
 }
-*/
 
-/*
-* {
-  box-sizing: border-box;
+@keyframes blink {
+  100% {
+      opacity: 0;
+  }
 }
-*/
+
+@-webkit-keyframes blink {
+  100% {
+      opacity: 0;
+  }
+}
+
+@-moz-keyframes blink {
+  100% {
+      opacity: 0;
+  }
+}
 

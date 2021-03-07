@@ -6,7 +6,7 @@ import TrackCard from '../../components/trackCard'
 import {Grid, Col} from '../../components/Grid'
 import Title from '../../components/Title'
 import Inner from '../../components/Inner'
-import {Container, ContainerInfo, ContainerImage, ArtistImage, ArtistName, ArtistGenres, Position, ArtistInfo, ArtistInfoCont, Button, GenresContainer, NoDataContainer, NoDataInfo, NoDataTitle} from './styled'
+import {Container, ContainerInfo, ContainerImage, ArtistImage, ArtistName, ArtistGenres, Position, ArtistInfo, ArtistInfoCont, Button, GenresContainer, NoDataContainer, NoDataInfo, NoDataTitle, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection} from './styled'
 import NavMenu from '../../components/NavMenu'
 import Footer from '../../components/Footer'
 import ParticlesBackground from '../../components/ParticlesBackground'
@@ -37,9 +37,14 @@ export default function Artist() {
     const [playing, setPlaying] = useState([]);
     const [playingData, setPlayingData] = useState([]);
     const [playingRightNow, setPlayingRightNow] = useState([]);
+    const [blink, setBlink] = useState(false)
+    const [playerArtistPage, setPlayerArtistPage] = useState([])
 
     // State relacionados a las canciones del historial de escucha del usuario
     const [tracksRecentlyPlayed, setTracksRecentlyPlayed] = useState([]);
+
+    // Loading
+    const [loadingTime, setLoadingTime] = useState(false)
 
     const [newToken, setNewToken] = useState(token);
 
@@ -49,25 +54,49 @@ export default function Artist() {
               'refresh_token': refresh_token
             }
           });
-        console.log(responseRefreshToken.data.access_token);
         setNewToken(responseRefreshToken.data.access_token)
       }
+
+      /*
+      useEffect(() => {
+        const fetchArtists = async () =>{
+          if(newToken){
+            console.log(playerArtistPage)
+            try{
+              const responsePlaying = await axios.get(
+                `https://api.spotify.com/v1/me/player/currently-playing`,
+                {
+                  headers: {
+                    Authorization: "Bearer " + newToken,
+                  },
+                }
+              );
+              console.log(responsePlaying.data.item);
+              setPlaying(responsePlaying.data.item);
+              setPlayingData(responsePlaying.data);
+
+            } catch (error){
+              console.error("este es mi error", error);
+              if (error.response.status === 401) {
+                getNewToken();
+              }
+              if (error.response.status === 500) {
+                console.log(error);
+              }
+              if (error.response.status === 504) {
+                console.log(error);
+              }
+            }
+          }
+        }
+        fetchArtists();
+      }, [playerArtistPage, token])
+      */
 
     useEffect(() => {
         const fetchData = async () => {
             if(newToken){
                 try {
-
-                    const responsePlaying = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
-                    headers: {
-                      'Authorization': 'Bearer ' + token
-                    }
-                    });
-                    console.log("ACTUALIZA3")
-                    console.log(responsePlaying.data.item);
-                    setPlaying(responsePlaying.data.item);
-                    setPlayingData(responsePlaying.data);
-
 
                     // Traer artista
                     const responseArtist = await axios.get(`https://api.spotify.com/v1/artists/${id}`, {
@@ -76,7 +105,6 @@ export default function Artist() {
                         }
                     });
                     setArtist(responseArtist.data);
-                    console.log(responseArtist)
                     // Nombre del artista para buscarlo entre los 50 artistas más escuchados
                     const artistName = responseArtist.data.name;
                     
@@ -87,7 +115,6 @@ export default function Artist() {
                         }
                     });
                     setArtistTopTracks(responseArtistTopTracks.data.tracks);
-                    console.log(responseArtistTopTracks)
 
                     // Traer artistas relacionados
                     const responseRelatedArtists = await axios.get(`https://api.spotify.com/v1/artists/${id}/related-artists`, {
@@ -230,7 +257,19 @@ export default function Artist() {
                         })
                     })
                     setTracksRecentlyPlayed(artistRepetitionRecentlyPlayed);
+                    
+                    const responsePlaying = await axios.get(
+                        `https://api.spotify.com/v1/me/player/currently-playing`,
+                        {
+                        headers: {
+                            Authorization: "Bearer " + newToken,
+                        },
+                        }
+                    );
+                    setPlaying(responsePlaying.data.item);
+                    setPlayingData(responsePlaying.data);
 
+                    setLoadingTime(true);
 
                 } catch (error) {
                     console.error('este es mi error',error);
@@ -247,7 +286,7 @@ export default function Artist() {
             }
         }
         fetchData()
-    }, [id])
+    }, [id, playerArtistPage, blink])
 
     const handleFollow = async () => {
         try{
@@ -277,9 +316,10 @@ export default function Artist() {
             <ParticlesBackground />
             <NavMenu access_token={token} refresh_token={refresh_token}/>
             <Inner>
-                {artist ? 
+
+                {loadingTime ? 
                 <Grid colGap={30} rowGap={40}>
-                    {playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} /> }
+                    {playing && <CurrentlyPlayingCard data={playing} token={token} refreshToken={refresh_token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink} setBlink={setBlink} /> }
                     <Col desktop={12} tablet={6} mobile={12}>
                         <Container>
                             <ContainerImage>
@@ -292,135 +332,142 @@ export default function Artist() {
                         </Container>
                     </Col>
                 </Grid>
-                : <p>Loading...</p>}
+                : 
+                <LoadingContainer>
+                  <LoadingImage src="/loading.gif" alt="loading" />
+                  <LoadingText>Just loading...</LoadingText>
+                </LoadingContainer>
+                }
 
-                {artist ? 
-                <Grid colGap={30} rowGap={40}>
-                    <Col desktop={4} tablet={6} mobile={12}>
-                        <Title size="h4" margin="0 0 0 0">Genres</Title>
-                        <GenresContainer>
-                            {artist.genres && artist.genres.map(genre => <ArtistGenres>{genre}</ArtistGenres>)}
-                        </GenresContainer>
-                    </Col>
-                    
-                    <Col desktop={4} tablet={6} mobile={12}>
-                        <Title size="h4" margin="0 0 0 0">Popularity</Title>
-                        {artist.popularity && <Position><strong>{artist.popularity} / 100</strong></Position>}
-                    </Col>
-                    
-                    <Col desktop={4} tablet={6} mobile={12}>
-                        <Title size="h4" margin="0 0 0 0">Followers</Title>
-                        {artist.genres && <Position><strong>{artist.followers.total}</strong></Position>}
-                    </Col>
-                </Grid>
-                : <p>Loading...</p>}
-
-                {artistFourWeeks || artistSixMonths || artistSeveralYears ? 
-                <Title size="h4" margin="60px 0 0 0">{artist.name} appeareances in your artist ranking</Title>
+                {loadingTime ? 
+                    <section>
+                        <Grid colGap={30} rowGap={40}>
+                            <Col desktop={4} tablet={6} mobile={12}>
+                                <Title size="h4" margin="0 0 0 0">Genres</Title>
+                                <GenresContainer>
+                                    {artist.genres && artist.genres.map(genre => <ArtistGenres>{genre}</ArtistGenres>)}
+                                </GenresContainer>
+                            </Col>
+                            <Col desktop={4} tablet={6} mobile={12}>
+                                <Title size="h4" margin="0 0 0 0">Popularity</Title>
+                                {artist.popularity && <Position><strong>{artist.popularity} / 100</strong></Position>}
+                            </Col>
+                            <Col desktop={4} tablet={6} mobile={12}>
+                                <Title size="h4" margin="0 0 0 0">Followers</Title>
+                                {artist.genres && <Position><strong>{artist.followers.total}</strong></Position>}
+                            </Col>
+                        </Grid>
+                    </section>
                 : null}
 
-                {artistFourWeeks || artistSixMonths || artistSeveralYears ?  
-                <Grid colGap={30} rowGap={40}>
-                    <Col desktop={4} tablet={6} mobile={12}>
-                        {artistFourWeeks ? 
-                            <ArtistInfoCont>
-                                <Position>#<strong>{artistFourWeeks}</strong></Position>
-                                <ArtistInfo>In your most listened artists list for the <strong>past 4 weeks</strong>.</ArtistInfo>
-                            </ArtistInfoCont>
-                        : 
-                        <NoDataContainer>
-                          <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
-                          <NoDataInfo>Not in your past 4 weeks ranking</NoDataInfo>  
-                        </NoDataContainer>
-                        }
-                    </Col>
-                    <Col desktop={4} tablet={6} mobile={12}>
-                        {artistSixMonths ? 
-                            <ArtistInfoCont>
-                                <Position>#<strong>{artistSixMonths}</strong></Position>
-                                <ArtistInfo>In your most listened artists list for the <strong>past 6 months</strong>.</ArtistInfo>
-                            </ArtistInfoCont>
-                        : 
-                        <NoDataContainer>
-                          <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
-                          <NoDataInfo>Not in your past 6 months ranking</NoDataInfo>  
-                        </NoDataContainer>
-                        }
-                    </Col>
-                    <Col desktop={4} tablet={6} mobile={12}>
-                        {artistSeveralYears ? 
-                            <ArtistInfoCont>
-                                <Position>#<strong>{artistSeveralYears}</strong></Position>
-                                <ArtistInfo>In your most listened artists list for the <strong>past several years</strong>.</ArtistInfo>
-                            </ArtistInfoCont>
-                        : 
-                        <NoDataContainer>
-                            <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
-                            <NoDataInfo>Not in your lifetime ranking</NoDataInfo>  
-                        </NoDataContainer>
-                        }
-                    </Col>
-                </Grid>
+                {loadingTime ? 
+                    <section>
+                        <Title size="h4" margin="60px 0 0 0">{artist.name} appeareances in your artist ranking</Title>
+                        <Grid colGap={30} rowGap={40}>
+                            <Col desktop={4} tablet={6} mobile={12}>
+                                {artistFourWeeks ? 
+                                    <ArtistInfoCont>
+                                        <Position>#<strong>{artistFourWeeks}</strong></Position>
+                                        <ArtistInfo>In your most listened artists list for the <strong>past 4 weeks</strong>.</ArtistInfo>
+                                    </ArtistInfoCont>
+                                : 
+                                <NoDataContainer>
+                                <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
+                                <NoDataInfo>Not in your past 4 weeks ranking</NoDataInfo>  
+                                </NoDataContainer>
+                                }
+                            </Col>
+                            <Col desktop={4} tablet={6} mobile={12}>
+                                {artistSixMonths ? 
+                                    <ArtistInfoCont>
+                                        <Position>#<strong>{artistSixMonths}</strong></Position>
+                                        <ArtistInfo>In your most listened artists list for the <strong>past 6 months</strong>.</ArtistInfo>
+                                    </ArtistInfoCont>
+                                : 
+                                <NoDataContainer>
+                                <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
+                                <NoDataInfo>Not in your past 6 months ranking</NoDataInfo>  
+                                </NoDataContainer>
+                                }
+                            </Col>
+                            <Col desktop={4} tablet={6} mobile={12}>
+                                {artistSeveralYears ? 
+                                    <ArtistInfoCont>
+                                        <Position>#<strong>{artistSeveralYears}</strong></Position>
+                                        <ArtistInfo>In your most listened artists list for the <strong>past several years</strong>.</ArtistInfo>
+                                    </ArtistInfoCont>
+                                : 
+                                <NoDataContainer>
+                                    <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
+                                    <NoDataInfo>Not in your lifetime ranking</NoDataInfo>  
+                                </NoDataContainer>
+                                }
+                            </Col>
+                        </Grid>
+                    </section>
                 : null}
 
-                {tracksFourWeeks.length > 0 || tracksSixMonths.length > 0 || tracksSeveralYears.length > 0 ? 
-                <Title size="h4" margin="60px 0 0 0">{artist.name}'s tracks appeareances in your tracks ranking</Title>
+                {loadingTime ? 
+                    <section>
+                        <Title size="h4" margin="60px 0 0 0">{artist.name}'s tracks appeareances in your tracks ranking</Title>
+                        <Grid colGap={30} rowGap={40}>
+                            <Col desktop={4} tablet={6} mobile={12}>
+                                {tracksFourWeeks.length > 0 ?<ArtistInfoCont>
+                                    <Position><strong>{tracksFourWeeks.length}</strong></Position>
+                                    <ArtistInfo>{tracksFourWeeks.length > 1 ? 'times' : 'time'} appeared in your top 50 tracks from the <strong>past 4 weeks</strong>.</ArtistInfo>
+                                </ArtistInfoCont>
+                                : 
+                                <NoDataContainer>
+                                <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
+                                <NoDataInfo>Not in your past 4 weeks ranking</NoDataInfo>  
+                                </NoDataContainer>
+                                }
+                            </Col>
+                            <Col desktop={4} tablet={6} mobile={12}>
+                                {tracksSixMonths.length > 0 ? <ArtistInfoCont>
+                                    <Position><strong>{tracksSixMonths.length}</strong></Position>
+                                    <ArtistInfo>{tracksSixMonths.length > 1 ? 'times' : 'time'} appeared in your top 50 tracks from the <strong>past 6 months</strong>.</ArtistInfo>
+                                </ArtistInfoCont>
+                                : 
+                                <NoDataContainer>
+                                <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
+                                <NoDataInfo>Not in your past 6 months ranking</NoDataInfo>  
+                                </NoDataContainer>
+                                }
+                            </Col>
+                            <Col desktop={4} tablet={6} mobile={12}>
+                                {tracksSeveralYears.length > 0 ? <ArtistInfoCont>
+                                    <Position><strong>{tracksSeveralYears.length}</strong></Position>
+                                    <ArtistInfo>{tracksSeveralYears.length > 1 ? 'times' : 'time'} appeared in your top 50 tracks <strong>lifetime</strong>.</ArtistInfo>
+                                </ArtistInfoCont>
+                                : 
+                                <NoDataContainer>
+                                <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
+                                <NoDataInfo>Not in your lifetime ranking</NoDataInfo>  
+                                </NoDataContainer>
+                                }
+                            </Col>
+                        </Grid>
+                    </section>
                 : null}
 
-                {tracksFourWeeks.length > 0 || tracksSixMonths.length > 0 || tracksSeveralYears.length > 0 ? 
-                <Grid colGap={30} rowGap={40}>
-                    <Col desktop={4} tablet={6} mobile={12}>
-                        {tracksFourWeeks.length > 0 ?<ArtistInfoCont>
-                            <Position><strong>{tracksFourWeeks.length}</strong></Position>
-                            <ArtistInfo>times appeared in your top 50 tracks from the <strong>past 4 weeks</strong>.</ArtistInfo>
-                        </ArtistInfoCont>
-                        : 
-                        <NoDataContainer>
-                          <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
-                          <NoDataInfo>Not in your past 4 weeks ranking</NoDataInfo>  
-                        </NoDataContainer>
-                        }
-                    </Col>
-                    <Col desktop={4} tablet={6} mobile={12}>
-                        {tracksSixMonths.length > 0 ? <ArtistInfoCont>
-                            <Position><strong>{tracksSixMonths.length}</strong></Position>
-                            <ArtistInfo>times appeared in your top 50 tracks from the <strong>past 6 months</strong>.</ArtistInfo>
-                        </ArtistInfoCont>
-                        : 
-                        <NoDataContainer>
-                          <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
-                          <NoDataInfo>Not in your past 6 months ranking</NoDataInfo>  
-                        </NoDataContainer>
-                        }
-                    </Col>
-                    <Col desktop={4} tablet={6} mobile={12}>
-                        {tracksSeveralYears.length > 0 ? <ArtistInfoCont>
-                            <Position><strong>{tracksSeveralYears.length}</strong></Position>
-                            <ArtistInfo>times appeared in your top 50 tracks <strong>lifetime</strong>.</ArtistInfo>
-                        </ArtistInfoCont>
-                        : 
-                        <NoDataContainer>
-                          <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
-                          <NoDataInfo>Not in your lifetime ranking</NoDataInfo>  
-                        </NoDataContainer>
-                        }
-                    </Col>
-                </Grid>
+                {loadingTime ? 
+                    <section>
+                        <Title size="h4">Artist Top Tracks on Spotify</Title>
+                        <Grid colGap={30} rowGap={40} columns>
+                            {artistTopTracks && artistTopTracks.map((track, index) => (<TrackCard key={track._id} data={track} token={newToken} refreshToken={refresh_token} index={index} gridSize={2} singleTrack="100" playerArtistPage={playerArtistPage} setPlayerArtistPage={setPlayerArtistPage} blink={blink} setBlink={setBlink}/>))}
+                        </Grid>
+                    </section>
                 : null}
 
-                <Title size="h4">Artist Top Tracks on Spotify</Title>
-                {artist ? 
-                <Grid colGap={30} rowGap={40} columns>
-                    {artistTopTracks && artistTopTracks.map((track, index) => (<TrackCard key={track._id} data={track} token={newToken} index={index} gridSize={2} singleTrack="100"/>))}
-                </Grid>
-                : <p>Loading...</p>}
-
-                <Title size="h4">Related Artists</Title>
-                {artist ? 
-                <Grid colGap={30} rowGap={40} columns>
-                    {relatedArtists && relatedArtists.map((artist) => (<ArtistCard key={artist._id} data={artist} gridSize={2} token={newToken}/>))}
-                </Grid>
-                : <p>Loading...</p>}
+                {loadingTime ? 
+                <section>
+                    <Title size="h4">Related Artists</Title>
+                    <Grid colGap={30} rowGap={40} columns>
+                        {relatedArtists && relatedArtists.map((artist) => (<ArtistCard key={artist._id} data={artist} gridSize={2} token={newToken} refreshToken={refresh_token}/>))}
+                    </Grid>
+                </section>
+                : null}
 
                 <Footer /> 
             </Inner>

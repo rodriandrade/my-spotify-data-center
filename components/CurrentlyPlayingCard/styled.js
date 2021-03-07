@@ -4,6 +4,19 @@ const TimePlayed = styled.p`
     font-size:16px;
     color: #000;
     margin:0;
+    animation: ${(props) => (props.blink ? "blink-text 1s ease-out" : "")};
+
+    @keyframes blink-text{
+        0% {
+            color: #000;
+        }
+        50% {
+            color: #47ffbb;
+        }
+        100% {
+            color: #000;
+        }
+    }
 `
 
 
@@ -17,6 +30,7 @@ const CurrentlyPlayingCont = styled.div`
     cursor:pointer;
     margin:0;
     padding:0;
+    animation: ${(props) => (props.blink ? "blink-cont 1s ease-out" : "")};
 
     :hover{
         opacity:0.6;
@@ -24,6 +38,18 @@ const CurrentlyPlayingCont = styled.div`
 
     &:hover ${TimePlayed} {
         color: #000;
+    }
+
+    @keyframes blink-cont{
+        0% {
+            background-color: #47ffbb;
+        }
+        50% {
+            background-color: rgba(10,10,10,1);
+        }
+        100% {
+            background-color: #47ffbb;
+        }
     }
 `
 

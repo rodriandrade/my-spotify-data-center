@@ -141,4 +141,33 @@ const RecommendationsContainer = styled.div`
     align-items:center;
 `
 
-export {ContainerAlbum, Subtitle, AlbumInfo, ContainerInfo, ContainerImage, ContainerAlbumName, Button, TrackImage, RecommendationsButtonsContainer, TrackName, Container, ArtistName, Icon, Text, TextContainer, RecommendationsContainer}
+const LoadingContainer = styled.div`
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    height:100vh;
+`
+
+const LoadingImage = styled.img`
+    width:150px;
+    height:150px;
+`
+
+const LoadingText = styled.span`
+    font-size:16px;
+    font-family: 'Poppins', sans-serif;
+    color:#fff;
+    margin-top:20px;
+`
+
+const LoadingContainerSection = styled.div`
+    width:100%;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+`
+
+export {ContainerAlbum, Subtitle, AlbumInfo, ContainerInfo, ContainerImage, ContainerAlbumName, Button, TrackImage, RecommendationsButtonsContainer, TrackName, Container, ArtistName, Icon, Text, TextContainer, RecommendationsContainer, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection}

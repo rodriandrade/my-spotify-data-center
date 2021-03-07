@@ -108,7 +108,7 @@ const CurrentlyPlayingCard = props =>{
                 }
             });
             setSave(responseSavedTrack.data.toString());
-            
+            console.log(responseSavedTrack)
             if(responseSavedTrack.data.toString() === "true"){
                 setSaveIcon('/heart.svg');
               } else{
@@ -117,7 +117,7 @@ const CurrentlyPlayingCard = props =>{
             }
         }
         checkSave();
-    }, [])
+    }, [props])
 
     // Save or unsave track
     const handleSave = async () => {
@@ -142,8 +142,8 @@ const CurrentlyPlayingCard = props =>{
         <div>
         <Inner>
             <Container showPlayer={showPlayer} >
-                <CurrentlyPlayingCont onClick={ ()=> setShowPlayer(!showPlayer) }>
-                    <TimePlayed>Currently Playing</TimePlayed>
+                <CurrentlyPlayingCont onClick={ ()=> setShowPlayer(!showPlayer) } blink={props.blink}>
+                    <TimePlayed blink={props.blink}>Currently Playing</TimePlayed>
                 </CurrentlyPlayingCont>
                     <SoundBar>
                     </SoundBar>
