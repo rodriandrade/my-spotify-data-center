@@ -727,7 +727,7 @@ const Home = () =>{
                 <ContainerHero>
                   {/*<Title size="h1" >Welcome to your Spotify Data Center</Title>*/}
                   <TypingEffect />
-                  {!user && <a href="https://my-spotify-data-center-server-rodriandrade.vercel.app/login">
+                  {!user && <a href="https://spotify-server-seven.vercel.app/login">
                     <MainButton>Login with Spotify</MainButton>
                   </a>}
                 </ContainerHero>

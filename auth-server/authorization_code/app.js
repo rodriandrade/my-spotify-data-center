@@ -62,11 +62,14 @@ app.get('/callback', function(req, res) {
 
   // your application requests refresh and access tokens
   // after checking the state parameter
-
   var code = req.query.code || null;
   var state = req.query.state || null;
   var storedState = req.cookies ? req.cookies[stateKey] : null;
-
+  console.log("Esto es el code" + " " + code)
+  console.log("Esto es el state" + " " + state)
+  console.log(storedState)
+  console.log(req.cookies)
+  
   if (state === null || state !== storedState) {
     res.redirect('/#' +
       querystring.stringify({
