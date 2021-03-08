@@ -26,12 +26,14 @@ const ContainerTrackData = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content:space-between;
+    position: relative;
 `
 
 const TrackName = styled.p`
     font-size:16px;
     color:#fff;
     cursor: pointer;
+    position: relative;
 
     :hover{
         text-decoration:underline 1px solid #47ffbb;
@@ -42,12 +44,14 @@ const TrackNumber = styled.p`
     font-size:16px;
     color:#fff;
     margin-right:10px;
+    position: relative;
 `
 
 const TrackDuration = styled.p`
     font-size:16px;
     color:#fff;
     margin:0 20px;
+    position: relative;
 `
 
 const TrackSave = styled.img`
@@ -55,6 +59,7 @@ const TrackSave = styled.img`
     max-height:20px;
     margin:0 20px;
     cursor:pointer;
+    position: relative;
 `
 
 

@@ -360,7 +360,7 @@ export default function Artist() {
                     </section>
                 : null}
 
-                {loadingTime ? 
+                {loadingTime && artistFourWeeks || artistSixMonths || artistSeveralYears ? 
                     <section>
                         <Title size="h4" margin="60px 0 0 0">{artist.name} appeareances in your artist ranking</Title>
                         <Grid colGap={30} rowGap={40}>
@@ -372,8 +372,8 @@ export default function Artist() {
                                     </ArtistInfoCont>
                                 : 
                                 <NoDataContainer>
-                                <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
-                                <NoDataInfo>Not in your past 4 weeks ranking</NoDataInfo>  
+                                    <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
+                                    <NoDataInfo>Not in your past 4 weeks ranking</NoDataInfo>  
                                 </NoDataContainer>
                                 }
                             </Col>
@@ -385,8 +385,8 @@ export default function Artist() {
                                     </ArtistInfoCont>
                                 : 
                                 <NoDataContainer>
-                                <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
-                                <NoDataInfo>Not in your past 6 months ranking</NoDataInfo>  
+                                    <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
+                                    <NoDataInfo>Not in your past 6 months ranking</NoDataInfo>  
                                 </NoDataContainer>
                                 }
                             </Col>
@@ -407,53 +407,53 @@ export default function Artist() {
                     </section>
                 : null}
 
-                {loadingTime ? 
+                {loadingTime && tracksFourWeeks.length > 0 || tracksSixMonths.length > 0 || tracksSeveralYears.length > 0 ? 
                     <section>
                         <Title size="h4" margin="60px 0 0 0">{artist.name}'s tracks appeareances in your tracks ranking</Title>
                         <Grid colGap={30} rowGap={40}>
-                            <Col desktop={4} tablet={6} mobile={12}>
-                                {tracksFourWeeks.length > 0 ?<ArtistInfoCont>
-                                    <Position><strong>{tracksFourWeeks.length}</strong></Position>
-                                    <ArtistInfo>{tracksFourWeeks.length > 1 ? 'times' : 'time'} appeared in your top 50 tracks from the <strong>past 4 weeks</strong>.</ArtistInfo>
-                                </ArtistInfoCont>
-                                : 
-                                <NoDataContainer>
-                                <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
-                                <NoDataInfo>Not in your past 4 weeks ranking</NoDataInfo>  
-                                </NoDataContainer>
-                                }
-                            </Col>
-                            <Col desktop={4} tablet={6} mobile={12}>
-                                {tracksSixMonths.length > 0 ? <ArtistInfoCont>
-                                    <Position><strong>{tracksSixMonths.length}</strong></Position>
-                                    <ArtistInfo>{tracksSixMonths.length > 1 ? 'times' : 'time'} appeared in your top 50 tracks from the <strong>past 6 months</strong>.</ArtistInfo>
-                                </ArtistInfoCont>
-                                : 
-                                <NoDataContainer>
-                                <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
-                                <NoDataInfo>Not in your past 6 months ranking</NoDataInfo>  
-                                </NoDataContainer>
-                                }
-                            </Col>
-                            <Col desktop={4} tablet={6} mobile={12}>
-                                {tracksSeveralYears.length > 0 ? <ArtistInfoCont>
-                                    <Position><strong>{tracksSeveralYears.length}</strong></Position>
-                                    <ArtistInfo>{tracksSeveralYears.length > 1 ? 'times' : 'time'} appeared in your top 50 tracks <strong>lifetime</strong>.</ArtistInfo>
-                                </ArtistInfoCont>
-                                : 
-                                <NoDataContainer>
-                                <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
-                                <NoDataInfo>Not in your lifetime ranking</NoDataInfo>  
-                                </NoDataContainer>
-                                }
-                            </Col>
+                                <Col desktop={4} tablet={6} mobile={12}>
+                                    {tracksFourWeeks.length > 0 ?<ArtistInfoCont>
+                                        <Position><strong>{tracksFourWeeks.length}</strong></Position>
+                                        <ArtistInfo>{tracksFourWeeks.length > 1 ? 'times' : 'time'} appeared in your top 50 tracks from the <strong>past 4 weeks</strong>.</ArtistInfo>
+                                    </ArtistInfoCont>
+                                    : 
+                                    <NoDataContainer>
+                                        <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
+                                        <NoDataInfo>Not in your past 4 weeks ranking</NoDataInfo>  
+                                    </NoDataContainer>
+                                    }
+                                </Col>
+                                <Col desktop={4} tablet={6} mobile={12}>
+                                    {tracksSixMonths.length > 0 ? <ArtistInfoCont>
+                                        <Position><strong>{tracksSixMonths.length}</strong></Position>
+                                        <ArtistInfo>{tracksSixMonths.length > 1 ? 'times' : 'time'} appeared in your top 50 tracks from the <strong>past 6 months</strong>.</ArtistInfo>
+                                    </ArtistInfoCont>
+                                    : 
+                                    <NoDataContainer>
+                                        <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
+                                        <NoDataInfo>Not in your past 6 months ranking</NoDataInfo>  
+                                    </NoDataContainer>
+                                    }
+                                </Col>
+                                <Col desktop={4} tablet={6} mobile={12}>
+                                    {tracksSeveralYears.length > 0 ? <ArtistInfoCont>
+                                        <Position><strong>{tracksSeveralYears.length}</strong></Position>
+                                        <ArtistInfo>{tracksSeveralYears.length > 1 ? 'times' : 'time'} appeared in your top 50 tracks <strong>lifetime</strong>.</ArtistInfo>
+                                    </ArtistInfoCont>
+                                    : 
+                                    <NoDataContainer>
+                                        <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
+                                        <NoDataInfo>Not in your lifetime ranking</NoDataInfo>  
+                                    </NoDataContainer>
+                                    }
+                                </Col>
                         </Grid>
                     </section>
                 : null}
 
                 {loadingTime ? 
                     <section>
-                        <Title size="h4">Artist Top Tracks on Spotify</Title>
+                        <Title size="h4" margin="120px 0 20px 0">Artist Top Tracks on Spotify</Title>
                         <Grid colGap={30} rowGap={40} columns>
                             {artistTopTracks && artistTopTracks.map((track, index) => (<TrackCard key={track._id} data={track} token={newToken} refreshToken={refresh_token} index={index} gridSize={2} singleTrack="100" playerArtistPage={playerArtistPage} setPlayerArtistPage={setPlayerArtistPage} blink={blink} setBlink={setBlink}/>))}
                         </Grid>
@@ -462,7 +462,7 @@ export default function Artist() {
 
                 {loadingTime ? 
                 <section>
-                    <Title size="h4">Related Artists</Title>
+                    <Title size="h4" margin="120px 0 20px 0">Related Artists</Title>
                     <Grid colGap={30} rowGap={40} columns>
                         {relatedArtists && relatedArtists.map((artist) => (<ArtistCard key={artist._id} data={artist} gridSize={2} token={newToken} refreshToken={refresh_token}/>))}
                     </Grid>

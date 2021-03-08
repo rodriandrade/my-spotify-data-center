@@ -85,18 +85,21 @@ const TrackName = styled.h1`
     font-size:48px;
     color:#fff;
     margin:0;
+    position: relative;
 `
 
 const ArtistName = styled.p`
     font-size:22px;
     color:#fff;
     margin:0;
+    position: relative;
 `
 
 const TrackGenres = styled.p`
     font-size:16px;
     color:rgb(200,200,200);
     margin:0;
+    position: relative;
 `
 
 const Button = styled.button`
@@ -113,6 +116,7 @@ const Button = styled.button`
     border:1px solid #47ffbb;
     height:50px;
     margin-left:${(props) => (props.margin ? "0px" : "20px")};
+    position: relative;
 `
 
 const Position = styled.h1`
@@ -120,6 +124,7 @@ const Position = styled.h1`
     color:#47ffbb; 
     margin:0;
     font-weight:lighter;
+    position: relative;
 `
 
 const TrackInfoCont = styled.div`
@@ -130,12 +135,14 @@ const TrackInfoCont = styled.div`
     border-radius:10px;
     //border-bottom:6px solid #47ffbb;
     //padding:20px;
+    position: relative;
 `
 
 const TrackInfo = styled.p`
     font-size:16px;
     color:#fff; 
     margin:0;
+    position: relative;
 `
 
 const ContainerAlbum = styled.div`
@@ -166,12 +173,14 @@ const NoDataTitle = styled.h1`
     font-size:72px;
     color:rgba(100,100,100,1);
     margin:0;
+    position:relative
 `
 
 const NoDataContainer = styled.div`
     display:flex;
     //background-color:rgba(20,20,20, 0.5);
     flex-direction:column;
+    position: relative;
     //border-radius:10px;
     //padding:20px;
 `
@@ -180,6 +189,7 @@ const NoDataInfo = styled.p`
     font-size:16px;
     color:rgba(100,100,100,1);
     margin:0;
+    position: relative;
 `
 
 const LoadingContainer = styled.div`

@@ -35,6 +35,7 @@ const ArtistName = styled.h1`
     font-size:48px;
     color:#fff;
     margin:0;
+    position: relative;
 `
 
 const GenresContainer = styled.div`
@@ -51,6 +52,7 @@ const ArtistGenres = styled.p`
     background-color: rgba(15,15,15);
     border-radius:10px;
     padding:10px;
+    position: relative;
 `
 
 const Button = styled.button`
@@ -65,6 +67,7 @@ const Button = styled.button`
     margin-top:10px;
     cursor: pointer;
     border:1px solid #47ffbb;
+    position: relative;
 `
 
 /////////////////////////////////////////////////////
@@ -77,6 +80,7 @@ const ArtistInfoCont = styled.div`
     border-radius:10px;
     //border-bottom:6px solid #47ffbb;
     //padding:20px;
+    position: relative;
 `
 
 const Position = styled.h1`
@@ -84,23 +88,28 @@ const Position = styled.h1`
     color:#47ffbb; 
     margin:0;
     font-weight:lighter;
+    position: relative;
 `
 
 const ArtistInfo = styled.p`
     font-size:16px;
     color:#fff; 
     margin:0;
+    position: relative;
 `
+
 const NoDataTitle = styled.h1`
     font-size:72px;
     color:rgba(100,100,100,1);
     margin:0;
+    position: relative;
 `
 
 const NoDataContainer = styled.div`
     display:flex;
     //background-color:rgba(20,20,20, 0.5);
     flex-direction:column;
+    position: relative;
     //border-radius:10px;
     //padding:20px;
 `
@@ -109,6 +118,7 @@ const NoDataInfo = styled.p`
     font-size:16px;
     color:rgba(100,100,100,1);
     margin:0;
+    position: relative;
 `
 
 const LoadingContainer = styled.div`

@@ -79,6 +79,7 @@ export default function Track() {
 
             try {
 
+                setRecommendations('')
                 const responseTrack = await axios.get(`https://api.spotify.com/v1/tracks/${id}`, {
                     headers: {
                     'Authorization': 'Bearer ' + newToken
@@ -377,6 +378,7 @@ export default function Track() {
     return (
         <div>
            
+           <ParticlesBackground />
            <NavMenu access_token={token} refresh_token={refresh_token}/>
             <Inner>
               {playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink} setBlink={setBlink} /> }
@@ -459,7 +461,7 @@ export default function Track() {
                 </Grid>
                 : null}
 
-                {loadingTime ? 
+                {loadingTime && tracksFourWeeks || tracksSixMonths || tracksSeveralYears ? 
                   <section>
                   <Title size="h4" margin="60px 0 0 0">{track.name} appeareances in your artist ranking</Title>
                   <Grid colGap={30} rowGap={40}>
@@ -536,7 +538,16 @@ export default function Track() {
                 {loadingTime ? 
                   <section>
                     <Grid colGap={30} rowGap={40} columns>
-                        {recommendations.map((track) => (<TrackCard key={track._id} data={track} token={newToken} refreshToken={refresh_token} gridSize={2} singleTrack="100" margin="20px 0 5px 0" playerTrackPage={playerTrackPage} setPlayerTrackPage={setPlayerTrackPage} blink={blink} setBlink={setBlink}/>))}
+                      {recommendations ?
+                        recommendations.map((track) => (<TrackCard key={track._id} data={track} token={newToken} refreshToken={refresh_token} gridSize={2} singleTrack="100" margin="20px 0 5px 0" playerTrackPage={playerTrackPage} setPlayerTrackPage={setPlayerTrackPage} blink={blink} setBlink={setBlink}/>))
+                      :
+                      <Col desktop={12} tablet={6} mobile={12}>
+                        <LoadingContainerSection>
+                          <LoadingImage src="/loading.gif" alt="loading" />
+                          <LoadingText>Just loading...</LoadingText>
+                        </LoadingContainerSection>
+                      </Col>
+                      }
                     </Grid>
                   </section>
                 : null}

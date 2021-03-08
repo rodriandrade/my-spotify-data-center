@@ -88,11 +88,13 @@ const TrackName = styled.h1`
     font-size:48px;
     color:#fff;
     margin:0;
+    position: relative;
 `
 
 const RecommendationsButtonsContainer = styled.div`
     display: flex; 
     flex-direction: row; 
+    position: relative;
 `
 
 const Button = styled.button`
@@ -108,6 +110,7 @@ const Button = styled.button`
     cursor: pointer;
     border:1px solid #47ffbb;
     height:50px;
+    position: relative;
 
     :hover{
         background-color: rgb(10,10,10,1);
@@ -126,6 +129,7 @@ const ArtistName = styled.p`
     font-size:22px;
     color:#fff;
     margin:0;
+    position: relative;
 `
 
 const Icon = styled.img`

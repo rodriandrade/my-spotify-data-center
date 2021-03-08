@@ -19,6 +19,8 @@ const CurrentlyPlayingCard = props =>{
     // Token
     const [token, setToken] = useState(props.token);
 
+    console.log(props.data)
+
     const getNewToken = async () =>{
         const responseRefreshToken = await axios.get(`https://my-spotify-data-center-server.vercel.app/refresh_token`, {
             params: {
@@ -108,7 +110,6 @@ const CurrentlyPlayingCard = props =>{
                 }
             });
             setSave(responseSavedTrack.data.toString());
-            console.log(responseSavedTrack)
             if(responseSavedTrack.data.toString() === "true"){
                 setSaveIcon('/heart.svg');
               } else{

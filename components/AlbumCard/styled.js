@@ -100,13 +100,14 @@ const TrackPosition = styled.p`
 `
 
 const TrackName = styled.p`
-    font-size:18px;
+    font-size:16px;
     color: #fff;
-    margin:40px 0 5px 0;
+    margin: ${(props) => (props.margin ? props.margin : "40px 0 5px 0")};
     text-align: center;
     cursor: pointer;
     text-transform:uppercase;
     z-index:4;
+    position:relative;
 
     :hover{
         text-decoration: underline 3px solid #47ffbb;
@@ -119,6 +120,7 @@ const ArtistName = styled.p`
     margin:0;
     text-align: center;
     z-index:4;
+    position:relative;
 
     //text-transform:uppercase;
 `

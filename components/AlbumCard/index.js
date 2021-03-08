@@ -258,7 +258,7 @@ const AlbumCard = props =>{
                         },
                         }}
                     >
-                        {props.albumRecommendations && <TrackName>{props.albumRecommendations.name}</TrackName>}
+                        {props.albumRecommendations && <TrackName margin="20px 0 5px 0">{props.albumRecommendations.name}</TrackName>}
                     </Link>
                     {props.albumRecommendations && <ArtistName>{props.albumRecommendations.artists[0].name}</ArtistName>}
                 </Col>

@@ -336,6 +336,8 @@ export default function Album() {
 
     return (
       <div>
+        
+        <ParticlesBackground />
         <NavMenu access_token={token} refresh_token={refresh_token} />
         <Inner>
           {playing && (
@@ -476,10 +478,12 @@ export default function Album() {
                     />
                   ))
                 ) : (
-                  <LoadingContainer>
-                    <LoadingImage src="/loading.gif" alt="loading" />
-                    <LoadingText>Just loading...</LoadingText>
-                  </LoadingContainer>
+                  <Col desktop={12} tablet={6} mobile={12}>
+                    <LoadingContainerSection>
+                      <LoadingImage src="/loading.gif" alt="loading" />
+                      <LoadingText>Just loading...</LoadingText>
+                    </LoadingContainerSection>
+                  </Col>
                 )}
               </Grid>
             </section>

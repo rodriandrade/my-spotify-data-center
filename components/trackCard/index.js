@@ -96,10 +96,12 @@ const TrackCard = props =>{
                 setActiveDevices(true)
                 const deviceID = responseUserDevices.data.devices[0].id
                 if(deviceID){
+                    console.log("Llegué acá")
                     const requestData = {
                         "uris": [`spotify:track:${id}`],
                         "position_ms": 0
                     }
+                    console.log(id)
                     const base_url = `https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`;
                     axios({
                         method: 'put',
@@ -108,7 +110,6 @@ const TrackCard = props =>{
                         headers: { 'Authorization': 'Bearer ' + token }
                     })
                     .then(function (response) {
-                        console.log(response);
                         if(props.setPlayingRightNow){
                             props.setPlayingRightNow(id)
                             props.setBlink(true)
