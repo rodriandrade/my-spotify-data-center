@@ -1017,7 +1017,7 @@ const Home = () =>{
               <Col desktop={9} tablet={6} mobile={12}>
                 <Grid colGap={30} rowGap={40}>
                   {recommendations ?
-                    tracks && recommendations.map((track, index) => (<TrackCard key={track.id} data={track} token={token} gridSize={3} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} margin="20px 0 5px 0" blink={blink} setBlink={setBlink} refreshToken={refreshToken}/>))
+                    recommendations.map((track, index) => (<TrackCard key={track.id} data={track} token={token} gridSize={3} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} margin="20px 0 5px 0" blink={blink} setBlink={setBlink} refreshToken={refreshToken}/>))
                   :
                   <Col desktop={12} tablet={6} mobile={12}>
                     <LoadingContainerSection>
