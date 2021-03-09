@@ -9,7 +9,7 @@ const TrackCard = props =>{
 
     const {genres, name, album, external_urls, id, artists} = props.data
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [activeDevices, setActiveDevices] = useState('');
+    const [activeDevices, setActiveDevices] = useState(props.activeDevices);
 
     // Token
     const [token, setToken] = useState(props.token);
@@ -29,6 +29,7 @@ const TrackCard = props =>{
         setModalIsOpen(!modalIsOpen)
     }
 
+    /*
     useEffect(() => {
         const fetchDevices = async () =>{
             try{
@@ -57,6 +58,7 @@ const TrackCard = props =>{
         }
         fetchDevices();
     }, [])
+    */
 
     const playTrack = async () =>{
         try{
@@ -64,7 +66,7 @@ const TrackCard = props =>{
                     headers: {
                     'Authorization': 'Bearer ' + token
                     }
-                });
+            });
             const devices = responseUserDevices.data.devices;
             if(devices.length == 0){
                 setActiveDevices(false)
@@ -149,12 +151,12 @@ const TrackCard = props =>{
             <ContainerTrack>
             <div>
                 {!activeDevices && 
-                <Modal 
-                modalIsOpen={modalIsOpen} 
-                setModalIsOpen={setModalIsOpen}
-                title={"No encontramos reproductores activos"}
-                text={"Para reproducir esta canción es necesario que tengas algún reproductor de Spotify abierto. Para que el dispositivo pueda ser detectado hay que empezar a reproducir una canción. Cuando lo hagas podés volver a intentar :)"}
-                buttonText={"Try again"}
+                    <Modal 
+                    modalIsOpen={modalIsOpen} 
+                    setModalIsOpen={setModalIsOpen}
+                    title={"No encontramos reproductores activos"}
+                    text={"Para reproducir esta canción es necesario que tengas algún reproductor de Spotify abierto. Para que el dispositivo pueda ser detectado hay que empezar a reproducir una canción. Cuando lo hagas podés volver a intentar :)"}
+                    buttonText={"Try again"}
                  />
                 }
                 <ImageContainer onClick={openModal} singleTrack={props.singleTrack}>

@@ -99,12 +99,23 @@ export default function Album() {
         const fetchData = async () => {
             
             if(newToken){
-              console.log("I'm in")
-            try {
+
+              try {
 
                 setRecommendations('')
-                console.log(token)
-                console.log(newToken)
+
+                const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
+                  headers: {
+                  'Authorization': 'Bearer ' + newToken
+                  }
+                });
+                const devices = responseUserDevices.data.devices;
+                if(devices.length == 0){
+                    setActiveDevices(false)
+                } else{
+                    setActiveDevices(true)
+                }
+
                 const responseAlbum = await axios.get(`https://api.spotify.com/v1/albums/${id}`, {
                     headers: {
                     'Authorization': 'Bearer ' + newToken
@@ -344,6 +355,7 @@ export default function Album() {
             <CurrentlyPlayingCard
               data={playing}
               token={token}
+              refreshToken={refresh_token} 
               playingData={playingData}
               playingRightNow={playingRightNow}
               setPlayingRightNow={setPlayingRightNow}
@@ -365,13 +377,16 @@ export default function Album() {
                   buttonText={"Try again"}
                 />
               )}
+              
               <ContainerImage onClick={playTrack}>
-                {!!album.images && (
-                  <TrackImage onClick={playTrack} src={cover} onClick={openModal}/>
-                )}
-                <TextContainer onClick={playTrack} onClick={openModal}>
-                  <Text onClick={playTrack} onClick={openModal}>Play On Spotify</Text>
-                </TextContainer>
+                <a onClick={playTrack} target="_blank">
+                  {!!album.images && (
+                    <TrackImage src={cover} onClick={openModal}/>
+                  )}
+                  <TextContainer onClick={openModal}>
+                    <Text onClick={openModal}>Play On Spotify</Text>
+                  </TextContainer>
+                </a>
               </ContainerImage>
               <ContainerAlbumName>
                 <TrackName>{album.name}</TrackName>
@@ -432,6 +447,7 @@ export default function Album() {
                         setPlayerAlbumPage={setPlayerAlbumPage}
                         blink={blink}
                         setBlink={setBlink}
+                        activeDevices={activeDevices}
                       />
                     ))}
                 </Col>
@@ -475,6 +491,7 @@ export default function Album() {
                       setPlayerAlbumPage={setPlayerAlbumPage}
                       blink={blink}
                       setBlink={setBlink}
+                      activeDevices={activeDevices}
                     />
                   ))
                 ) : (

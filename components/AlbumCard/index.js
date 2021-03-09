@@ -17,18 +17,19 @@ const AlbumCard = props =>{
     // Album Card from Recommendations
     const [albumRecommendation, setAlbumRecommendation] = useState('')
     // Play track from album
-    const [activeDevices, setActiveDevices] = useState('');
+    const [activeDevices, setActiveDevices] = useState(props.activeDevices);
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
     // Token
     const [token, setToken] = useState(props.token);
+    const [refreshToken, setRefreshToken] = useState(props.refreshToken);
 
     const position = props.index + 1;
 
     const getNewToken = async () =>{
         const responseRefreshToken = await axios.get(`https://my-spotify-data-center-server.vercel.app/refresh_token`, {
             params: {
-              'refresh_token': props.refreshToken
+              'refresh_token': refreshToken
             }
           });
         //console.log(responseRefreshToken.data.access_token);
@@ -109,6 +110,7 @@ const AlbumCard = props =>{
     }, [props.albumRecommendations])
 
     const playTrack = async () =>{
+        console.log("click")
         try{
             const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
                     headers: {
@@ -137,6 +139,7 @@ const AlbumCard = props =>{
     }
   
     const checkPlayTrack = (responseUserDevices) =>{
+        console.log("Hola")
         if(tracks){
             if(props.setBlink){
                 props.setBlink(false)
@@ -209,11 +212,13 @@ const AlbumCard = props =>{
                             buttonText={"Try again"}
                         />
                     }
-                    <ImageContainer onClick={playTrack} onClick={openModal}>
-                        {albumToShow && <TrackImage onClick={playTrack} src={albumToShow.image} alt={name} />}
-                        <TextContainer onClick={playTrack} onClick={openModal}>
-                            <Text onClick={playTrack} onClick={openModal}>Play On Spotify</Text>
-                        </TextContainer>
+                    <ImageContainer onClick={openModal}>
+                        <a onClick={playTrack} target="_blank">
+                            {albumToShow && <TrackImage onClick={openModal} src={albumToShow.image} alt={name} />}
+                            <TextContainer>
+                                <Text>Play On Spotify</Text>
+                            </TextContainer>
+                        </a>
                         {!!position && <TrackPosition>{position}</TrackPosition>}
                     </ImageContainer>
                     <Link
@@ -222,7 +227,7 @@ const AlbumCard = props =>{
                         query: {
                             token: props.token,
                             id: albumToShow.id,
-                            refreshToken: props.refreshToken,
+                            refreshToken: refreshToken,
                         },
                         }}
                     >
@@ -243,16 +248,18 @@ const AlbumCard = props =>{
                         />
                     }
                     <ImageContainer onClick={playTrack} onClick={openModal}>
-                        {props.albumRecommendations.images && <TrackImage onClick={playTrack} src={props.albumRecommendations.images[1].url} alt={name} />}
-                        <TextContainer onClick={playTrack} onClick={openModal}>
-                            <Text onClick={playTrack} onClick={openModal}>Play On Spotify</Text>
-                        </TextContainer>
+                        <a onClick={playTrack} target="_blank">
+                            {props.albumRecommendations.images && <TrackImage onClick={playTrack} src={props.albumRecommendations.images[1].url} alt={name} />}
+                            <TextContainer onClick={openModal}>
+                                <Text onClick={openModal}>Play On Spotify</Text>
+                            </TextContainer>
+                        </a>
                     </ImageContainer>
                     <Link
                         href={{
                         pathname: `/album/${props.albumRecommendations.name}`,
                         query: {
-                            token: props.token,
+                            token: token,
                             id: props.albumRecommendations.id,
                             refreshToken: props.refreshToken,
                         },

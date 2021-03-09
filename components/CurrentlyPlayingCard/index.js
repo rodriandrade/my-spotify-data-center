@@ -18,13 +18,14 @@ const CurrentlyPlayingCard = props =>{
 
     // Token
     const [token, setToken] = useState(props.token);
+    const [refreshToken, setRefreshToken] = useState(props.refreshToken)
 
     console.log(props.data)
 
     const getNewToken = async () =>{
         const responseRefreshToken = await axios.get(`https://my-spotify-data-center-server.vercel.app/refresh_token`, {
             params: {
-              'refresh_token': props.refreshToken
+              'refresh_token': refreshToken
             }
           });
         //console.log(responseRefreshToken.data.access_token);
@@ -163,7 +164,7 @@ const CurrentlyPlayingCard = props =>{
                             </a>
                         }
                         <TextContainer>
-                            <Link href={{pathname: `/track/${id}`, query: { token: props.token, id: id }, }}>
+                            <Link href={{pathname: `/track/${id}`, query: { token: token, id: id, refreshToken: refreshToken }, }}>
                                 <TrackName>{name}</TrackName>
                             </Link>
                             <ArtistName>{artistsNames.join(", ")}</ArtistName>

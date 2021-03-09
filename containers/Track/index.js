@@ -80,6 +80,19 @@ export default function Track() {
             try {
 
                 setRecommendations('')
+
+                const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
+                  headers: {
+                  'Authorization': 'Bearer ' + newToken
+                  }
+                });
+                const devices = responseUserDevices.data.devices;
+                if(devices.length == 0){
+                    setActiveDevices(false)
+                } else{
+                    setActiveDevices(true)
+                }
+
                 const responseTrack = await axios.get(`https://api.spotify.com/v1/tracks/${id}`, {
                     headers: {
                     'Authorization': 'Bearer ' + newToken
@@ -381,7 +394,7 @@ export default function Track() {
            <ParticlesBackground />
            <NavMenu access_token={token} refresh_token={refresh_token}/>
             <Inner>
-              {playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink} setBlink={setBlink} /> }
+              {playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink} setBlink={setBlink} refreshToken={refresh_token} /> }
                 {playlistModalState && 
                 <Modal 
                     modalIsOpen={modalIsOpen} 
@@ -439,7 +452,7 @@ export default function Track() {
                                   token: newToken, 
                                   id: albumID, 
                                   refreshToken: refresh_token 
-                              },
+                                },
                               }
                             }
                           >
@@ -539,7 +552,7 @@ export default function Track() {
                   <section>
                     <Grid colGap={30} rowGap={40} columns>
                       {recommendations ?
-                        recommendations.map((track) => (<TrackCard key={track._id} data={track} token={newToken} refreshToken={refresh_token} gridSize={2} singleTrack="100" margin="20px 0 5px 0" playerTrackPage={playerTrackPage} setPlayerTrackPage={setPlayerTrackPage} blink={blink} setBlink={setBlink}/>))
+                        recommendations.map((track) => (<TrackCard key={track._id} data={track} token={newToken} refreshToken={refresh_token} gridSize={2} singleTrack="100" margin="20px 0 5px 0" playerTrackPage={playerTrackPage} setPlayerTrackPage={setPlayerTrackPage} blink={blink} setBlink={setBlink} activeDevices={activeDevices}/>))
                       :
                       <Col desktop={12} tablet={6} mobile={12}>
                         <LoadingContainerSection>

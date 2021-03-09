@@ -10,7 +10,7 @@ const TracklistCard = props =>{
     const [token, setToken] = useState(props.token);
 
     // Check if exist any active device
-    const [activeDevices, setActiveDevices] = useState('');
+    const [activeDevices, setActiveDevices] = useState(props.activeDevices);
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
     // Track length
@@ -172,7 +172,9 @@ const TracklistCard = props =>{
                     <Link href={{pathname: `/track/${id}`, query: { token: props.token, id: id, refreshToken: props.refresh_token }, }}>
                         <TrackName>{name}</TrackName>
                     </Link>
-                    <TrackPlay onClick={playTrack} onClick={openModal} src='/play.svg' alt="save_icon"/>
+                    <a onClick={playTrack} target="_blank">
+                        <TrackPlay onClick={playTrack} onClick={openModal} src='/play.svg' alt="save_icon"/>
+                    </a>
                 </ContainerTrackData>
                 <TrackDuration>{trackLength}</TrackDuration>
             </ContainerTrack>

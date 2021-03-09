@@ -65,6 +65,7 @@ const MainButton = styled.button`
     border:1px solid #47ffbb;
     height:50px;
     margin-left:0;
+    position: relative;
 `
 
 const Button = styled.button`
@@ -80,6 +81,7 @@ const Button = styled.button`
     cursor: pointer;
     border-bottom:${(props) => (props.selected ? "1px solid #47ffbb" : "1px solid rgb(20,20,20)")};
     width:250px;
+    position: relative;
 `
 
 const RefreshIcon = styled.img`

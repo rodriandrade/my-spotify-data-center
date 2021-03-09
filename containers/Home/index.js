@@ -79,6 +79,9 @@ const Home = () =>{
       const [albums, setAlbums] = useState([]);
       const [totalAlbums, setTotalAlbums] = useState([]);
 
+      // Devices
+      const [activeDevices, setActiveDevices] = useState('');
+
       // Player
       const [recentlyPlayed, setRecentlyPlayed] = useState([]);
       const [playing, setPlaying] = useState([]);
@@ -260,6 +263,19 @@ const Home = () =>{
               const access_token = params.access_token;
 
               try {
+
+                  const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
+                      headers: {
+                      'Authorization': 'Bearer ' + token
+                      }
+                  });
+                  const devices = responseUserDevices.data.devices;
+                  if(devices.length == 0){
+                      setActiveDevices(false)
+                  } else{
+                      setActiveDevices(true)
+                  }
+
                   //////////////////////////////////////////////////////////////////////////////////////////////////////
                   
                   // PLAYLISTS DATA
@@ -841,7 +857,7 @@ const Home = () =>{
               <Col desktop={9} tablet={6} mobile={12}>
                 <Grid colGap={30} rowGap={40}>
                   {tracks ? 
-                    tracks && tracks.map((track, index) => (<TrackCard key={track.id} data={track} index={index} token={token} refreshToken={refreshToken} gridSize={3} setToken={setToken} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} blink={blink} setBlink={setBlink}/>))
+                    tracks && tracks.map((track, index) => (<TrackCard key={track.id} data={track} index={index} token={token} refreshToken={refreshToken} gridSize={3} setToken={setToken} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} blink={blink} setBlink={setBlink} activeDevices={activeDevices}/>))
                   : 
                   <Col desktop={12} tablet={6} mobile={12}>
                     <LoadingContainerSection>
@@ -887,7 +903,7 @@ const Home = () =>{
               <Col desktop={9} tablet={6} mobile={12}>
                 <Grid colGap={30} rowGap={40}>
                   {albums ? 
-                    albums.map((album, index) => (<AlbumCard key={album.id} data={album} index={index} token={token} gridSize={3} imageSizeLarge refreshToken={refreshToken} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setBlink={setBlink} blink={blink} />))
+                    albums.map((album, index) => (<AlbumCard key={album.id} data={album} index={index} token={token} gridSize={3} imageSizeLarge refreshToken={refreshToken} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setBlink={setBlink} blink={blink} activeDevices={activeDevices} />))
                   :
                   <Col desktop={12} tablet={6} mobile={12}>
                     <LoadingContainerSection>
@@ -1019,7 +1035,7 @@ const Home = () =>{
               <Col desktop={9} tablet={6} mobile={12}>
                 <Grid colGap={30} rowGap={40}>
                   {recommendations ?
-                    recommendations.map((track, index) => (<TrackCard key={track.id} data={track} token={token} gridSize={3} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} margin="20px 0 5px 0" blink={blink} setBlink={setBlink} refreshToken={refreshToken}/>))
+                    recommendations.map((track, index) => (<TrackCard key={track.id} data={track} token={token} gridSize={3} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} margin="20px 0 5px 0" blink={blink} setBlink={setBlink} refreshToken={refreshToken} activeDevices={activeDevices}/>))
                   :
                   <Col desktop={12} tablet={6} mobile={12}>
                     <LoadingContainerSection>
