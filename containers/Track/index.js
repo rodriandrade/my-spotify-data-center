@@ -20,6 +20,8 @@ export default function Track() {
     const refresh_token = router.query.refreshToken;
     const id = router.query.id;
 
+    ////////// STATES //////////
+
     // State información a mostrar: track, audioFeatures y recommendations
     const [track, setTrack] = useState([]);
     const [audioFeatures, setAudioFeatures] = useState('');
@@ -50,6 +52,9 @@ export default function Track() {
 
     const [activeDevices, setActiveDevices] = useState('');
 
+    // Playlist 
+    const [playlistName, setPlaylistName] = useState('')
+
     // Player
     const [playing, setPlaying] = useState([]);
     const [playingData, setPlayingData] = useState([]);
@@ -62,6 +67,8 @@ export default function Track() {
 
     // Loading
     const [loadingTime, setLoadingTime] = useState(false)
+
+    ////////// EFFECTS & FUNCTIONS //////////
 
     const getNewToken = async () =>{
         const responseRefreshToken = await axios.get(`https://my-spotify-data-center-server.vercel.app/refresh_token`, {
@@ -78,8 +85,6 @@ export default function Track() {
         const fetchData = async () => {
 
             try {
-
-                setRecommendations('')
 
                 const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
                   headers: {
@@ -98,8 +103,7 @@ export default function Track() {
                     'Authorization': 'Bearer ' + newToken
                     }
                 });
-                
-                
+
                 const responseAudioFeatures = await axios.get(`https://api.spotify.com/v1/audio-features/${id}`, {
                     headers: {
                     'Authorization': 'Bearer ' + newToken
@@ -144,6 +148,7 @@ export default function Track() {
                 setAlbumID(albumID);
                 setAlbumName(albumName);
                 
+                /*
                 const artist = responseTrack.data.artists[0].id;
 
                 const responseRecommendations = await axios.get(`https://api.spotify.com/v1/recommendations?market=US&seed_artists=${artist}&seed_tracks=${id}&min_energy=0.4&min_popularity=50`, {
@@ -154,6 +159,7 @@ export default function Track() {
 
                 //console.log(responseRecommendations.data.tracks)
                 setRecommendations(responseRecommendations.data.tracks)
+                */
 
                 // Four weeks
                 const responseTracksFourWeeks = await axios.get(`https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=50`, {
@@ -232,6 +238,42 @@ export default function Track() {
         
     }, [newToken, newRec, id, playerTrackPage, blink])
 
+    // Recommendations
+    useEffect(() => {
+      const fetchRecommendations = async () =>{
+        if(newToken){
+          try{
+            setRecommendations('')
+            const responseTrack = await axios.get(`https://api.spotify.com/v1/tracks/${id}`, {
+                headers: {
+                  'Authorization': 'Bearer ' + newToken
+                }
+            });
+            const artist = responseTrack.data.artists[0].id;
+            const responseRecommendations = await axios.get(`https://api.spotify.com/v1/recommendations?market=US&seed_artists=${artist}&seed_tracks=${id}&min_energy=0.4&min_popularity=50`, {
+                    headers: {
+                    'Authorization': 'Bearer ' + newToken
+                    }
+            });
+            setRecommendations(responseRecommendations.data.tracks)
+          } catch (error){
+            console.error("este es mi error", error);
+            if (error.response.status === 401) {
+              getNewToken();
+            }
+            if (error.response.status === 500) {
+              console.log(error);
+            }
+            if (error.response.status === 504) {
+              console.log(error);
+            }
+          }
+        }
+      }
+      fetchRecommendations();
+    }, [newRec, newToken, id])
+
+    // Save track
     const handleSave = async () => {
         const base_url = `https://api.spotify.com/v1/me/tracks?ids=${id}`
           axios({
@@ -243,10 +285,12 @@ export default function Track() {
         setSaveIcon(save === "true" ? '/heart_no_fill.svg' : '/heart.svg');
     }
 
+    // Modal
     const openModal = () =>{
       setModalIsOpen(!modalIsOpen)
     }
 
+    // Create playlist
     const createPlaylistWithRecommendations = async () => {
         if(newToken){
 
@@ -260,6 +304,7 @@ export default function Track() {
               setPlaylistModalState(true);
               const user_id = responseUserProfile.data.id;
               const base_url = `https://api.spotify.com/v1/users/${user_id}/playlists`
+              setPlaylistName(`Recommendations based on ${track.name} - My Spotify Data Center`)
               axios({
                 method: 'post',
                 url: base_url,
@@ -328,52 +373,52 @@ export default function Track() {
               console.log(error);
           }
       }
-  }
+    }
 
-  const checkPlayTrack = (responseUserDevices) =>{
-      try {
-      const devices = responseUserDevices.data.devices;
-      if(devices.length == 0){
-          setActiveDevices(false);
-      } else{
-          setActiveDevices(true)
-          const deviceID = responseUserDevices.data.devices[0].id
-          if(deviceID){
-          //console.log("Holis");
-          //console.log("El ID es" + id)
-          const requestData = {
-              "uris": [`spotify:track:${id}`],
-              "position_ms": 0
-          }
-          const base_url = `https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`;
-          axios({
-              method: 'put',
-              url: base_url,
-              data: requestData,
-              headers: { 'Authorization': 'Bearer ' + token }
-          })
-          .then(function (response) {
-              console.log(response);
-              setPlayingRightNow(id);
-              setPlayerTrackPage(id);
-              setBlink(true)
-          });
-          } else{
-              console.log("No hay devices activos")
-          }
-      }
-      } catch(error){
-          if (error.response.status === 401) {
-              getNewToken();
-          }
-          if (error.response.status === 500) {
-              console.log(error);
-          }
-          if (error.response.status === 504) {
-              console.log(error);
-          }
-      }
-  }
+    const checkPlayTrack = (responseUserDevices) =>{
+        try {
+        const devices = responseUserDevices.data.devices;
+        if(devices.length == 0){
+            setActiveDevices(false);
+        } else{
+            setActiveDevices(true)
+            const deviceID = responseUserDevices.data.devices[0].id
+            if(deviceID){
+            //console.log("Holis");
+            //console.log("El ID es" + id)
+            const requestData = {
+                "uris": [`spotify:track:${id}`],
+                "position_ms": 0
+            }
+            const base_url = `https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`;
+            axios({
+                method: 'put',
+                url: base_url,
+                data: requestData,
+                headers: { 'Authorization': 'Bearer ' + token }
+            })
+            .then(function (response) {
+                console.log(response);
+                setPlayingRightNow(id);
+                setPlayerTrackPage(id);
+                setBlink(true)
+            });
+            } else{
+                console.log("No hay devices activos")
+            }
+        }
+        } catch(error){
+            if (error.response.status === 401) {
+                getNewToken();
+            }
+            if (error.response.status === 500) {
+                console.log(error);
+            }
+            if (error.response.status === 504) {
+                console.log(error);
+            }
+        }
+    }
 
     useEffect(() => {
       const formatLength = () =>{
@@ -397,11 +442,11 @@ export default function Track() {
               {playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink} setBlink={setBlink} refreshToken={refresh_token} /> }
                 {playlistModalState && 
                 <Modal 
-                    modalIsOpen={modalIsOpen} 
-                    setModalIsOpen={setModalIsOpen} 
-                    title={"Success"}
-                    text={"Your playlist was created"}
-                    buttonText={""}
+                  modalIsOpen={modalIsOpen} 
+                  setModalIsOpen={setModalIsOpen} 
+                  title={"Your playlist was created!"}
+                  text={"Check your Spotify account to find" + " " + playlistName + " " + "your new playlist based on your favorites tracks."}
+                  buttonText={"Close"}
                 />}
 
                 {loadingTime ? 
@@ -458,7 +503,7 @@ export default function Track() {
                           >
                             <ContainerAlbumInfo>
                               {track.popularity && <TrackInfo><strong>{track.album.name}</strong></TrackInfo>}
-                              {track.popularity && <TrackInfo><strong>{artistsAlbumNames.join(", ")}</strong></TrackInfo>}
+                              {track.popularity && <ArtistName size="small"><strong>{artistsAlbumNames.join(", ")}</strong></ArtistName>}
                             </ContainerAlbumInfo>
                           </Link>
                         </ContainerAlbum>

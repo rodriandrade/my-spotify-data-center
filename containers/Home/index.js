@@ -596,15 +596,52 @@ const Home = () =>{
                   setRecommendationsDescription(`We prepare a list of recommendations based in your most listened tracks in the past 4 weeks, which includes`)
                 } 
                 else if(recommendationsTerm === "genres"){
+
+                  /*
                   const responseRecommendations = await axios.get(`https://api.spotify.com/v1/recommendations?limit=50&market=US&seed_genres=${totalGenres}&min_energy=0.4&min_popularity=50`, {
                     headers: {
                     'Authorization': 'Bearer ' + token
                     }
                   });
                   //console.log(responseRecommendations)
-                  setRecommendationsArtistsNames(genres);
+                  
+                  */
+
+                 const tracksId = tracks.map(track =>{
+                  return track.id
+                  })
+                  const tracksIdFilter = tracksId.filter( (artist, index ) => {
+                    return index < 5;
+                  })
+
+                  const moreArtists = artists.filter((artist, index) => {
+                    return index < 5;
+                  })
+                  const getNames = moreArtists.map(artist=>{
+                    return artist.name
+                  })
+
+                  setRecommendationsArtistsNames(getNames);
+
+                  const getArtistsIds = moreArtists.map(track=>{
+                    return track.id
+                  })
+
+
+                 const responseRecommendations = await axios.get(`https://api.spotify.com/v1/recommendations?market=US&seed_artists=${getArtistsIds}&seed_tracks=${tracksIdFilter}&min_energy=0.4&min_popularity=50`, {
+                  headers: {
+                  'Authorization': 'Bearer ' + newToken
+                  }
+                  });
+                  //console.log(responseRecommendations.data.tracks)
+
+                  const getAlbumsFromRecommendations = responseRecommendations.data.tracks.map(track =>{
+                    return track.album;
+                  })
+
                   setRecommendations(responseRecommendations.data.tracks);
                   setRecommendationsDescription(`We prepare a list of recommendations based in your most listened genres in the past 4 weeks, which includes`)
+
                 } else if(recommendationsTerm === "artists"){
                     const moreArtists = artists.filter((artist, index) => {
                       return index < 5;
@@ -738,20 +775,20 @@ const Home = () =>{
           <Inner>
 
           {!token ? 
-          <section id="home_section">
-            <Grid colGap={30} rowGap={40}>
-              <Col desktop={12} tablet={6} mobile={12}>
-                <ContainerHero>
-                  {/*<Title size="h1" >Welcome to your Spotify Data Center</Title>*/}
-                  <TypingEffect />
-                  {!user && <a href="https://spotify-server-seven.vercel.app/login">
-                  {/*{!user && <a href="http://localhost:8888/login">*/}
-                    <MainButton>Login with Spotify</MainButton>
-                  </a>}
-                </ContainerHero>
-              </Col>
-            </Grid>
-          </section>
+            <section id="home_section">
+              <Grid colGap={30} rowGap={40}>
+                <Col desktop={12} tablet={6} mobile={12}>
+                  <ContainerHero>
+                    {/*<Title size="h1" >Welcome to your Spotify Data Center</Title>*/}
+                    <TypingEffect title/>
+                    {/*{!user && <a href="https://spotify-server-seven.vercel.app/login">*/}
+                    {!user && <a href="http://localhost:8888/login">
+                      <MainButton>Login with Spotify</MainButton>
+                    </a>}
+                  </ContainerHero>
+                </Col>
+              </Grid>
+            </section>
           : null}
           
           {user ? 
@@ -759,7 +796,8 @@ const Home = () =>{
             <Grid colGap={30} rowGap={40}>
               <Col desktop={12} tablet={6} mobile={12}>
                 <ContainerHero>
-                  <Title size="h1" margin="0 0 0 0">Hi, {user} :)</Title>
+                  {/*<Title size="h1" margin="0 0 0 0">Hi, {user} :)</Title>*/}
+                  <TypingEffect user={user}/>
                   <Text>Welcome to your Spotify Data Center</Text>
                   {user && playing && <CurrentlyPlayingCard data={playing} token={token} refreshToken={refreshToken} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink}/>}
                 </ContainerHero>
@@ -770,7 +808,8 @@ const Home = () =>{
           <LoadingContainer>
             <LoadingImage src="/loading.gif" alt="loading" />
             <LoadingText>Just loading...</LoadingText>
-          </LoadingContainer>}
+          </LoadingContainer>
+          }
           
           {user ?
           <section id="artists_section">             
@@ -964,6 +1003,7 @@ const Home = () =>{
           </section>  
           : null }
 
+          {/*
           {user ?
           <section id="recently-played_section">             
             <Grid colGap={30} rowGap={40}>
@@ -985,6 +1025,7 @@ const Home = () =>{
             </Grid>
           </section>
           : null }
+          */}
 
           {/*
           {user ?
@@ -1026,7 +1067,7 @@ const Home = () =>{
                   <Text>Show recommendations by:</Text>
                   <Button activeButton={handleRecommendationsButton('tracks')} onClick={ () => setRecommendationsTerm('tracks')}>By Tracks</Button>
                   <Button activeButton={handleRecommendationsButton('artists')} onClick={ () => setRecommendationsTerm('artists')}>By Artists</Button>
-                  <Button activeButton={handleRecommendationsButton('genres')} onClick={ () => setRecommendationsTerm('genres')}>By Genre</Button>
+                  <Button activeButton={handleRecommendationsButton('albums')} onClick={ () => setRecommendationsTerm('genres')}>By Albums</Button>
                   <Button onClick={() => setNewRec(!newRec)}>Refresh recommendations</Button>
                   <Text margin="30px 0 0 0">Do you want to create a playlist with your 50 favorites tracks?</Text>
                   <MainButton onClick={createPlaylistWithRecommendations}>Create playlist</MainButton>

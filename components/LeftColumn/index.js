@@ -10,6 +10,7 @@ const LeftColumn = props =>{
     const [isSticky, setIsSticky] = useState(false)
     const [flag, setFlag] = useState(false)
     const ref = React.createRef()
+    const [playlistName, setPlaylistName] = useState('')
 
     // State para modal
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -78,6 +79,7 @@ const LeftColumn = props =>{
                 'medium_term': 'My Favs 50 tracks - Past 6 months',
                 'long_term': 'My Favs 50 tracks - Several Years',
               }
+              setPlaylistName(playlistName[props.typeTerm])
               axios({
                 method: 'post',
                 url: base_url,
@@ -142,11 +144,11 @@ const LeftColumn = props =>{
                 <Modal 
                     modalIsOpen={modalIsOpen} 
                     setModalIsOpen={setModalIsOpen} 
-                    title={"Success"}
-                    text={"Your playlist was created"}
-                    buttonText={""}
+                    title={"Your playlist was created!"}
+                    text={"Check your Spotify account to find" + " " + playlistName + " " + "your new playlist based on your favorites tracks."}
+                    buttonText={"Close"}
             />}
-            <Text>{props.description} <MostListened>{props.mostListened.join(", ")}</MostListened></Text>
+            <Text>{props.description} <MostListened>{props.mostListened.slice(0,4).join(', ') + ' and ' + props.mostListened.slice(-1)}</MostListened></Text>
             <Text>{props.showBy}</Text>
             <ContainerButtons>
                 <Button activeButton={props.handlerButton('short_term')} onClick={ () => props.setTypeTerm('short_term')}>Past 4 weeks</Button>

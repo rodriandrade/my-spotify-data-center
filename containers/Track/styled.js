@@ -73,6 +73,7 @@ const Container = styled.div`
 const TrackImage = styled.img`
     max-width:${(props) => (props.album ? "50px" : "220px")};
     max-height:${(props) => (props.album ? "50px" : "220px")};
+    position:relative;
 `
 
 const Icon = styled.img`
@@ -89,8 +90,8 @@ const TrackName = styled.h1`
 `
 
 const ArtistName = styled.p`
-    font-size:22px;
-    color:#fff;
+    font-size:${(props) => (props.size ? "14px" : "22px")};
+    color:${(props) => (props.size ? "rgb(100,100,100)" : "#fff")};
     margin:0;
     position: relative;
 `

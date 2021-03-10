@@ -15,6 +15,7 @@ import TracklistCard from '../../components/TracklistCard'
 import Link from 'next/link'
 import CurrentlyPlayingCard from '../../components/CurrentlyPlayingCard'
 import AlbumCard from '../../components/AlbumCard'
+import _ from 'lodash';
 
 export default function Album() {
     const router = useRouter()
@@ -102,8 +103,6 @@ export default function Album() {
 
               try {
 
-                setRecommendations('')
-
                 const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
                   headers: {
                   'Authorization': 'Bearer ' + newToken
@@ -123,7 +122,6 @@ export default function Album() {
                 }); 
                 setAlbum(responseAlbum.data);
                 setTracks(responseAlbum.data.tracks.items);
-                const trackID = responseAlbum.data.tracks.items[0].id;
 
                 const albumCover = responseAlbum.data.images[0].url;
                 setCover(albumCover);
@@ -147,6 +145,8 @@ export default function Album() {
                   setSaveIcon('/heart_no_fill.svg');
                 }
 
+                /*
+                const trackID = responseAlbum.data.tracks.items[0].id;
                 const artistsIDS = responseAlbum.data.artists.map(artist =>{
                   return artist.id
                 });
@@ -165,6 +165,7 @@ export default function Album() {
                 const checkRepetitions = getAlbumsFromRecommendations.reduce((p,c) => (c.name !== album.name && p.push(c),p),[])
                 
                 setRecommendations(checkRepetitions);
+                */
 
                 const responsePlaying = await axios.get(
                   `https://api.spotify.com/v1/me/player/currently-playing`,
@@ -198,7 +199,69 @@ export default function Album() {
         
         fetchData()
         
-    }, [id, newRec, playerAlbumPage, blink, newToken])
+    }, [id, playerAlbumPage, blink, newToken])
+
+    useEffect(() => {
+      const fetchRecommendations = async () =>{
+        if(newToken){
+          try{
+            setRecommendations('')
+            const responseAlbum = await axios.get(`https://api.spotify.com/v1/albums/${id}`, {
+                headers: {
+                  'Authorization': 'Bearer ' + newToken
+                }
+            }); 
+            const trackID = responseAlbum.data.tracks.items[0].id;
+            const artistsIDS = responseAlbum.data.artists.map(artist =>{
+              return artist.id
+            });
+            const responseRecommendations = await axios.get(`https://api.spotify.com/v1/recommendations?market=US&seed_artists=${artistsIDS}&seed_tracks=${trackID}&min_energy=0.4&min_popularity=50`, {
+                    headers: {
+                    'Authorization': 'Bearer ' + newToken
+                    }
+            });
+                //console.log(responseRecommendations.data.tracks)
+            const getAlbumsFromRecommendations = responseRecommendations.data.tracks.map(track =>{
+              return track.album;
+            })
+            const checkRepetitions = getAlbumsFromRecommendations.reduce((p,c) => (c.name !== album.name && p.push(c),p),[])
+            
+            var uniqueRecommendations = _.uniqBy(checkRepetitions, 'name'); 
+            console.log(uniqueRecommendations)
+
+            if(uniqueRecommendations.length < 20){
+              const fillValue = 20 - uniqueRecommendations.length;
+              const responseRecommendations = await axios.get(`https://api.spotify.com/v1/recommendations?limit=${fillValue}&market=US&seed_artists=${artistsIDS}&seed_tracks=${trackID}&min_energy=0.4&min_popularity=50`, {
+                    headers: {
+                    'Authorization': 'Bearer ' + newToken
+                    }
+              });
+              const newValue = responseRecommendations.data.tracks.map(track =>{
+                return track.album
+              })
+              const recommendationsToShow = [...newValue, ...uniqueRecommendations];
+              setRecommendations(recommendationsToShow);
+            } else{
+              setRecommendations(uniqueRecommendations);
+            }
+
+        
+          } catch (error){
+            console.error("este es mi error", error);
+            if (error.response.status === 401) {
+              getNewToken();
+            }
+            if (error.response.status === 500) {
+              console.log(error);
+            }
+            if (error.response.status === 504) {
+              console.log(error);
+            }
+          }
+        }
+      }
+      fetchRecommendations();
+    }, [newRec, newToken, id])
 
     const handleSave = async () => {
         const base_url = `https://api.spotify.com/v1/me/albums?ids=${id}`

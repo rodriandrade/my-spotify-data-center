@@ -38,11 +38,14 @@ const Button = styled.div`
     font-weight: bold;
     background-color: rgb(10,10,10,0.0);
     border-radius:5px;
-    //margin:0px;
     cursor: pointer;
     border-bottom:${(props) => (props.selected ? "1px solid #47ffbb" : "1px solid rgb(20,20,20)")};
     width:100%;
     text-align:center;
+
+    :hover{
+        background-color: rgb(10,10,10,0.5);   
+    }
 `
 
 const MostListened = styled.span`
@@ -61,13 +64,18 @@ const MainButton = styled.button`
     font-family: Poppins;
     font-size: 16px;
     //font-weight: bold;
-    background-color: rgb(10,10,10,1);
+    background-color: rgb(10,10,10,0.0);
     border-radius:5px;
     margin-top:10px;
     cursor: pointer;
     border:1px solid #47ffbb;
     height:50px;
     margin-left:0;
+    width:100%;
+
+    :hover{
+        background-color: rgb(10,10,10,0.5)   
+    }
 `
 
 const ContainerButtons = styled.div`
