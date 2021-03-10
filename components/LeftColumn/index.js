@@ -7,7 +7,7 @@ const LeftColumn = props =>{
 
     const [playlistCreation, setCreatePlaylist] = useState(false);
     const [token, setToken] = useState(props.token ? props.token : null)
-    const [isSticky, setIsSticky] = useState(false)
+    const [isSticky, setIsSticky] = useState(true)
     const [flag, setFlag] = useState(false)
     const ref = React.createRef()
     const [playlistName, setPlaylistName] = useState('')
@@ -29,22 +29,12 @@ const LeftColumn = props =>{
     // Title when position sticky get triggered
     useEffect(()=>{
         const cachedRef = ref.current
-
-        
         const observer = new IntersectionObserver(
                 ([e]) => 
                 setIsSticky(e.intersectionRatio > 1)
                 ,{threshold: [1]}
         )
-
-        if(flag === false){
-            observer.unobserve(cachedRef)
-        } else{
-            observer.observe(cachedRef)
-        }
-
         observer.observe(cachedRef)
-        
         // unmount
         return function(){
           observer.unobserve(cachedRef)

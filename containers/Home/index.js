@@ -260,10 +260,7 @@ const Home = () =>{
       useEffect(() => {
         const fetchData = async () => {
             if(token){
-              const access_token = params.access_token;
-
               try {
-
                   const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
                       headers: {
                       'Authorization': 'Bearer ' + token
@@ -275,9 +272,7 @@ const Home = () =>{
                   } else{
                       setActiveDevices(true)
                   }
-
                   //////////////////////////////////////////////////////////////////////////////////////////////////////
-                  
                   // PLAYLISTS DATA
                   const responsePlaylists = await axios.get(`https://api.spotify.com/v1/me/playlists?limit=50`, {
                     headers: {
@@ -285,9 +280,7 @@ const Home = () =>{
                     }
                   });
                   setPlaylists(responsePlaylists.data.items);
-                 
                   //////////////////////////////////////////////////////////////////////////////////////////////////////
-                  
                   // CURRENTLY PLAYING DATA
                   const responsePlaying = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
                     headers: {
@@ -296,12 +289,8 @@ const Home = () =>{
                   });
                   setPlaying(responsePlaying.data.item);
                   setPlayingData(responsePlaying.data)
-                  console.log(playing)
-                  
                   //////////////////////////////////////////////////////////////////////////////////////////////////////
-                  
                   // RECENTLY PLAYED DATA
-
                   const responseRecentlyPlayed = await axios.get(`https://api.spotify.com/v1/me/player/recently-played?limit=50`, {
                     headers: {
                       'Authorization': 'Bearer ' + token
@@ -309,7 +298,6 @@ const Home = () =>{
                   });
                   setRecentlyPlayed(responseRecentlyPlayed.data.items);
                   // Total days
-
                   const findDay = responseRecentlyPlayed.data.items.map(song=>{
                     return song.played_at.slice(0, 10);
                   })
@@ -320,9 +308,7 @@ const Home = () =>{
                     return acc;
                   }, 0);
                   setStreamsDay(totalDay);
-
                   // Total minutes
-
                   const durationTrack = responseRecentlyPlayed.data.items.map(song => {
                     return song.track.duration_ms;
                   })
@@ -331,11 +317,8 @@ const Home = () =>{
                   }, 0);
                   let minutesListenedToShow = (totalDuration / 60000).toFixed(0);
                   setMinutesListened(minutesListenedToShow)
-
                   //////////////////////////////////////////////////////////////////////////////////////////////////////
-
                   // USER DATA
-
                   const responseUser = await axios.get(`https://api.spotify.com/v1/me`, {
                     headers: {
                       'Authorization': 'Bearer ' + token
@@ -498,29 +481,6 @@ const Home = () =>{
                 });
                 //artists_genres.push(more);
                 return musicGenre
-              
-                /*
-                //console.log(artists_genres);
-                //console.log(artists_genres);
-
-                const countGenres = artists_genres.reduce((obj, genre) =>{
-                  obj[genre] = (obj[genre] || 0) + 1;
-                  return obj
-                }, {})
-
-                //console.log(countGenres);
-
-                //let orderGenres = Object.keys(countGenres).sort(function(a,b){return countGenres[b]-countGenres[a]})
-                let orderGenres = Object.keys(countGenres).sort(function(a,b){return countGenres[b]-countGenres[a]})
-                let orderValues = Object.values(countGenres).sort(function(a,b){return countGenres[b]-countGenres[a]})
-                //console.log(orderGenres);
-                //console.log(orderValues);
-                const genresToShow = orderGenres.filter((genre, index) =>{
-                  return index < 5
-                })
-                //console.log(orderGenres);
-                setGenres(genresToShow)
-                */
               })
 
               const showGenresData = Promise.all(findGenres);
@@ -595,45 +555,67 @@ const Home = () =>{
                   setRecommendations(responseRecommendations.data.tracks);
                   setRecommendationsDescription(`We prepare a list of recommendations based in your most listened tracks in the past 4 weeks, which includes`)
                 } 
-                else if(recommendationsTerm === "genres"){
+                else if(recommendationsTerm === "albums")
+                {
+                   /*
+                  console.log(albums)
+                  const artistsAlbums = albums.filter((artist, index) =>{
+                    return index < 5;
+                  })
+                  const seedArtists = artistsAlbums.map(album =>{
+                    return album.artist
+                  })
 
-                  /*
-                  const responseRecommendations = await axios.get(`https://api.spotify.com/v1/recommendations?limit=50&market=US&seed_genres=${totalGenres}&min_energy=0.4&min_popularity=50`, {
+                  const tracksAlbums = albums.filter((track, index)=>{
+                    return index < 5;
+                  })
+
+                  const seedTracks = tracksAlbums.map(async (track) =>{
+                    const responseAlbumTracks = await axios.get(`https://api.spotify.com/v1/albums/${track.d}`, {
+                      headers: {
+                        'Authorization': 'Bearer ' + token
+                      }
+                    }); 
+                    const pickTrack = responseAlbumTracks.data.tracks.items[0];
+                    return pickTrack
+                  })
+
+                  console.log(seedArtists)
+
+                  const responseRecommendations = await axios.get(`https://api.spotify.com/v1/recommendations?market=US&seed_artists=${seedArtists}&min_energy=0.4&min_popularity=50`, {
                     headers: {
                     'Authorization': 'Bearer ' + token
                     }
                   });
-                  //console.log(responseRecommendations)
-                  
-                  */
+                  console.log(responseRecommendations)
+                  const getAlbumsFromRecommendations = responseRecommendations.data.tracks.map(track =>{
+                    return track.album;
+                  })
 
-                 const tracksId = tracks.map(track =>{
+                 
+                  
+                  const tracksId = tracks.map(track =>{
                   return track.id
                   })
                   const tracksIdFilter = tracksId.filter( (artist, index ) => {
                     return index < 5;
                   })
-
                   const moreArtists = artists.filter((artist, index) => {
                     return index < 5;
                   })
                   const getNames = moreArtists.map(artist=>{
                     return artist.name
                   })
-
                   setRecommendationsArtistsNames(getNames);
-
                   const getArtistsIds = moreArtists.map(track=>{
                     return track.id
                   })
-
-
-                 const responseRecommendations = await axios.get(`https://api.spotify.com/v1/recommendations?market=US&seed_artists=${getArtistsIds}&seed_tracks=${tracksIdFilter}&min_energy=0.4&min_popularity=50`, {
-                  headers: {
-                  'Authorization': 'Bearer ' + newToken
+                  const responseRecommendations = await axios.get(`https://api.spotify.com/v1/recommendations?market=US&seed_artists=${getArtistsIds}&seed_tracks=${tracksIdFilter}&min_energy=0.4&min_popularity=50`, {
+                    headers: {
+                    'Authorization': 'Bearer ' + newToken
                   }
                   });
-                  //console.log(responseRecommendations.data.tracks)
+                    //console.log(responseRecommendations.data.tracks)
 
                   const getAlbumsFromRecommendations = responseRecommendations.data.tracks.map(track =>{
                     return track.album;
@@ -641,8 +623,11 @@ const Home = () =>{
 
                   setRecommendations(responseRecommendations.data.tracks);
                   setRecommendationsDescription(`We prepare a list of recommendations based in your most listened genres in the past 4 weeks, which includes`)
+                  */
 
-                } else if(recommendationsTerm === "artists"){
+                } 
+                else if(recommendationsTerm === "artists")
+                {
                     const moreArtists = artists.filter((artist, index) => {
                       return index < 5;
                     })
@@ -681,6 +666,7 @@ const Home = () =>{
         fetchRecommendations();
       }, [tracks, recommendationsTerm, newRec, token])
       
+      // Create Playlist
       const createPlaylistWithRecommendations = async () => {
         if(token){
           const access_token = params.access_token;
@@ -781,8 +767,8 @@ const Home = () =>{
                   <ContainerHero>
                     {/*<Title size="h1" >Welcome to your Spotify Data Center</Title>*/}
                     <TypingEffect title/>
-                    {!user && <a href="https://spotify-server-seven.vercel.app/login">
-                    {/*{!user && <a href="http://localhost:8888/login">*/}
+                    {/*{!user && <a href="https://spotify-server-seven.vercel.app/login">*/}
+                    {!user && <a href="http://localhost:8888/login">
                       <MainButton>Login with Spotify</MainButton>
                     </a>}
                   </ContainerHero>
@@ -1067,7 +1053,7 @@ const Home = () =>{
                   <Text>Show recommendations by:</Text>
                   <Button activeButton={handleRecommendationsButton('tracks')} onClick={ () => setRecommendationsTerm('tracks')}>By Tracks</Button>
                   <Button activeButton={handleRecommendationsButton('artists')} onClick={ () => setRecommendationsTerm('artists')}>By Artists</Button>
-                  <Button activeButton={handleRecommendationsButton('albums')} onClick={ () => setRecommendationsTerm('genres')}>By Albums</Button>
+                  {/*<Button activeButton={handleRecommendationsButton('albums')} onClick={ () => setRecommendationsTerm('albums')}>By Albums</Button>*/}
                   <Button onClick={() => setNewRec(!newRec)}>Refresh recommendations</Button>
                   <Text margin="30px 0 0 0">Do you want to create a playlist with your 50 favorites tracks?</Text>
                   <MainButton onClick={createPlaylistWithRecommendations}>Create playlist</MainButton>
