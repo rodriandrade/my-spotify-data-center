@@ -86,4 +86,9 @@ const ContainerButtons = styled.div`
     align-items:center;
 `
 
-export { ContainerLeftColumn, MostListened, Text, Button, MainButton, ContainerButtons }
+const MainButtonContainer = styled.div`
+    width:100%;
+    margin-top:20px;
+`
+
+export { ContainerLeftColumn, MostListened, Text, Button, MainButton, ContainerButtons, MainButtonContainer }

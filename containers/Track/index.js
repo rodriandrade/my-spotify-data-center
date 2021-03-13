@@ -13,6 +13,7 @@ import ParticlesBackground from '../../components/ParticlesBackground'
 import Footer from '../../components/Footer'
 import Link from 'next/link'
 import CurrentlyPlayingCard from '../../components/CurrentlyPlayingCard'
+import { getLyrics, getSong } from 'genius-lyrics-api';
 
 export default function Track() {
     const router = useRouter()
@@ -218,6 +219,15 @@ export default function Track() {
                 setPlayingData(responsePlaying.data);
 
                 setLoadingTime(true)
+
+                const options = {
+                  apiKey: '_PdyyNf9uUW5xmsrfS5ELwFOspW_ln2e_mI0_o9DJdEtE9Bw64EyihZ48CAVbIsR',
+                  title: 'Blinding Lights',
+                  artist: 'The Weeknd',
+                  optimizeQuery: true
+                };
+                
+                getLyrics(options).then((lyrics) => console.log(lyrics));
                 
             } catch (error) {
                 console.error('este es mi error',error);
@@ -531,7 +541,7 @@ export default function Track() {
                         : 
                         <Col desktop={4} tablet={6} mobile={12}>
                           <NoDataContainer>
-                            <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
+                            <NoDataTitle><strong>:(</strong></NoDataTitle> 
                             <NoDataInfo>Not in your past 4 weeks ranking</NoDataInfo>  
                           </NoDataContainer>
                         </Col>
@@ -544,7 +554,7 @@ export default function Track() {
                         : 
                         <Col desktop={4} tablet={6} mobile={12}>
                           <NoDataContainer>
-                            <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
+                            <NoDataTitle><strong>:(</strong></NoDataTitle> 
                             <NoDataInfo>Not in your past 6 months ranking</NoDataInfo>  
                           </NoDataContainer>
                         </Col>
@@ -557,7 +567,7 @@ export default function Track() {
                         : 
                         <Col desktop={4} tablet={6} mobile={12}>
                           <NoDataContainer>
-                            <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
+                            <NoDataTitle><strong>:(</strong></NoDataTitle> 
                             <NoDataInfo>Not in your lifetime ranking</NoDataInfo>  
                           </NoDataContainer>
                         </Col>

@@ -1,4 +1,4 @@
-import {TrackImage, TrackName, ArtistName, ImageContainer, Container, TextContainer, ContainerPlay, Cont, ContainerTrack, PlayState, CurrentlyPlayingCont, SoundBar, SoundContainer, TimePlayed, TrackSave, BlurContainer} from './styled'
+import {TrackImage, TrackName, ArtistName, ImageContainer, Container, TextContainer, ContainerPlay, Cont, ContainerTrack, PlayState, CurrentlyPlayingCont, SoundContainer, TimePlayed, TrackSave, BlurContainer, DevicesMenuContainer, DevicesMenuTitle, DeviceContainer, DeviceName, DeviceType, DeviceInfo} from './styled'
 import Link from 'next/link'
 import Inner from '../Inner'
 import axios from 'axios'
@@ -20,7 +20,14 @@ const CurrentlyPlayingCard = props =>{
     const [token, setToken] = useState(props.token);
     const [refreshToken, setRefreshToken] = useState(props.refreshToken)
 
-    console.log(props.data)
+    // Devices
+    const [availableDevices, setAvailableDevices] = useState(false)
+    const [devices, setDevices] = useState([])
+
+    const deviceIcon = {
+        "Computer": "/laptop.svg",
+        "Smartphone": "/smartphone.svg"
+    }
 
     const getNewToken = async () =>{
         const responseRefreshToken = await axios.get(`https://my-spotify-data-center-server.vercel.app/refresh_token`, {
@@ -121,6 +128,42 @@ const CurrentlyPlayingCard = props =>{
         checkSave();
     }, [props])
 
+    // Check devices
+    useEffect(() => {
+        const checkDevices = async () =>{
+            try{
+                const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
+                        headers: {
+                        'Authorization': 'Bearer ' + token
+                        }
+                });
+                const devices = responseUserDevices.data.devices;
+                console.log(devices);
+                setDevices(devices)
+                /*
+                if(devices.length == 0){
+                    setActiveDevices(false)
+                    checkPlayTrack(responseUserDevices);
+                } else{
+                    setActiveDevices(true)
+                    checkPlayTrack(responseUserDevices);
+                }
+                */
+            } catch(error){
+                if (error.response.status === 401) {
+                    getNewToken();
+                }
+                if (error.response.status === 500) {
+                    console.log(error);
+                }
+                if (error.response.status === 504) {
+                    console.log(error);
+                }
+            }
+        }
+        checkDevices()
+    }, [])
+
     // Save or unsave track
     const handleSave = async () => {
         const base_url = `https://api.spotify.com/v1/me/tracks?ids=${id}`
@@ -140,47 +183,88 @@ const CurrentlyPlayingCard = props =>{
         })
     }
 
-    return(
-        <div>
+    const selectDevice = () =>{
+
+    }
+
+    return (
+      <div>
         <Inner>
-            <Container showPlayer={showPlayer} >
-                <CurrentlyPlayingCont onClick={ ()=> setShowPlayer(!showPlayer) } blink={props.blink}>
-                    <TimePlayed blink={props.blink}>Currently Playing</TimePlayed>
-                </CurrentlyPlayingCont>
-                    <SoundBar>
-                    </SoundBar>
-                    <Cont>
-                        <ContainerTrack>
-                            <SoundContainer isPlaying={isPlaying}>
-                                <div />
-                                <div />
-                                <div />
-                            </SoundContainer>
-                        {props.data.length !== 0 &&
-                            <a href={external_urls.spotify} target="_blank">
-                                <ImageContainer>
-                                    <TrackImage src={album.images[1].url} alt="playing" />
-                                </ImageContainer>
-                            </a>
-                        }
-                        <TextContainer>
-                            <Link href={{pathname: `/track/${id}`, query: { token: token, id: id, refreshToken: refreshToken }, }}>
-                                <TrackName>{name}</TrackName>
-                            </Link>
-                            <ArtistName>{artistsNames.join(", ")}</ArtistName>
-                        </TextContainer>
-                        {saveIcon && <TrackSave onClick={handleSave} src={saveIcon} alt="save_icon"/>}
-                        
-                    </ContainerTrack>
-                    <ContainerPlay>
-                        <PlayState src={icon} alt="pause_button" onClick={player}/>
-                    </ContainerPlay>
-                    </Cont>
-                
-            </Container>
+          <Container showPlayer={showPlayer}>
+            <CurrentlyPlayingCont
+              onClick={() => setShowPlayer(!showPlayer)}
+              blink={props.blink}
+            >
+              <TimePlayed blink={props.blink}>Currently Playing</TimePlayed>
+            </CurrentlyPlayingCont>
+            <Cont>
+              <ContainerTrack>
+                <SoundContainer isPlaying={isPlaying}>
+                  <div />
+                  <div />
+                  <div />
+                </SoundContainer>
+                {props.data.length !== 0 && (
+                  <a href={external_urls.spotify} target="_blank">
+                    <ImageContainer>
+                      <TrackImage src={album.images[1].url} alt="playing" />
+                    </ImageContainer>
+                  </a>
+                )}
+                <TextContainer>
+                  <Link
+                    href={{
+                      pathname: `/track/${id}`,
+                      query: {
+                        token: token,
+                        id: id,
+                        refreshToken: refreshToken,
+                      },
+                    }}
+                  >
+                    <TrackName>{name}</TrackName>
+                  </Link>
+                  <ArtistName>{artistsNames.join(", ")}</ArtistName>
+                </TextContainer>
+                {saveIcon && (
+                  <TrackSave
+                    onClick={handleSave}
+                    src={saveIcon}
+                    alt="save_icon"
+                  />
+                )}
+
+                {/*
+                <TrackSave
+                  onClick={() => setAvailableDevices(!availableDevices)}
+                  src="/responsive.svg"
+                  alt="devices_icon"
+                />
+
+                {availableDevices ? (
+                  <DevicesMenuContainer>
+                    <DevicesMenuTitle>Available devices</DevicesMenuTitle>
+                    {devices.map(device => (
+                        <DeviceContainer active={device.is_active} onClick={ () => props.setSelectDevice(device.id)}>
+                            <TrackSave src={deviceIcon[device.type]} alt="device-icon" />
+                            <DeviceInfo>
+                                <DeviceName active={device.is_active}>{device.name}</DeviceName>
+                                <DeviceType>{device.type}</DeviceType>
+                            </DeviceInfo>
+                        </DeviceContainer>
+                    ))}
+                  </DevicesMenuContainer>
+                ) : null}
+                    */}
+              </ContainerTrack>
+              <ContainerPlay>
+                <PlayState src={icon} alt="pause_button" onClick={player} />
+              </ContainerPlay>
+            </Cont>
+          </Container>
         </Inner>
-        </div>
-    )
+      </div>
+    );
 }
 
 export default CurrentlyPlayingCard

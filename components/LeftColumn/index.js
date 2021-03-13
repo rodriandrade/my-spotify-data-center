@@ -1,7 +1,8 @@
-import { ContainerLeftColumn, Text, MostListened, Button, MainButton, ContainerButtons} from './styled'
+import { ContainerLeftColumn, Text, MostListened, Button, MainButton, ContainerButtons, MainButtonContainer} from './styled'
 import React, {useState, useEffect, createRef} from 'react'
 import axios from 'axios'
 import Modal from '../Modal'
+import domtoimage from "dom-to-image";
 
 const LeftColumn = props =>{
 
@@ -11,6 +12,8 @@ const LeftColumn = props =>{
     const [flag, setFlag] = useState(false)
     const ref = React.createRef()
     const [playlistName, setPlaylistName] = useState('')
+    
+    const [dataImage, setDataImage] = useState('')
 
     // State para modal
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -127,6 +130,34 @@ const LeftColumn = props =>{
         return props.typeTerm === buttonTerm;
     }
 
+    const handleShare = () => {
+      setModalIsOpen(!modalIsOpen);
+      setDataImage(true)
+      /*
+      let node = document.getElementById(`content-to-be-copied`);
+      domtoimage
+        .toPng(node)
+        .then(dataUrl => {
+          axios
+            .post(
+              "http://localhost:9000/imagetotweet",
+              {
+                dataUrl: dataUrl,
+              }
+            )
+            .then(res => {
+              const title = res.data.message;
+              const twitterURL = 
+              `https://twitter.com/intent/tweet/text=${title}`;
+              window.open(twitterURL,"twitter");
+             //openTwitterUrl(twitterURL); //optional 
+            })
+            .catch(err => console.log(err, "Error trying to tweet"))
+        })
+        .catch(err => console.log(err));
+        */
+    };
+
     return(
       
         <ContainerLeftColumn className={isSticky ? " isSticky" : ""} ref={ref} sectionTitle={props.sectionTitle}>
@@ -135,8 +166,17 @@ const LeftColumn = props =>{
                     modalIsOpen={modalIsOpen} 
                     setModalIsOpen={setModalIsOpen} 
                     title={"Your playlist was created!"}
-                    text={"Check your Spotify account to find" + " " + playlistName + " " + "your new playlist based on your favorites tracks."}
+                    text={"Check your account to find" + ' "' + playlistName + '", ' + "your new playlist based on your favorites tracks."}
                     buttonText={"Close"}
+            />}
+            {dataImage && 
+                <Modal 
+                    modalIsOpen={modalIsOpen} 
+                    setModalIsOpen={setModalIsOpen} 
+                    dataImage
+                    data={props.data}
+                    term={props.typeTerm}
+                    type={props.type}
             />}
             <Text>{props.description} <MostListened>{props.mostListened.slice(0,4).join(', ') + ' and ' + props.mostListened.slice(-1)}</MostListened></Text>
             <Text>{props.showBy}</Text>
@@ -144,13 +184,17 @@ const LeftColumn = props =>{
                 <Button activeButton={props.handlerButton('short_term')} onClick={ () => props.setTypeTerm('short_term')}>Past 4 weeks</Button>
                 <Button activeButton={props.handlerButton('medium_term')} onClick={ () => props.setTypeTerm('medium_term')}>Past 6 months</Button>
                 <Button activeButton={props.handlerButton('long_term')} onClick={ () => props.setTypeTerm('long_term')}>Several years</Button>
+                <MainButtonContainer>
+                  <MainButton onClick={handleShare}>Generate image</MainButton>
+                </MainButtonContainer>
             </ContainerButtons>
             {playlistCreation ? 
                 <div>
-                    <Text margin="30px 0 0 0">Do you want to create a playlist with your 50 favorites tracks?</Text>
+                    {/*<Text margin="30px 0 0 0">Do you want to create a playlist with your 50 favorites tracks?</Text>*/}
                     <MainButton onClick={createPlaylist}>Create playlist</MainButton>
                 </div>
             : null}
+            
         </ContainerLeftColumn>
     )
 }

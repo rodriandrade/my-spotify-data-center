@@ -66,21 +66,12 @@ const ImageContainer = styled.div`
 `
 
 const TrackPosition = styled.p`
-/*
-    font-size:32px;
-    color: #fff;
-    margin:0;
-    text-align: center;
-    */
-        //font-size:32px;
     font-size:60px;
     color: #fff;
     margin:0;
     text-align: center;
     font-weight:bold;
     position:absolute;
-    //top:125px;
-    //left:10px;
     top:67%;
     left:50%;
     transform: translate(-50%, 25%);
@@ -121,8 +112,6 @@ const ArtistName = styled.p`
     text-align: center;
     z-index:4;
     position:relative;
-
-    //text-transform:uppercase;
 `
 
 

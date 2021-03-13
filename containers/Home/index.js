@@ -815,16 +815,9 @@ const Home = () =>{
                   typeTerm={artistsTerm}
                   handlerButton={handleArtistButton}
                   sectionTitle="Artists"
+                  data={artists}
+                  type="artists"
                 />
-                {/*
-                <ContainerLeftColumn>
-                  {totalArtists && <Text>You listen to these artists for the most part in the {timePeriod}! You spend a lot of time listening to <MostListened>{totalArtists.join(", ")}</MostListened></Text>}
-                  <Text>Show artists by:</Text>
-                  <Button activeButton={handleArtistButton('short_term')} onClick={ () => setArtistsTerm('short_term')}>Past 4 weeks</Button>
-                  <Button activeButton={handleArtistButton('medium_term')} onClick={ () => setArtistsTerm('medium_term')}>6 months</Button>
-                  <Button activeButton={handleArtistButton('long_term')} onClick={ () => setArtistsTerm('long_term')}>Several years</Button>
-                </ContainerLeftColumn>
-                */}
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
                 <Grid colGap={30} rowGap={40}>
@@ -866,18 +859,9 @@ const Home = () =>{
                   createPlaylist={true}
                   tracks={tracks}
                   sectionTitle="Tracks"
+                  data={tracks}
+                  type="tracks"
                 />
-                {/*
-                <ContainerLeftColumn>
-                  {totalTracks && <Text>You listen to these tracks for the most part in the past 4 weeks! You spend a lot of time listening to <MostListened>{totalTracks.join(", ")}</MostListened></Text>}
-                  <Text>Show artists by:</Text>
-                  <Button activeButton={handleTracksButton('short_term')} onClick={ () => setTracksTerm('short_term')}>Past 4 weeks</Button>
-                  <Button activeButton={handleTracksButton('medium_term')} onClick={ () => setTracksTerm('medium_term')}>6 months</Button>
-                  <Button activeButton={handleTracksButton('long_term')} onClick={ () => setTracksTerm('long_term')}>Several years</Button>
-                  <Text margin="30px 0 0 0">Do you want to create a playlist with your 50 favorites tracks?</Text>
-                  <MainButton onClick={createPlaylist}>Create playlist</MainButton>
-                </ContainerLeftColumn>
-                */}
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
                 <Grid colGap={30} rowGap={40}>
@@ -914,16 +898,9 @@ const Home = () =>{
                     typeTerm={albumsTerm}
                     handlerButton={handleAlbumsButton}
                     sectionTitle="Albums"
+                    data={albums}
+                    type="albums"
                   />
-                {/*
-                <ContainerLeftColumn>
-                  <Text>You listen these albums for the most part in the past 4 weeks! You spend a lot of time listening to <MostListened>{totalAlbums.join(", ")}</MostListened></Text>
-                  <Text>Show artists by:</Text>
-                  <Button activeButton={handleAlbumsButton('short_term')} onClick={ () => setAlbumsTerm('short_term')}>Past 4 weeks</Button>
-                  <Button activeButton={handleAlbumsButton('medium_term')} onClick={ () => setAlbumsTerm('medium_term')}>6 months</Button>
-                  <Button activeButton={handleAlbumsButton('long_term')} onClick={ () => setAlbumsTerm('long_term')}>Several years</Button>
-                </ContainerLeftColumn>
-                */}
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
                 <Grid colGap={30} rowGap={40}>
@@ -960,16 +937,9 @@ const Home = () =>{
                     typeTerm={genresTerm}
                     handlerButton={handleGenresButton}
                     sectionTitle="Genres"
+                    data={genres}
+                    type="genres"
                 />
-                {/*
-                <ContainerLeftColumn>
-                  <Text>You listen these artists for the most part in the past 4 weeks! You spend a lot of time listening to <MostListened>{totalGenres.join(", ")}</MostListened></Text>
-                  <Text>Show artists by:</Text>
-                  <Button activeButton={handleGenresButton('short_term')} onClick={ () => setGenresTerm('short_term')}>Past 4 weeks</Button>
-                  <Button activeButton={handleGenresButton('medium_term')} onClick={ () => setGenresTerm('medium_term')}>Past 6 months</Button>
-                  <Button activeButton={handleGenresButton('long_term')} onClick={ () => setGenresTerm('long_term')}>Several years</Button>
-                </ContainerLeftColumn>
-                */}
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
                 <Grid colGap={60} rowGap={40}>
@@ -988,49 +958,6 @@ const Home = () =>{
             </Grid>
           </section>  
           : null }
-
-          {/*
-          {user ?
-          <section id="recently-played_section">             
-            <Grid colGap={30} rowGap={40}>
-              <Col desktop={9} tablet={6} mobile={12}>
-                  <Title size="extra-large">These are your recently played tracks</Title>
-              </Col>
-            </Grid>
-            <Grid colGap={30} rowGap={40}>
-              <Col desktop={3} tablet={6} mobile={12}>
-                <ContainerLeftColumn>
-                  <Text>You listen {minutesListened} minutes in the last {streamsDays} days</Text>
-                </ContainerLeftColumn>
-              </Col>
-              <Col desktop={9} tablet={6} mobile={12}>
-                <Grid colGap={10} rowGap={10}>
-                  {recentlyPlayed.map((track) => (<RecentlyPlayedCard key={track.id} data={track} token={token}  playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} refreshToken={refreshToken}/>))}
-                </Grid>
-              </Col>
-            </Grid>
-          </section>
-          : null }
-          */}
-
-          {/*
-          {user ?
-          <section>             
-            <Grid colGap={30} rowGap={40}>
-              <Col desktop={7} tablet={6} mobile={12}>
-                  {artists && <Title size="extra-large">These are your playlists</Title>}
-              </Col>
-            </Grid>
-            <Grid colGap={30} rowGap={40}>
-              <Col desktop={9} tablet={6} mobile={12}>
-                <Grid>
-                  {playlists && playlists.map((playlist) => (<PlaylistCard key={playlist.id} data={playlist} />))}
-                </Grid>
-              </Col>
-            </Grid>
-          </section>  
-          : null }
-          */}
 
           {user ?
           <section id="recommendations_section">             

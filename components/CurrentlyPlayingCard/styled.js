@@ -187,7 +187,63 @@ const TrackSave = styled.img`
     cursor:pointer;
 `
 
-const SoundBar = styled.div`
+const DevicesMenuContainer = styled.div`
+    background-color:rgba(20,20,20,1);
+    position:absolute;
+    top:-290px;
+    left:200px;
+    width:300px;
+    min-height:250px;
+    padding:10px;
+    border-radius:4px;
+
+    ::after{
+        content:'';
+        display:block;
+        width: 0;
+        height: 0;
+        border-left: 25px solid transparent;
+        border-right: 25px solid transparent;
+        border-top: 50px solid rgba(20,20,20,1);
+        top:50%;
+        left:50%;
+        transform: translate(-50%, 230%);
+        position:absolute;
+    }
 `
 
-export { Container, TrackName, TimePlayed, TrackImage, ArtistName, ImageContainer, TextContainer, ContainerPlay, Cont, ContainerTrack, PlayState, CurrentlyPlayingCont, SoundBar, SoundContainer, TrackSave}
+const DeviceContainer = styled.div`
+    padding:10px;
+    border-bottom:1px solid rgb(22,22,22,1);
+    cursor:pointer;
+    display:flex;
+    flex-direction:row;
+    background-color: ${(props) => (props.active ? "rgba(66, 133, 108, 0.1)" : "")};
+
+    :hover{
+        background-color:rgb(23,23,23,1);
+    }
+`
+
+const DevicesMenuTitle = styled.h2`
+    font-size:16px;
+    color: #fff;
+    text-align:center;
+`
+
+const DeviceName = styled.span`
+    font-size:16px;
+    color: ${(props) => (props.active ? "#47ffbb" : "#fff")};
+`
+
+const DeviceType = styled.span`
+    font-size:14px;
+    color: rgba(100,100,100,1);
+`
+
+const DeviceInfo = styled.div`
+    display:flex;
+    flex-direction:column;
+`
+
+export { Container, TrackName, TimePlayed, TrackImage, ArtistName, ImageContainer, TextContainer, ContainerPlay, Cont, ContainerTrack, PlayState, CurrentlyPlayingCont, SoundContainer, TrackSave, DevicesMenuContainer, DevicesMenuTitle, DeviceContainer, DeviceName, DeviceType, DeviceInfo}

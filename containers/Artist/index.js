@@ -372,7 +372,7 @@ export default function Artist() {
                                     </ArtistInfoCont>
                                 : 
                                 <NoDataContainer>
-                                    <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
+                                    <NoDataTitle><strong>:(</strong></NoDataTitle> 
                                     <NoDataInfo>Not in your past 4 weeks ranking</NoDataInfo>  
                                 </NoDataContainer>
                                 }
@@ -385,7 +385,7 @@ export default function Artist() {
                                     </ArtistInfoCont>
                                 : 
                                 <NoDataContainer>
-                                    <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
+                                    <NoDataTitle><strong>:(</strong></NoDataTitle> 
                                     <NoDataInfo>Not in your past 6 months ranking</NoDataInfo>  
                                 </NoDataContainer>
                                 }
@@ -398,7 +398,7 @@ export default function Artist() {
                                     </ArtistInfoCont>
                                 : 
                                 <NoDataContainer>
-                                    <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
+                                    <NoDataTitle><strong>:(</strong></NoDataTitle> 
                                     <NoDataInfo>Not in your lifetime ranking</NoDataInfo>  
                                 </NoDataContainer>
                                 }
