@@ -5,6 +5,7 @@ const Text = styled.span`
     font-weight:bold;
     font-family: Poppins;
     margin-bottom:60px;
+    position:relative;
 
     span{
         color:#47ffbb

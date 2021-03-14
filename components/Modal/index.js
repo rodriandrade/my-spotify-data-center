@@ -168,12 +168,14 @@ const Modal = props => {
 
     const handleShare = () => {
         let node = document.getElementById(`content-to-be-copied`);
+        const url = "https://twitter-server-sable.vercel.app/imagetotweet"
+        console.log(url)
         domtoimage
           .toPng(node)
           .then(dataUrl => {
             axios
               .post(
-                "http://localhost:9000/imagetotweet",
+                url,
                 {
                   dataUrl: dataUrl,
                   tweet: tweet

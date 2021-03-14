@@ -35,6 +35,7 @@ const ContainerHero = styled.div`
 
 const Text = styled.p`
     font-size:16px;
+    position:relative;
     font-family: 'Poppins', sans-serif;
     text-align:left;
     color:#fff;
