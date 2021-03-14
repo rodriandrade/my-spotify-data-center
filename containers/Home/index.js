@@ -975,6 +975,8 @@ const Home = () =>{
                     sectionTitle="Genres"
                     data={genres}
                     type="genres"
+                    token={token}
+                    refreshToken={refreshToken}
                 />
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
@@ -1019,11 +1021,13 @@ const Home = () =>{
                     typeTerm={recommendationsTerm}
                     handlerButton={handleRecommendationsButton}
                     sectionTitle="Recommendations"
-                    data={recommendations}
+                    recommendations={recommendations}
                     type="recommendations"
                     setNewRec={setNewRec}
                     newRec={newRec}
                     isRecommendation
+                    token={token}
+                    refreshToken={refreshToken}
                 />
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>

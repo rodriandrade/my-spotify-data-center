@@ -8,7 +8,7 @@ const LeftColumn = props =>{
 
     const [playlistCreation, setCreatePlaylist] = useState(false);
     const [isRecommendation, setIsRecommendation] = useState(props.isRecommendation ? true : false)
-    const [token, setToken] = useState(props.token ? props.token : null)
+    const [token, setToken] = useState(props.token)
     const [isSticky, setIsSticky] = useState(true)
     const [flag, setFlag] = useState(false)
     const ref = React.createRef()
@@ -54,6 +54,67 @@ const LeftColumn = props =>{
         }
         checkPlaylist();
     }, [])
+
+    const createPlaylistWithRecommendations = async () => {
+      if(token){
+        try {
+            const responseUserProfile = await axios.get(`https://api.spotify.com/v1/me`, {
+                headers: {
+                'Authorization': 'Bearer ' + token
+                }
+            });
+            setModalIsOpen(!modalIsOpen);
+            setPlaylistModalState(true);
+            //console.log(responseUserProfile)
+            const user_id = responseUserProfile.data.id;
+            const base_url = `https://api.spotify.com/v1/users/${user_id}/playlists`
+            const playlistName = {
+              'tracks': 'Recommendations by  your favorites tracks - My Spotify Data Center',
+              'artists': 'Recommendations by your favorites artists - My Spotify Data Center',
+              'genres': 'Recommendations by your favorites genres - My Spotify Data Center',
+            }
+            setPlaylistName(playlistName[props.typeTerm])
+            axios({
+              method: 'post',
+              url: base_url,
+              data: {
+                name: playlistName[props.typeTerm],
+                description: 'New playlist description',
+                public: false
+              },
+              headers: { 'Authorization': 'Bearer ' + token }
+            })
+            .then(function (response) {
+              const tracksURI = [];
+              const playlist_id = response.data.id;
+              props.recommendations.map(track => {
+                tracksURI.push(track.uri)
+              })
+              const base_url_playlist = `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`
+              axios({
+                method: 'post',
+                url: base_url_playlist,
+                data: tracksURI,
+                headers: { 'Authorization': 'Bearer ' + token }
+              })
+              .then(function (response) {
+                //console.log(response);
+              });
+            });
+        } catch (error) {
+            console.error('este es mi error',error);
+            if (error.response.status === 401) {
+              getNewToken();
+            }
+            if (error.response.status === 500) {
+              console.log(error);
+            }
+            if (error.response.status === 504) {
+              console.log(error);
+            }
+        }
+      }        
+    }
 
     // Create playlist 
     const createPlaylist = async () => {
@@ -115,64 +176,7 @@ const LeftColumn = props =>{
         }
     }
 
-    const createPlaylistWithRecommendations = async () => {
-      if(token){
-        try {
-            const responseUserProfile = await axios.get(`https://api.spotify.com/v1/me`, {
-                headers: {
-                'Authorization': 'Bearer ' + token
-                }
-            });
-            //console.log(responseUserProfile)
-            const user_id = responseUserProfile.data.id;
-            const base_url = `https://api.spotify.com/v1/users/${user_id}/playlists`
-            const playlistName = {
-              'tracks': 'Recommendations by  your favorites tracks - My Spotify Data Center',
-              'artists': 'Recommendations by your favorites artists - My Spotify Data Center',
-              'genres': 'Recommendations by your favorites genres - My Spotify Data Center',
-            }
-            axios({
-              method: 'post',
-              url: base_url,
-              data: {
-                name: playlistName[props.typeTerm],
-                description: 'New playlist description',
-                public: false
-              },
-              headers: { 'Authorization': 'Bearer ' + token }
-            })
-            .then(function (response) {
-              const tracksURI = [];
-              const playlist_id = response.data.id;
-              recommendations.map(track => {
-                tracksURI.push(track.uri)
-              })
-              const base_url_playlist = `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`
-              axios({
-                method: 'post',
-                url: base_url_playlist,
-                data: tracksURI,
-                headers: { 'Authorization': 'Bearer ' + token }
-              })
-              .then(function (response) {
-                //console.log(response);
-              });
-            });
-        } catch (error) {
-            console.error('este es mi error',error);
-            if (error.response.status === 401) {
-              getNewToken();
-            }
-            if (error.response.status === 500) {
-              console.log(error);
-            }
-            if (error.response.status === 504) {
-              console.log(error);
-            }
-        }
-      }        
-    }
-
+    
     function handleArtistButton(buttonTerm) {
         return props.typeTerm === buttonTerm;
     }
@@ -254,7 +258,6 @@ const LeftColumn = props =>{
                   <Button activeButton={props.handlerButton('artists')} onClick={ () => props.setTypeTerm('artists')}>Artists</Button>
                   <MainButtonContainer>
                     <MainButton onClick={() => props.setNewRec(!props.newRec)}>Refresh recommendations</MainButton>
-                    <MainButton onClick={handleShare}>Generate image</MainButton>
                     <MainButton onClick={createPlaylistWithRecommendations}>Create playlist</MainButton>
                   </MainButtonContainer>
               </ContainerButtons>
