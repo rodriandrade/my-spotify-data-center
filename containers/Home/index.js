@@ -14,13 +14,12 @@ import Title from '../../components/Title'
 import Modal from '../../components/Modal'
 import ParticlesBackground from '../../components/ParticlesBackground'
 import Inner from '../../components/Inner'
-import Typical from 'react-typical'
 import NavMenu from '../../components/NavMenu'
 import Footer from '../../components/Footer'
 import LeftColumn from '../../components/LeftColumn'
 import TypingEffect from '../../components/TypingEffect'
 
-import {Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshIcon, IconContainer, MainButton, LoadingImage, LoadingContainer, LoadingText, LoadingContainerSection} from './styled'
+import {Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshIcon, IconContainer, MainButton, LoadingImage, LoadingContainer, LoadingText, LoadingContainerSection, MasterContainer, SuperContainer} from './styled'
 
 const Home = () =>{
 
@@ -324,7 +323,7 @@ const Home = () =>{
                       'Authorization': 'Bearer ' + token
                     }
                   });
-                  setUser(responseUser.data.id)
+                  setUser(responseUser.data.display_name)
                   if(user){
                     setLoggedIn(true);
                   }
@@ -666,6 +665,41 @@ const Home = () =>{
         fetchRecommendations();
       }, [tracks, recommendationsTerm, newRec, token])
       
+      // Check Currently Playing
+      const checkCurrentlyPlaying = async () => {
+        if(token){
+          try {
+            const responsePlaying = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
+              headers: {
+                'Authorization': 'Bearer ' + token
+              }
+            });
+            setPlaying(responsePlaying.data.item);
+            setPlayingData(responsePlaying.data)
+            setBlink(true)
+            setPlayingRightNow(responsePlaying.data.item);
+          } catch (err) {
+            console.error('este es mi error',error);
+              if (error.response.status === 401) {
+                getNewToken();
+              }
+              if (error.response.status === 500) {
+                console.log(error);
+              }
+              if (error.response.status === 504) {
+                console.log(error);
+              }
+          }
+        }
+      };
+      useEffect(()=>{
+        checkCurrentlyPlaying()
+        const interval=setInterval(()=>{
+          checkCurrentlyPlaying()
+         },3000)
+         return()=>clearInterval(interval)
+      },[token])
+
       // Create Playlist
       const createPlaylistWithRecommendations = async () => {
         if(token){
@@ -756,8 +790,10 @@ const Home = () =>{
           </Head>
           <ParticlesBackground />
 
+          <SuperContainer>
           {token && <NavMenu access_token={token} />}
           
+          <MasterContainer>
           <Inner>
 
           {!token ? 
@@ -975,16 +1011,20 @@ const Home = () =>{
             </Grid>
             <Grid colGap={30} rowGap={40}>
               <Col desktop={3} tablet={6} mobile={12}>
-                <ContainerLeftColumn>
-                  <Text>{recommendationsDescription}<MostListened> {recommendationsArtistsNames.join(", ")}</MostListened></Text>
-                  <Text>Show recommendations by:</Text>
-                  <Button activeButton={handleRecommendationsButton('tracks')} onClick={ () => setRecommendationsTerm('tracks')}>By Tracks</Button>
-                  <Button activeButton={handleRecommendationsButton('artists')} onClick={ () => setRecommendationsTerm('artists')}>By Artists</Button>
-                  {/*<Button activeButton={handleRecommendationsButton('albums')} onClick={ () => setRecommendationsTerm('albums')}>By Albums</Button>*/}
-                  <Button onClick={() => setNewRec(!newRec)}>Refresh recommendations</Button>
-                  <Text margin="30px 0 0 0">Do you want to create a playlist with your 50 favorites tracks?</Text>
-                  <MainButton onClick={createPlaylistWithRecommendations}>Create playlist</MainButton>
-                </ContainerLeftColumn>
+                <LeftColumn 
+                    description={recommendationsDescription}
+                    showBy="Show recommendations by"
+                    mostListened={recommendationsArtistsNames}
+                    setTypeTerm={setRecommendationsTerm}
+                    typeTerm={recommendationsTerm}
+                    handlerButton={handleRecommendationsButton}
+                    sectionTitle="Recommendations"
+                    data={recommendations}
+                    type="recommendations"
+                    setNewRec={setNewRec}
+                    newRec={newRec}
+                    isRecommendation
+                />
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
                 <Grid colGap={30} rowGap={40}>
@@ -1005,8 +1045,10 @@ const Home = () =>{
           : null }
 
            <Footer />
-          </Inner>
 
+          </Inner>
+          </MasterContainer>
+          </SuperContainer>
         </div>
       )
 }

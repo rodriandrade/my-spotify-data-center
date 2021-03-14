@@ -26,25 +26,25 @@ const Text = styled.p`
     text-align:left;
     color:#fff;
     margin:${(props) => (props.margin ? props.margin : "0 0 0 0")};
-    margin-bottom:30px;
+    margin-bottom:${(props) => (props.margin ? "10px" : "30px")};
 `
 
 const Button = styled.div`
-    padding:10px ;
+    padding:10px 0 ;
     border: none;
     color: ${(props) => (props.activeButton ? "#47ffbb" : "rgb(100,100,100)")};
     font-family: Poppins;
     font-size: 16px;
     font-weight: bold;
-    background-color: rgb(10,10,10,0.0);
+    background-color: ${(props) => (props.activeButton ? "rgba(42, 74, 62, 0.1)" : "rgb(10,10,10,0.0)")};
     border-radius:5px;
     cursor: pointer;
     border-bottom:${(props) => (props.selected ? "1px solid #47ffbb" : "1px solid rgb(20,20,20)")};
     width:100%;
     text-align:center;
 
-    :hover{
-        background-color: rgb(10,10,10,0.5);   
+    :hover{ 
+        background-color: ${(props) => (props.activeButton ? "rgba(72, 74, 62, 0.1)" : "rgb(10,10,10,0.5)")};
     }
 `
 

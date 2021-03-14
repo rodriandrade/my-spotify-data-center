@@ -310,6 +310,40 @@ export default function Artist() {
         }
     }
 
+    // Check Currently Playing
+    const checkCurrentlyPlaying = async () => {
+        if(token){
+          try {
+            const responsePlaying = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
+              headers: {
+                'Authorization': 'Bearer ' + token
+              }
+            });
+            setPlaying(responsePlaying.data.item);
+            setPlayingData(responsePlaying.data)
+          } catch (err) {
+            console.error('este es mi error',error);
+              if (error.response.status === 401) {
+                getNewToken();
+              }
+              if (error.response.status === 500) {
+                console.log(error);
+              }
+              if (error.response.status === 504) {
+                console.log(error);
+              }
+          }
+        }
+    };
+    
+    useEffect(()=>{
+        checkCurrentlyPlaying()
+        const interval=setInterval(()=>{
+          checkCurrentlyPlaying()
+         },3000)
+         return()=>clearInterval(interval)
+      },[token])
+
     return (
         <div>
             
@@ -418,7 +452,7 @@ export default function Artist() {
                                     </ArtistInfoCont>
                                     : 
                                     <NoDataContainer>
-                                        <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
+                                        <NoDataTitle><strong>:(</strong></NoDataTitle> 
                                         <NoDataInfo>Not in your past 4 weeks ranking</NoDataInfo>  
                                     </NoDataContainer>
                                     }
@@ -430,7 +464,7 @@ export default function Artist() {
                                     </ArtistInfoCont>
                                     : 
                                     <NoDataContainer>
-                                        <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
+                                        <NoDataTitle><strong>:(</strong></NoDataTitle> 
                                         <NoDataInfo>Not in your past 6 months ranking</NoDataInfo>  
                                     </NoDataContainer>
                                     }
@@ -442,7 +476,7 @@ export default function Artist() {
                                     </ArtistInfoCont>
                                     : 
                                     <NoDataContainer>
-                                        <NoDataTitle><strong>Zzz...</strong></NoDataTitle> 
+                                        <NoDataTitle><strong>:(</strong></NoDataTitle> 
                                         <NoDataInfo>Not in your lifetime ranking</NoDataInfo>  
                                     </NoDataContainer>
                                     }

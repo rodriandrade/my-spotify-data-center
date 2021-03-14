@@ -156,10 +156,12 @@ const ContainerAlbum = styled.div`
     margin-top:15px;
     width:80%;
     cursor:pointer;
-    border-bottom:3px solid #47ffbb;
+    border-bottom:3px solid rgba(20,20,20,1);
+    transition:0.5s;
+    position:relative;
 
     :hover{
-        opacity:0.7;
+        border-bottom:3px solid #47ffbb;
     }
 `
 
@@ -168,13 +170,14 @@ const ContainerAlbumImage = styled.div`
 
 const ContainerAlbumInfo = styled.div`
     margin-left:20px;
+    position:relative;
 `   
 
 const NoDataTitle = styled.h1`
     font-size:72px;
     color:rgba(100,100,100,1);
     margin:0;
-    position:relative
+    position:relative;
 `
 
 const NoDataContainer = styled.div`

@@ -296,7 +296,15 @@ const BtnContainer = styled.div`
     flex-direction:row;
 `
 
+const TweetSent = styled.p`
+    font-size: 18px;
+    color: #fff;
+    padding:5px;
+    border-left: 5px solid #47ffbb;
+    padding-left:10px;
+    margin-top:30px;
+`
 
 // TWEET MENU
 
-export {Container, CloseButton, InfoContainer, InfoText, InfoTitle, Button, MainButton, DataImageContainer, DataImageTitle, MainArtistContainer, MainArtistImage, MainArtistName, MainArtistPosition, OtherArtistsContainer, DataTitleContainer, ArtistCardContainer, ArtistCardImage, ArtistCardName, ArtistCardPosition, ArtistCard, DataImageFooterText, GeneralContainer, MenuContainer, ArtistCardImageContainer, ButtonsContainer, MainArtistImageContainer, ArtistCardNameContainer, Tweet, Counter, TweetContainer, BtnContainer}
+export {Container, CloseButton, InfoContainer, InfoText, InfoTitle, Button, MainButton, DataImageContainer, DataImageTitle, MainArtistContainer, MainArtistImage, MainArtistName, MainArtistPosition, OtherArtistsContainer, DataTitleContainer, ArtistCardContainer, ArtistCardImage, ArtistCardName, ArtistCardPosition, ArtistCard, DataImageFooterText, GeneralContainer, MenuContainer, ArtistCardImageContainer, ButtonsContainer, MainArtistImageContainer, ArtistCardNameContainer, Tweet, Counter, TweetContainer, BtnContainer, TweetSent}

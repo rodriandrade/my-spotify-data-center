@@ -13,7 +13,7 @@ import ParticlesBackground from '../../components/ParticlesBackground'
 import Footer from '../../components/Footer'
 import Link from 'next/link'
 import CurrentlyPlayingCard from '../../components/CurrentlyPlayingCard'
-import { getLyrics, getSong } from 'genius-lyrics-api';
+import lyricsFinder from 'lyrics-finder'
 
 export default function Track() {
     const router = useRouter()
@@ -70,6 +70,9 @@ export default function Track() {
     const [loadingTime, setLoadingTime] = useState(false)
 
     ////////// EFFECTS & FUNCTIONS //////////
+
+    
+    
 
     const getNewToken = async () =>{
         const responseRefreshToken = await axios.get(`https://my-spotify-data-center-server.vercel.app/refresh_token`, {
@@ -135,6 +138,11 @@ export default function Track() {
                     })
                     setArtistsNames(artistsNamesToShow);
                 }
+                
+                /*
+                const getLyrics = await axios.get(`https://api.lyrics.ovh/v1/${responseTrack.data.artists[0].name}/${responseTrack.data.name}`)
+                console.log(getLyrics.data.lyrics)
+                */
 
                 if(trackSaved){
                     const getNames = trackSaved.album.artists.map(artist =>{
@@ -220,14 +228,6 @@ export default function Track() {
 
                 setLoadingTime(true)
 
-                const options = {
-                  apiKey: '_PdyyNf9uUW5xmsrfS5ELwFOspW_ln2e_mI0_o9DJdEtE9Bw64EyihZ48CAVbIsR',
-                  title: 'Blinding Lights',
-                  artist: 'The Weeknd',
-                  optimizeQuery: true
-                };
-                
-                getLyrics(options).then((lyrics) => console.log(lyrics));
                 
             } catch (error) {
                 console.error('este es mi error',error);
@@ -248,6 +248,7 @@ export default function Track() {
         
     }, [newToken, newRec, id, playerTrackPage, blink])
 
+
     // Recommendations
     useEffect(() => {
       const fetchRecommendations = async () =>{
@@ -266,6 +267,7 @@ export default function Track() {
                     }
             });
             setRecommendations(responseRecommendations.data.tracks)
+
           } catch (error){
             console.error("este es mi error", error);
             if (error.response.status === 401) {
@@ -443,13 +445,47 @@ export default function Track() {
       formatLength()
     }, [track])
 
+    // Check Currently Playing
+    const checkCurrentlyPlaying = async () => {
+      if(token){
+        try {
+          const responsePlaying = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
+            headers: {
+              'Authorization': 'Bearer ' + token
+            }
+          });
+          setPlaying(responsePlaying.data.item);
+          setPlayingData(responsePlaying.data)
+        } catch (err) {
+          console.error('este es mi error',error);
+            if (error.response.status === 401) {
+              getNewToken();
+            }
+            if (error.response.status === 500) {
+              console.log(error);
+            }
+            if (error.response.status === 504) {
+              console.log(error);
+            }
+        }
+      }
+    };
+  
+    useEffect(()=>{
+      checkCurrentlyPlaying()
+      const interval=setInterval(()=>{
+        checkCurrentlyPlaying()
+       },3000)
+       return()=>clearInterval(interval)
+    },[token])
+
     return (
         <div>
            
            <ParticlesBackground />
            <NavMenu access_token={token} refresh_token={refresh_token}/>
             <Inner>
-              {playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink} setBlink={setBlink} refreshToken={refresh_token} /> }
+              
                 {playlistModalState && 
                 <Modal 
                   modalIsOpen={modalIsOpen} 
@@ -460,30 +496,33 @@ export default function Track() {
                 />}
 
                 {loadingTime ? 
-                <Container>
-                    <ContainerImage onClick={playTrack}>
-                        {!activeDevices && 
-                          <Modal 
-                              modalIsOpen={modalIsOpen} 
-                              setModalIsOpen={setModalIsOpen}
-                              title={"No encontramos reproductores activos"}
-                              text={"Para reproducir esta canción es necesario que tengas algún reproductor de Spotify abierto. Para que el dispositivo pueda ser detectado hay que empezar a reproducir una canción. Cuando lo hagas podés volver a intentar :)"}
-                              buttonText={"Try again"}
-                          />
-                        }
-                        {track.album && <TrackImage onClick={playTrack} onClick={openModal} src={track.album.images[0].url} />}
-                        <TextContainer onClick={playTrack} onClick={openModal}>
-                            <Text onClick={playTrack} onClick={openModal}>Play On Spotify</Text>
-                        </TextContainer>
-                    </ContainerImage>
-                    <ContainerInfo>
-                        <TrackName>{track.name}</TrackName> 
-                        {!!artistsNames.length > 0 && <ArtistName>{artistsNames.join(", ")}</ArtistName>}
-                        <RecommendationsButtonsContainer>
-                          {save && <Button onClick={handleSave} margin><Icon src={saveIcon} alt="save_button" />{save === 'true' ? 'unsave' : 'save'}</Button> }
-                        </RecommendationsButtonsContainer> 
-                    </ContainerInfo>
-                </Container>
+                  <div>
+                    {playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink} setBlink={setBlink} refreshToken={refresh_token} /> }
+                    <Container>
+                        <ContainerImage onClick={playTrack}>
+                            {!activeDevices && 
+                              <Modal 
+                                  modalIsOpen={modalIsOpen} 
+                                  setModalIsOpen={setModalIsOpen}
+                                  title={"No encontramos reproductores activos"}
+                                  text={"Para reproducir esta canción es necesario que tengas algún reproductor de Spotify abierto. Para que el dispositivo pueda ser detectado hay que empezar a reproducir una canción. Cuando lo hagas podés volver a intentar :)"}
+                                  buttonText={"Try again"}
+                              />
+                            }
+                            {track.album && <TrackImage onClick={playTrack} onClick={openModal} src={track.album.images[0].url} />}
+                            <TextContainer onClick={playTrack} onClick={openModal}>
+                                <Text onClick={playTrack} onClick={openModal}>Play On Spotify</Text>
+                            </TextContainer>
+                        </ContainerImage>
+                        <ContainerInfo>
+                            <TrackName>{track.name}</TrackName> 
+                            {!!artistsNames.length > 0 && <ArtistName>{artistsNames.join(", ")}</ArtistName>}
+                            <RecommendationsButtonsContainer>
+                              {save && <Button onClick={handleSave} margin><Icon src={saveIcon} alt="save_button" />{save === 'true' ? 'unsave' : 'save'}</Button> }
+                            </RecommendationsButtonsContainer> 
+                        </ContainerInfo>
+                    </Container>
+                  </div>
                 : 
                 <LoadingContainer>
                   <LoadingImage src="/loading.gif" alt="loading" />

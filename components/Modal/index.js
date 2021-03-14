@@ -1,4 +1,4 @@
-import {Button, MainButton, Container, CloseButton, InfoContainer, InfoText, InfoTitle, DataImageContainer, DataImageTitle, MainArtistContainer, MainArtistImage, MainArtistName, MainArtistPosition, OtherArtistsContainer, DataTitleContainer, ArtistCardContainer, ArtistCardImage, ArtistCardName, ArtistCardPosition, ArtistCard, DataImageFooterText, GeneralContainer, MenuContainer, ArtistCardImageContainer, ButtonsContainer, MainArtistImageContainer, ArtistCardNameContainer, Tweet, Counter, TweetContainer, BtnContainer} from './styled'
+import {Button, MainButton, Container, CloseButton, InfoContainer, InfoText, InfoTitle, DataImageContainer, DataImageTitle, MainArtistContainer, MainArtistImage, MainArtistName, MainArtistPosition, OtherArtistsContainer, DataTitleContainer, ArtistCardContainer, ArtistCardImage, ArtistCardName, ArtistCardPosition, ArtistCard, DataImageFooterText, GeneralContainer, MenuContainer, ArtistCardImageContainer, ButtonsContainer, MainArtistImageContainer, ArtistCardNameContainer, Tweet, Counter, TweetContainer, BtnContainer, TweetSent} from './styled'
 import React, {useRef, useState, useEffect} from 'react'
 import ClientOnlyPortal from '../ClientOnlyPortal'
 import axios from 'axios'
@@ -295,10 +295,10 @@ const Modal = props => {
                                             <Counter>{count} / 240</Counter>
                                         </TweetContainer>
                                         <BtnContainer>
-                                            <Button size="small" look="primary" onClick={ () => setTweetMenu(false)}>Back</Button>
+                                            <Button size="small" look="primary" onClick={() => { setTweetMenu(false); setTweetDone(false);}}>Back</Button>
                                             <Button size="small" disabled={disabled} onClick={handleShare}>Tweet</Button>
                                         </BtnContainer>
-                                        {tweetDone && <span>Tweet sent!</span>}
+                                        {tweetDone && <TweetSent>Tweet sent!</TweetSent>}
                                     </ButtonsContainer> 
                                     }
                                 </MenuContainer>

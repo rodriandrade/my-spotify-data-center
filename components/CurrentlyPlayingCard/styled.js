@@ -246,4 +246,20 @@ const DeviceInfo = styled.div`
     flex-direction:column;
 `
 
-export { Container, TrackName, TimePlayed, TrackImage, ArtistName, ImageContainer, TextContainer, ContainerPlay, Cont, ContainerTrack, PlayState, CurrentlyPlayingCont, SoundContainer, TrackSave, DevicesMenuContainer, DevicesMenuTitle, DeviceContainer, DeviceName, DeviceType, DeviceInfo}
+const LyricsContainer = styled.div`
+    width:100%;
+    height:50vh;
+    background-color: rgba(10,10,10,0.9);
+    position:absolute;
+    top:-700px;
+    left:0px;
+    padding:100px;
+`
+
+const Lyrics = styled.span`
+    font-size:16px;
+    color:#fff;
+    font-family: Poppins;
+`
+
+export { Container, TrackName, TimePlayed, TrackImage, ArtistName, ImageContainer, TextContainer, ContainerPlay, Cont, ContainerTrack, PlayState, CurrentlyPlayingCont, SoundContainer, TrackSave, DevicesMenuContainer, DevicesMenuTitle, DeviceContainer, DeviceName, DeviceType, DeviceInfo, Lyrics, LyricsContainer}

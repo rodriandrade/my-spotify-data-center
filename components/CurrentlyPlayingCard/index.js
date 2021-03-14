@@ -1,10 +1,12 @@
-import {TrackImage, TrackName, ArtistName, ImageContainer, Container, TextContainer, ContainerPlay, Cont, ContainerTrack, PlayState, CurrentlyPlayingCont, SoundContainer, TimePlayed, TrackSave, BlurContainer, DevicesMenuContainer, DevicesMenuTitle, DeviceContainer, DeviceName, DeviceType, DeviceInfo} from './styled'
+import {TrackImage, TrackName, ArtistName, ImageContainer, Container, TextContainer, ContainerPlay, Cont, ContainerTrack, PlayState, CurrentlyPlayingCont, SoundContainer, TimePlayed, TrackSave, BlurContainer, DevicesMenuContainer, DevicesMenuTitle, DeviceContainer, DeviceName, DeviceType, DeviceInfo, Lyrics, LyricsContainer} from './styled'
 import Link from 'next/link'
 import Inner from '../Inner'
 import axios from 'axios'
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 
 const CurrentlyPlayingCard = props =>{
+
+    const ref = useRef()
 
     const {name, artists, album, external_urls, id, uri, track_number} = props.data
     const [isPlaying, setIsPlaying] = useState(true)
@@ -23,6 +25,10 @@ const CurrentlyPlayingCard = props =>{
     // Devices
     const [availableDevices, setAvailableDevices] = useState(false)
     const [devices, setDevices] = useState([])
+
+    // Lyrics
+    const [lyrics, setLyrics] = useState('')
+    const [availableLyrics, setAvailableLyrics] = useState(false)
 
     const deviceIcon = {
         "Computer": "/laptop.svg",
@@ -127,6 +133,54 @@ const CurrentlyPlayingCard = props =>{
         }
         checkSave();
     }, [props])
+
+    /*
+    // Check lyrics
+    useEffect(() => {
+      const checkLyrics = async () =>{
+          try{
+            if(props.playingRightNow){
+              const getLyrics = await axios.get('http://localhost:9000/lyrics', {
+                params: {
+                  'artist': props.playingRightNow.artistName,
+                  'track': props.playingRightNow.trackName
+                }
+              });
+
+              ref.current = document.querySelector('#content')
+              console.log(getLyrics)
+              const newLyrics = getLyrics.data.replace(new RegExp("\n", "g"), `{"\n"}`);
+              setLyrics(newLyrics)
+
+              document.getElementById("content").innerHTML = getLyrics.data.replace(new RegExp("\n", "g"), "<br>");
+
+              const anotherLyrics = await axios.get('https://api.lyrics.ovh/v1/Coldplay/Midnight');
+              console.log(anotherLyrics)
+              /*
+              if(devices.length == 0){
+                  setActiveDevices(false)
+                  checkPlayTrack(responseUserDevices);
+              } else{
+                  setActiveDevices(true)
+                  checkPlayTrack(responseUserDevices);
+              }
+             
+            }
+          } catch(error){
+              if (error.response.status === 401) {
+                  getNewToken();
+              }
+              if (error.response.status === 500) {
+                  console.log(error);
+              }
+              if (error.response.status === 504) {
+                  console.log(error);
+              }
+          }
+      }
+      checkLyrics()
+  }, [props.playingRightNow])
+  */
 
     // Check devices
     useEffect(() => {
@@ -234,7 +288,22 @@ const CurrentlyPlayingCard = props =>{
                   />
                 )}
 
+                
                 {/*
+                
+                <TrackSave
+                  onClick={() => setAvailableLyrics(!availableLyrics)}
+                  src="/responsive.svg"
+                  alt="devices_icon"
+                />
+
+                {availableLyrics ? (
+                  <LyricsContainer>
+                    <Lyrics id="content"></Lyrics>
+                  </LyricsContainer>
+                ) : null}
+
+
                 <TrackSave
                   onClick={() => setAvailableDevices(!availableDevices)}
                   src="/responsive.svg"

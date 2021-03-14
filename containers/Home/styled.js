@@ -75,7 +75,7 @@ const Button = styled.button`
     font-family: Poppins;
     font-size: 16px;
     font-weight: bold;
-    background-color: rgb(10,10,10,0.0);
+    background-color: ${(props) => (props.activeButton ? "rgba(66, 133, 108, 0.1)" : "rgb(10,10,10,0.0)")};
     border-radius:5px;
     margin:0px;
     cursor: pointer;
@@ -126,4 +126,19 @@ const LoadingContainerSection = styled.div`
     flex-direction:column;
 `
 
-export {TitleTest, Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshIcon, IconContainer, MainButton, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection}
+const MasterContainer = styled.div`
+/*
+    width:80%;
+    */
+`
+
+const SuperContainer = styled.div`
+/*
+    width:100%;
+    display:flex;
+    flex-direction:row;
+    background-color:red;
+    */
+`
+
+export {TitleTest, Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshIcon, IconContainer, MainButton, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer}

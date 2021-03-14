@@ -359,6 +359,7 @@ export default function Album() {
   }
 
   const checkPlayTrack = (responseUserDevices) =>{
+    console.log("holanda")
       if(tracks){
         try {
           const devices = responseUserDevices.data.devices;
@@ -408,62 +409,99 @@ export default function Album() {
       setModalIsOpen(!modalIsOpen)
     }
 
+    // Check Currently Playing
+    const checkCurrentlyPlaying = async () => {
+      if(token){
+        try {
+          const responsePlaying = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
+            headers: {
+              'Authorization': 'Bearer ' + token
+            }
+          });
+          setPlaying(responsePlaying.data.item);
+          setPlayingData(responsePlaying.data)
+        } catch (err) {
+          console.error('este es mi error',error);
+            if (error.response.status === 401) {
+              getNewToken();
+            }
+            if (error.response.status === 500) {
+              console.log(error);
+            }
+            if (error.response.status === 504) {
+              console.log(error);
+            }
+        }
+      }
+    };
+  
+    useEffect(()=>{
+      checkCurrentlyPlaying()
+      const interval=setInterval(()=>{
+        checkCurrentlyPlaying()
+       },3000)
+       return()=>clearInterval(interval)
+    },[token])
+
     return (
       <div>
         
         <ParticlesBackground />
         <NavMenu access_token={token} refresh_token={refresh_token} />
         <Inner>
-          {playing && (
-            <CurrentlyPlayingCard
-              data={playing}
-              token={token}
-              refreshToken={refresh_token} 
-              playingData={playingData}
-              playingRightNow={playingRightNow}
-              setPlayingRightNow={setPlayingRightNow}
-              setPlaying={setPlaying}
-              blink={blink}
-              setBlink={setBlink}
-            />
-          )}
+          
           {loadingTime ? (
-            <Container>
-              {!activeDevices && (
-                <Modal
-                  modalIsOpen={modalIsOpen}
-                  setModalIsOpen={setModalIsOpen}
-                  title={"No encontramos reproductores activos"}
-                  text={
-                    "Para reproducir esta canción es necesario que tengas algún reproductor de Spotify abierto. Para que el dispositivo pueda ser detectado hay que empezar a reproducir una canción. Cuando lo hagas podés volver a intentar :)"
-                  }
-                  buttonText={"Try again"}
+            <div>
+              {playing && (
+                <CurrentlyPlayingCard
+                  data={playing}
+                  token={token}
+                  refreshToken={refresh_token} 
+                  playingData={playingData}
+                  playingRightNow={playingRightNow}
+                  setPlayingRightNow={setPlayingRightNow}
+                  setPlaying={setPlaying}
+                  blink={blink}
+                  setBlink={setBlink}
                 />
               )}
-              
-              <ContainerImage onClick={playTrack}>
-                <a onClick={playTrack} target="_blank">
-                  {!!album.images && (
-                    <TrackImage src={cover} onClick={openModal}/>
-                  )}
-                  <TextContainer onClick={openModal}>
-                    <Text onClick={openModal}>Play On Spotify</Text>
-                  </TextContainer>
-                </a>
-              </ContainerImage>
-              <ContainerAlbumName>
-                <TrackName>{album.name}</TrackName>
-                <ArtistName>{artistName.join(", ")}</ArtistName>
-                <RecommendationsButtonsContainer>
-                  {save && (
-                    <Button onClick={handleSave}>
-                      <Icon src={saveIcon} alt="save_button" />
-                      {save === "true" ? "unsave" : "save"}
-                    </Button>
-                  )}
-                </RecommendationsButtonsContainer>
-              </ContainerAlbumName>
-            </Container>
+              <Container>
+                {!activeDevices && (
+                  <Modal
+                    modalIsOpen={modalIsOpen}
+                    setModalIsOpen={setModalIsOpen}
+                    title={"No encontramos reproductores activos"}
+                    text={
+                      "Para reproducir esta canción es necesario que tengas algún reproductor de Spotify abierto. Para que el dispositivo pueda ser detectado hay que empezar a reproducir una canción. Cuando lo hagas podés volver a intentar :)"
+                    }
+                    buttonText={"Try again"}
+                  />
+                )}
+                
+                <ContainerImage onClick={playTrack}>
+                  <a onClick={playTrack} target="_blank">
+                    {!!album.images && (
+                      <TrackImage src={cover} onClick={openModal}/>
+                    )}
+                    <TextContainer onClick={openModal}>
+                      <Text onClick={openModal}>Play On Spotify</Text>
+                    </TextContainer>
+                  </a>
+                </ContainerImage>
+                <ContainerAlbumName>
+                  <TrackName>{album.name}</TrackName>
+                  <ArtistName>{artistName.join(", ")}</ArtistName>
+                  <RecommendationsButtonsContainer>
+                    {save && (
+                      <Button onClick={handleSave}>
+                        <Icon src={saveIcon} alt="save_button" />
+                        {save === "true" ? "unsave" : "save"}
+                      </Button>
+                    )}
+                  </RecommendationsButtonsContainer>
+                </ContainerAlbumName>
+              </Container>
+            </div>
           ) : (
             <LoadingContainer>
               <LoadingImage src="/loading.gif" alt="loading" />

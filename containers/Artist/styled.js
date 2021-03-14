@@ -20,7 +20,7 @@ const Container = styled.div`
     padding:20px;
     padding-left:0;
     border-radius:10px;
-    margin:40px 0;
+    margin:20px 0 40px 0;
     display: flex;
     flex-direction: row;
 `

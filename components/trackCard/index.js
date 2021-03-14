@@ -11,6 +11,9 @@ const TrackCard = props =>{
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [activeDevices, setActiveDevices] = useState(props.activeDevices);
 
+    const [trackName, setTrackName] = useState(name)
+    const [artistName, setArtistName] = useState(artists[0].name)
+
     // Token
     const [token, setToken] = useState(props.token);
     
@@ -113,7 +116,11 @@ const TrackCard = props =>{
                     })
                     .then(function (response) {
                         if(props.setPlayingRightNow){
-                            props.setPlayingRightNow(id)
+                            props.setPlayingRightNow({
+                                id: id,
+                                artistName: artists[0].name,
+                                trackName: name
+                            })
                             props.setBlink(true)
                         }
                         if(props.setPlayerArtistPage){
