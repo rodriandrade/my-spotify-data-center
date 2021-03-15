@@ -168,7 +168,7 @@ const Modal = props => {
 
     const handleShare = () => {
         let node = document.getElementById(`content-to-be-copied`);
-        const url = "https://twitter-server-sable.vercel.app/imagetotweet"
+        const url = "https://twitter-api-phi.vercel.app/imagetotweet"
         console.log(url)
         domtoimage
           .toPng(node)
