@@ -166,16 +166,22 @@ const Modal = props => {
       getArtists()
     }, [props.data])
 
-    const handleShare = () => {
-        let node = document.getElementById(`content-to-be-copied`);
-        const url = "https://twitter-api-phi.vercel.app/imagetotweet"
-        console.log(url)
+    const handleShare = async () => {
+        let node = document.getElementById(`content-to-be-copied`);        
+        /*
+        const hola = await axios.post("http://localhost:3000/api/hello", {
+            dataUrl: "Holis",
+            tweet: "Holanda"
+          });
+        console.log(hola)
+        */
+  
         domtoimage
-          .toPng(node)
+            .toPng(node)
           .then(dataUrl => {
             axios
               .post(
-                url,
+                "https://my-spotify-data-center.vercel.app/api/hello",
                 {
                   dataUrl: dataUrl,
                   tweet: tweet
@@ -183,12 +189,14 @@ const Modal = props => {
               )
               .then(res => {
                 if(res.status === 200){
+                    console.log(res)
                     setTweetDone(true)
                 }
               })
               .catch(err => console.log(err, "Error trying to tweet"))
           })
           .catch(err => console.log(err));
+          
     };
 
     const saveImage = () =>{
