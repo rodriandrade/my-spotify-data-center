@@ -44,12 +44,12 @@ export default async (req, res) => {
             if (error) {
               console.log("MEDIA UPLOAD", error);
             } else {
-              res.send("listo")
-              console.log("Ahora estamos acá")
               const status = {
                 status: tweet,
                 media_ids: media.media_id_string,
               };
+              client.post("statuses/update", status)
+              res.send("listo")
             }
           }
         );
@@ -62,3 +62,58 @@ export default async (req, res) => {
   
   }
 }
+
+/*
+
+export default async (req, res) => {
+  
+  // await runMiddleware(req, res, cors)
+   if (req.method === 'POST') {
+     
+     
+     const { dataUrl, tweet } = req.body;
+   // console.log(dataUrl);
+   console.log("hola")
+   //deleteImage();
+   ba64.writeImage("public/myimage", dataUrl, (err) => {
+     if (err) {
+       console.log("Write image error", err);
+     }
+     console.log("Image saved successfully");
+     
+     fs.readFile("public/myimage.png", (err, data) => {
+       if (err) {
+         console.log("Read file err", err);
+       }
+       try {
+         console.log("try")
+         client.post(
+           "media/upload",
+           {
+             media: data,
+           },
+           
+           function (error, media, response) {
+             if (error) {
+               console.log("MEDIA UPLOAD", error);
+             } else {
+               res.send("listo")
+               console.log("Ahora estamos acá")
+               const status = {
+                 status: tweet,
+                 media_ids: media.media_id_string,
+               };
+             }
+           }
+         );
+       } catch (error) {
+         res.status(500).json({ error: error.message });
+       }
+       //deleteImage();
+     });
+   });
+   
+   }
+ }
+
+ */
