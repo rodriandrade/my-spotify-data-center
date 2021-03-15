@@ -39,10 +39,12 @@ export default async (req, res) => {
           {
             media: data,
           },
+          
           function (error, media, response) {
             if (error) {
               console.log("MEDIA UPLOAD", error);
             } else {
+              res.send("listo")
               console.log("Ahora estamos acá")
               const status = {
                 status: tweet,
