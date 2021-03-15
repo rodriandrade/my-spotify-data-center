@@ -34,6 +34,7 @@ export default async (req, res) => {
       }
       try {
         console.log("try")
+        res.send("que")
         client.post(
           "media/upload",
           {
