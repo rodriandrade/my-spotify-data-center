@@ -50,24 +50,6 @@ export default async (req, res) => {
                 status: tweet,
                 media_ids: media.media_id_string,
               };
-              client.post("statuses/update", status, function (
-                error,
-                response
-              ) {
-                if (error) {
-                  console.log(error);
-                } else {
-                  console.log("final")
-                  res.send("Ok")
-                  //console.log(response)
-                  /*
-                  res.status(200).json({
-                    message: response.entities.media[0].display_url,
-                  });
-                  */
-                  // console.log("Display URL: ", response.entities.media[0].display_url);
-                }
-              });
             }
           }
         );
