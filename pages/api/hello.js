@@ -48,8 +48,11 @@ export default async (req, res) => {
                 status: tweet,
                 media_ids: media.media_id_string,
               };
+              res.send(status)
+              /*
               client.post("statuses/update", status)
               res.send("listo")
+              */
             }
           }
         );
