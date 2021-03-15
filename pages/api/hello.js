@@ -34,29 +34,7 @@ export default async (req, res) => {
       }
       try {
         console.log("try")
-        res.send("que")
-        client.post(
-          "media/upload",
-          {
-            media: data,
-          },
-          
-          function (error, media, response) {
-            if (error) {
-              console.log("MEDIA UPLOAD", error);
-            } else {
-              const status = {
-                status: tweet,
-                media_ids: media.media_id_string,
-              };
-              res.send(status)
-              /*
-              client.post("statuses/update", status)
-              res.send("listo")
-              */
-            }
-          }
-        );
+        res.send(data)
       } catch (error) {
         res.status(500).json({ error: error.message });
       }
