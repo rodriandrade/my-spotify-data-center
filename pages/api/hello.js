@@ -22,7 +22,7 @@ export default async (req, res) => {
   // console.log(dataUrl);
   console.log("hola")
   //deleteImage();
-  ba64.writeImage("myimage", dataUrl, (err) => {
+  ba64.writeImage("public/myimage", dataUrl, (err) => {
     if (err) {
       console.log("Write image error", err);
     }
