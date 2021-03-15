@@ -16,22 +16,19 @@ export default async (req, res) => {
   
  // await runMiddleware(req, res, cors)
   if (req.method === 'POST') {
-
+    
     
     const { dataUrl, tweet } = req.body;
   // console.log(dataUrl);
   console.log("hola")
   //deleteImage();
-  ba64.writeImage("myimage", dataUrl, (err) => {
+  ba64.writeImage("public/myimage", dataUrl, (err) => {
     if (err) {
       console.log("Write image error", err);
     }
     console.log("Image saved successfully");
-    res.send("Image saved successfully");
-  });
-  /*
-
-    fs.readFile("myimage.png", (err, data) => {
+    
+    fs.readFile("public/myimage.png", (err, data) => {
       if (err) {
         console.log("Read file err", err);
       }
@@ -59,10 +56,13 @@ export default async (req, res) => {
                   console.log(error);
                 } else {
                   console.log("final")
+                  res.send("Ok")
                   //console.log(response)
+                  /*
                   res.status(200).json({
                     message: response.entities.media[0].display_url,
                   });
+                  */
                   // console.log("Display URL: ", response.entities.media[0].display_url);
                 }
               });
@@ -75,6 +75,6 @@ export default async (req, res) => {
       //deleteImage();
     });
   });
-  */
+  
   }
 }
