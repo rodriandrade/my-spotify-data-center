@@ -3412,6 +3412,13 @@ next@10.0.5:
   optionalDependencies:
     sharp "0.26.3"
 
+nextjs-cors@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/nextjs-cors/-/nextjs-cors-1.0.4.tgz#d4ab30de47ed2ab722a7f97df787a685084e88ae"
+  integrity sha512-ejHufQNKB5bk8jAnDkOfo98XZPSkxV0vuNUR9c20lMd8l+AExvUy61s9Dq4VMq3iasek9kAF9nPHplfxKYgdCg==
+  dependencies:
+    cors "^2.8.5"
+
 node-abi@^2.7.0:
   version "2.19.3"
   resolved "https://registry.yarnpkg.com/node-abi/-/node-abi-2.19.3.tgz#252f5dcab12dad1b5503b2d27eddd4733930282d"

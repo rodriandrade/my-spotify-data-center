@@ -181,7 +181,7 @@ const Modal = props => {
           .then(dataUrl => {
             axios
               .post(
-                "https://my-spotify-data-center.vercel.app/api/hello",
+                "http://localhost:3000/api/hello",
                 {
                   dataUrl: dataUrl,
                   tweet: tweet
