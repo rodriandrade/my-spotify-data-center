@@ -16,8 +16,8 @@ export default async (req, res) => {
   
  // await runMiddleware(req, res, cors)
   if (req.method === 'POST') {
-    res.send("Funciona");
-    /*
+
+    
     const { dataUrl, tweet } = req.body;
   // console.log(dataUrl);
   console.log("hola")
@@ -27,6 +27,9 @@ export default async (req, res) => {
       console.log("Write image error", err);
     }
     console.log("Image saved successfully");
+    res.send("Image saved successfully");
+  });
+  /*
 
     fs.readFile("myimage.png", (err, data) => {
       if (err) {
