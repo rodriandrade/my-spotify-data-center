@@ -16,19 +16,17 @@ export default async (req, res) => {
   
  // await runMiddleware(req, res, cors)
   if (req.method === 'POST') {
-    
-    
     const { dataUrl, tweet } = req.body;
   // console.log(dataUrl);
   console.log("hola")
   //deleteImage();
-  ba64.writeImage("myimage", dataUrl, (err) => {
+  ba64.writeImage("public/myimage", dataUrl, (err) => {
     if (err) {
       console.log("Write image error", err);
     }
     console.log("Image saved successfully");
     
-    fs.readFile("myimage.png", (err, data) => {
+    fs.readFile("https://my-spotify-data-center.vercel.app/myimage.png", (err, data) => {
       if (err) {
         console.log("Read file err", err);
       }
