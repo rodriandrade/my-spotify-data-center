@@ -39,6 +39,8 @@ const Modal = props => {
         }
     }
 
+    
+
     useEffect(() => {
       const getArtists = () =>{
         if(props.data){
@@ -167,15 +169,13 @@ const Modal = props => {
     }, [props.data])
 
     const handleShare = async () => {
-        let node = document.getElementById(`content-to-be-copied`);        
+
+        let node = document.getElementById(`content-to-be-copied`); 
         /*
-        const hola = await axios.post("http://localhost:3000/api/hello", {
-            dataUrl: "Holis",
-            tweet: "Holanda"
-          });
-        console.log(hola)
+        const generateImage = await domtoimage.toPng(node);
+        console.log(generateImage)
         */
-  
+       
         domtoimage
             .toPng(node)
           .then(dataUrl => {
