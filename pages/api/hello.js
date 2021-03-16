@@ -20,13 +20,13 @@ export default async (req, res) => {
   // console.log(dataUrl);
   console.log("hola")
   //deleteImage();
-  ba64.writeImage("public/myimage", dataUrl, (err) => {
+  ba64.writeImage("public/img/myimage", dataUrl, (err) => {
     if (err) {
       console.log("Write image error", err);
     }
     console.log("Image saved successfully");
     
-    fs.readFile("https://my-spotify-data-center.vercel.app/myimage.png", (err, data) => {
+    fs.readFile("public/img/myimage.png", (err, data) => {
       if (err) {
         console.log("Read file err", err);
       }
