@@ -128,18 +128,26 @@ const LoadingContainerSection = styled.div`
 `
 
 const MasterContainer = styled.div`
-/*
-    width:80%;
-    */
+    width:93%;
+    display:flex;
+    justify-content:center;
 `
 
 const SuperContainer = styled.div`
-/*
     width:100%;
     display:flex;
     flex-direction:row;
-    background-color:red;
-    */
 `
 
-export {TitleTest, Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshIcon, IconContainer, MainButton, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer}
+const NavContainer = styled.div`
+    width:7%;
+    height:100vh;
+    position:relative;
+`
+
+const WelcomeContainer = styled.div`
+    display:flex;
+    flex-direction:column;
+`
+
+export {TitleTest, Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshIcon, IconContainer, MainButton, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer, WelcomeContainer}

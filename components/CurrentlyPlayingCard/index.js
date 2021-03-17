@@ -1,13 +1,14 @@
-import {TrackImage, TrackName, ArtistName, ImageContainer, Container, TextContainer, ContainerPlay, Cont, ContainerTrack, PlayState, CurrentlyPlayingCont, SoundContainer, TimePlayed, TrackSave, BlurContainer, DevicesMenuContainer, DevicesMenuTitle, DeviceContainer, DeviceName, DeviceType, DeviceInfo, Lyrics, LyricsContainer} from './styled'
+import {TrackImage, TrackName, ArtistName, ImageContainer, Container, TextContainer, ContainerPlay, Cont, ContainerTrack, PlayState, CurrentlyPlayingCont, SoundContainer, TimePlayed, TrackSave, BlurContainer, DevicesMenuContainer, DevicesMenuTitle, DeviceContainer, DeviceName, DeviceType, DeviceInfo, LyricsContainer, IconsContainer} from './styled'
 import Link from 'next/link'
 import Inner from '../Inner'
 import axios from 'axios'
 import React, {useEffect, useState, useRef} from 'react'
+import Lyrics from '../Lyrics'
 
 const CurrentlyPlayingCard = props =>{
 
     const ref = useRef()
-
+    console.log(props)
     const {name, artists, album, external_urls, id, uri, track_number} = props.data
     const [isPlaying, setIsPlaying] = useState(true)
     const [progress, setProgress] = useState('')
@@ -43,6 +44,10 @@ const CurrentlyPlayingCard = props =>{
           });
         //console.log(responseRefreshToken.data.access_token);
         setToken(responseRefreshToken.data.access_token)
+    }
+
+    const openLyrics = () =>{
+      setAvailableLyrics(!availableLyrics)
     }
  
     const player = async () => {
@@ -134,37 +139,19 @@ const CurrentlyPlayingCard = props =>{
         checkSave();
     }, [props])
 
-    /*
     // Check lyrics
     useEffect(() => {
       const checkLyrics = async () =>{
           try{
             if(props.playingRightNow){
-              const getLyrics = await axios.get('http://localhost:9000/lyrics', {
+              const getLyrics = await axios.get('/api/lyrics', {
                 params: {
-                  'artist': props.playingRightNow.artistName,
-                  'track': props.playingRightNow.trackName
+                  'artist': artists[0].name,
+                  'title': name
                 }
               });
-
-              ref.current = document.querySelector('#content')
+              setLyrics(getLyrics)
               console.log(getLyrics)
-              const newLyrics = getLyrics.data.replace(new RegExp("\n", "g"), `{"\n"}`);
-              setLyrics(newLyrics)
-
-              document.getElementById("content").innerHTML = getLyrics.data.replace(new RegExp("\n", "g"), "<br>");
-
-              const anotherLyrics = await axios.get('https://api.lyrics.ovh/v1/Coldplay/Midnight');
-              console.log(anotherLyrics)
-              /*
-              if(devices.length == 0){
-                  setActiveDevices(false)
-                  checkPlayTrack(responseUserDevices);
-              } else{
-                  setActiveDevices(true)
-                  checkPlayTrack(responseUserDevices);
-              }
-             
             }
           } catch(error){
               if (error.response.status === 401) {
@@ -179,8 +166,8 @@ const CurrentlyPlayingCard = props =>{
           }
       }
       checkLyrics()
-  }, [props.playingRightNow])
-  */
+  }, [id])
+
 
     // Check devices
     useEffect(() => {
@@ -241,9 +228,20 @@ const CurrentlyPlayingCard = props =>{
 
     }
 
+    //<Inner></Inner>
+
     return (
-      <div>
-        <Inner>
+      <>
+          {availableLyrics ? (
+              <Lyrics 
+                lyrics={lyrics}
+                availableLyrics={availableLyrics}
+                setAvailableLyrics={setAvailableLyrics}
+                artist={artists[0].name}
+                track={name}
+              />
+          ) : null}
+
           <Container showPlayer={showPlayer}>
             <CurrentlyPlayingCont
               onClick={() => setShowPlayer(!showPlayer)}
@@ -280,30 +278,22 @@ const CurrentlyPlayingCard = props =>{
                   </Link>
                   <ArtistName>{artistsNames.join(", ")}</ArtistName>
                 </TextContainer>
-                {saveIcon && (
+                <IconsContainer>
+                  {saveIcon && (
+                    <TrackSave
+                      onClick={handleSave}
+                      src={saveIcon}
+                      alt="save_icon"
+                    />
+                  )}
+
                   <TrackSave
-                    onClick={handleSave}
-                    src={saveIcon}
-                    alt="save_icon"
+                    onClick={openLyrics}
+                    src="/subtitles.svg"
+                    alt="lyrics_icon"
                   />
-                )}
-
-                
+                </IconsContainer>
                 {/*
-                
-                <TrackSave
-                  onClick={() => setAvailableLyrics(!availableLyrics)}
-                  src="/responsive.svg"
-                  alt="devices_icon"
-                />
-
-                {availableLyrics ? (
-                  <LyricsContainer>
-                    <Lyrics id="content"></Lyrics>
-                  </LyricsContainer>
-                ) : null}
-
-
                 <TrackSave
                   onClick={() => setAvailableDevices(!availableDevices)}
                   src="/responsive.svg"
@@ -324,6 +314,7 @@ const CurrentlyPlayingCard = props =>{
                     ))}
                   </DevicesMenuContainer>
                 ) : null}
+ 
                     */}
               </ContainerTrack>
               <ContainerPlay>
@@ -331,8 +322,8 @@ const CurrentlyPlayingCard = props =>{
               </ContainerPlay>
             </Cont>
           </Container>
-        </Inner>
-      </div>
+  
+      </>
     );
 }
 

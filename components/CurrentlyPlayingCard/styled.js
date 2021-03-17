@@ -54,20 +54,23 @@ const CurrentlyPlayingCont = styled.div`
 `
 
 const Container = styled.div`
-    background-color: rgba(10,10,10,1);
-    width:100%;
+    //background-color: rgba(10,10,10,1);
+    width:93%;
     height:100px;
     margin:0;
     position: fixed;
     display:flex;
     flex-direction:column;
-    left:0;
+    //left:0;
     bottom:0;
     justify-content:center;
     align-items:center;
     z-index:20000;
     transition:1s;
+    //transform: translateX(-50%);
     transform:${(props) => (props.showPlayer ? "translate(0%, 0px)" : "translate(0%, 75px)")};
+    background-color:rgba(0,0,0,0.8);
+    backdrop-filter:blur(20px);
 `
 
 const TrackImage = styled.img`
@@ -183,7 +186,7 @@ const SoundContainer = styled.div`
 const TrackSave = styled.img`
     max-width:20px;
     max-height:20px;
-    margin:0 20px;
+    margin-right:20px;
     cursor:pointer;
 `
 
@@ -248,12 +251,9 @@ const DeviceInfo = styled.div`
 
 const LyricsContainer = styled.div`
     width:100%;
-    height:50vh;
-    background-color: rgba(10,10,10,0.9);
-    position:absolute;
-    top:-700px;
-    left:0px;
-    padding:100px;
+    height:100vh;
+    background-color: yellow;
+    position:relative;
 `
 
 const Lyrics = styled.span`
@@ -262,4 +262,12 @@ const Lyrics = styled.span`
     font-family: Poppins;
 `
 
-export { Container, TrackName, TimePlayed, TrackImage, ArtistName, ImageContainer, TextContainer, ContainerPlay, Cont, ContainerTrack, PlayState, CurrentlyPlayingCont, SoundContainer, TrackSave, DevicesMenuContainer, DevicesMenuTitle, DeviceContainer, DeviceName, DeviceType, DeviceInfo, Lyrics, LyricsContainer}
+const IconsContainer = styled.div`
+    position:relative;
+    margin-left:20px;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+`
+
+export { Container, TrackName, TimePlayed, TrackImage, ArtistName, ImageContainer, TextContainer, ContainerPlay, Cont, ContainerTrack, PlayState, CurrentlyPlayingCont, SoundContainer, TrackSave, DevicesMenuContainer, DevicesMenuTitle, DeviceContainer, DeviceName, DeviceType, DeviceInfo, Lyrics, LyricsContainer, IconsContainer}

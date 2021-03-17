@@ -150,4 +150,22 @@ const LoadingContainerSection = styled.div`
     flex-direction:column;
 `
 
-export {ContainerInfo, ContainerImage, Container, ArtistImage, ArtistName, ArtistGenres, Position, ArtistInfo, ArtistInfoCont, Button, GenresContainer, NoDataContainer, NoDataInfo, NoDataTitle, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection}
+const MasterContainer = styled.div`
+    width:93%;
+    display:flex;
+    justify-content:center;
+`
+
+const SuperContainer = styled.div`
+    width:100%;
+    display:flex;
+    flex-direction:row;
+`
+
+const NavContainer = styled.div`
+    width:7%;
+    height:100vh;
+    position:relative;
+`
+
+export {ContainerInfo, ContainerImage, Container, ArtistImage, ArtistName, ArtistGenres, Position, ArtistInfo, ArtistInfoCont, Button, GenresContainer, NoDataContainer, NoDataInfo, NoDataTitle, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer}

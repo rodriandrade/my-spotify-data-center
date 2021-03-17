@@ -15,10 +15,10 @@ const Container = styled.div`
     width:100%;
     */
    width:100vh;    
-  height:100px;
+  height:104px;
   position:fixed;
   z-index:1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;
-  background:rgba(5,5,5, 1);
+  background:rgba(5,5,5, 0.8);
   border-bottom: 1px solid rgb(20, 20, 20);
   -webkit-transform-origin: left top;
   -webkit-transform:rotate(-90deg) translateX(-100%);

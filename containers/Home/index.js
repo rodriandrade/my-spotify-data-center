@@ -19,7 +19,7 @@ import Footer from '../../components/Footer'
 import LeftColumn from '../../components/LeftColumn'
 import TypingEffect from '../../components/TypingEffect'
 
-import {Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshIcon, IconContainer, MainButton, LoadingImage, LoadingContainer, LoadingText, LoadingContainerSection, MasterContainer, SuperContainer} from './styled'
+import {Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshIcon, IconContainer, MainButton, LoadingImage, LoadingContainer, LoadingText, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer, WelcomeContainer} from './styled'
 
 const Home = () =>{
 
@@ -113,14 +113,14 @@ const Home = () =>{
 
       // Loading
       const [pickLoadingText, setPickLoadingText] = useState('');
-
-      let loadingIntro = [];
+      // Loading
+      const [loadingTime, setLoadingTime] = useState(false)
 
       useEffect(() => {
         const randomLoadingText = () =>{
-          const loadingText = ["Are you listening to this? Well...", "Nice data", "You have a wonderful taste", "Just loading..."]
+          const loadingText = ["Are you listening to this? Well...", "Hello :)", "You have a wonderful taste", "Just loading..."]
           const pickLoading = loadingText[Math.floor(Math.random() * 3)]
-          loadingIntro.push(pickLoading);
+          setPickLoadingText(pickLoading)
         }
         randomLoadingText();
       }, [])
@@ -678,16 +678,16 @@ const Home = () =>{
             setPlayingData(responsePlaying.data)
             setBlink(true)
             setPlayingRightNow(responsePlaying.data.item);
-          } catch (err) {
+          } catch (error) {
             console.error('este es mi error',error);
               if (error.response.status === 401) {
                 getNewToken();
               }
               if (error.response.status === 500) {
-                console.log(error);
+                console.log(err);
               }
               if (error.response.status === 504) {
-                console.log(error);
+                console.log(err);
               }
           }
         }
@@ -780,6 +780,9 @@ const Home = () =>{
         return recommendationsTerm === buttonTerm;
       }
 
+      //  {!user && <a href="http://localhost:8888/login"></a>
+     
+
       return (
         
         <div>
@@ -791,37 +794,41 @@ const Home = () =>{
           <ParticlesBackground />
 
           <SuperContainer>
-          {token && <NavMenu access_token={token} />}
-          
+
+          <NavContainer>
+            {token && <NavMenu access_token={token} />}
+          </NavContainer>
+
           <MasterContainer>
-          <Inner>
 
           {!token ? 
-            <section id="home_section">
-              <Grid colGap={30} rowGap={40}>
-                <Col desktop={12} tablet={6} mobile={12}>
-                  <ContainerHero>
-                    {/*<Title size="h1" >Welcome to your Spotify Data Center</Title>*/}
-                    <TypingEffect title/>
-                    {!user && <a href="https://spotify-server-seven.vercel.app/login">
-                    {/*{!user && <a href="http://localhost:8888/login">*/}
-                      <MainButton>Login with Spotify</MainButton>
-                    </a>}
-                  </ContainerHero>
-                </Col>
-              </Grid>
-            </section>
+            <WelcomeContainer>
+              <section id="home_section">
+                <Grid colGap={30} rowGap={40}>
+                  <Col desktop={12} tablet={6} mobile={12}>
+                    <ContainerHero>
+                      <TypingEffect title/>
+                        {!user && <a href="https://spotify-server-seven.vercel.app/login">
+                        <MainButton>Login with Spotify</MainButton>
+                      </a>}
+                    </ContainerHero>
+                  </Col>
+                </Grid>
+              </section>
+            </WelcomeContainer>
           : null}
-          
+
+          {user && playing && <CurrentlyPlayingCard data={playing} token={token} refreshToken={refreshToken} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink}/>}
+
+          <Inner>
+        
           {user ? 
             <section id="home_section">
             <Grid colGap={30} rowGap={40}>
               <Col desktop={12} tablet={6} mobile={12}>
                 <ContainerHero>
-                  {/*<Title size="h1" margin="0 0 0 0">Hi, {user} :)</Title>*/}
                   <TypingEffect user={user}/>
                   <Text>Welcome to your Spotify Data Center</Text>
-                  {user && playing && <CurrentlyPlayingCard data={playing} token={token} refreshToken={refreshToken} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink}/>}
                 </ContainerHero>
               </Col>
             </Grid>
@@ -829,10 +836,10 @@ const Home = () =>{
           : 
           <LoadingContainer>
             <LoadingImage src="/loading.gif" alt="loading" />
-            <LoadingText>Just loading...</LoadingText>
+            <LoadingText>{pickLoadingText}</LoadingText>
           </LoadingContainer>
           }
-          
+
           {user ?
           <section id="artists_section">             
             <Grid colGap={30} rowGap={40}>
@@ -1003,13 +1010,6 @@ const Home = () =>{
               <Col desktop={6} tablet={6} mobile={12}>
                   <Title size="extra-large">Recommendations</Title>
               </Col>
-              {/*
-              <Col desktop={6} tablet={6} mobile={12}>
-                <IconContainer>
-                    <RefreshIcon src="/refresh.svg" />
-                </IconContainer>
-              </Col>
-              */}
             </Grid>
             <Grid colGap={30} rowGap={40}>
               <Col desktop={3} tablet={6} mobile={12}>
@@ -1051,7 +1051,9 @@ const Home = () =>{
            <Footer />
 
           </Inner>
+                
           </MasterContainer>
+          
           </SuperContainer>
         </div>
       )

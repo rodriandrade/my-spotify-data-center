@@ -6,7 +6,7 @@ import TrackCard from '../../components/trackCard'
 import {Grid, Col} from '../../components/Grid'
 import Title from '../../components/Title'
 import Inner from '../../components/Inner'
-import {Container, ContainerInfo, ContainerImage, ArtistImage, ArtistName, ArtistGenres, Position, ArtistInfo, ArtistInfoCont, Button, GenresContainer, NoDataContainer, NoDataInfo, NoDataTitle, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection} from './styled'
+import {Container, ContainerInfo, ContainerImage, ArtistImage, ArtistName, ArtistGenres, Position, ArtistInfo, ArtistInfoCont, Button, GenresContainer, NoDataContainer, NoDataInfo, NoDataTitle, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer} from './styled'
 import NavMenu from '../../components/NavMenu'
 import Footer from '../../components/Footer'
 import ParticlesBackground from '../../components/ParticlesBackground'
@@ -348,108 +348,73 @@ export default function Artist() {
         <div>
             
             <ParticlesBackground />
-            <NavMenu access_token={token} refresh_token={refresh_token}/>
-            <Inner>
+
+            <SuperContainer>
+
+                <NavContainer>
+                    <NavMenu access_token={token} refresh_token={refresh_token}/>
+                </NavContainer>
+
+                <MasterContainer>
 
                 {loadingTime ? 
-                <Grid colGap={30} rowGap={40}>
-                    {playing && <CurrentlyPlayingCard data={playing} token={token} refreshToken={refresh_token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink} setBlink={setBlink} /> }
-                    <Col desktop={12} tablet={6} mobile={12}>
-                        <Container>
-                            <ContainerImage>
-                               {artist.images && <ArtistImage src={artist.images[0].url} />}
-                            </ContainerImage>
-                            <ContainerInfo>
-                                <ArtistName>{artist.name}</ArtistName>
-                                {!!follow && <Button onClick={handleFollow}>{follow === 'true' ? 'following' : 'follow'}</Button> }  
-                            </ContainerInfo>
-                        </Container>
-                    </Col>
-                </Grid>
-                : 
-                <LoadingContainer>
-                  <LoadingImage src="/loading.gif" alt="loading" />
-                  <LoadingText>Just loading...</LoadingText>
-                </LoadingContainer>
-                }
-
-                {loadingTime ? 
-                    <section>
-                        <Grid colGap={30} rowGap={40}>
-                            <Col desktop={4} tablet={6} mobile={12}>
-                                <Title size="h4" margin="0 0 0 0">Genres</Title>
-                                <GenresContainer>
-                                    {artist.genres && artist.genres.map(genre => <ArtistGenres>{genre}</ArtistGenres>)}
-                                </GenresContainer>
-                            </Col>
-                            <Col desktop={4} tablet={6} mobile={12}>
-                                <Title size="h4" margin="0 0 0 0">Popularity</Title>
-                                {artist.popularity && <Position><strong>{artist.popularity} / 100</strong></Position>}
-                            </Col>
-                            <Col desktop={4} tablet={6} mobile={12}>
-                                <Title size="h4" margin="0 0 0 0">Followers</Title>
-                                {artist.genres && <Position><strong>{artist.followers.total}</strong></Position>}
-                            </Col>
-                        </Grid>
-                    </section>
+                    playing && <CurrentlyPlayingCard data={playing} token={token} refreshToken={refresh_token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink} setBlink={setBlink} /> 
                 : null}
 
-                {loadingTime && artistFourWeeks || artistSixMonths || artistSeveralYears ? 
-                    <section>
-                        <Title size="h4" margin="60px 0 0 0">{artist.name} appeareances in your artist ranking</Title>
-                        <Grid colGap={30} rowGap={40}>
-                            <Col desktop={4} tablet={6} mobile={12}>
-                                {artistFourWeeks ? 
-                                    <ArtistInfoCont>
-                                        <Position>#<strong>{artistFourWeeks}</strong></Position>
-                                        <ArtistInfo>In your most listened artists list for the <strong>past 4 weeks</strong>.</ArtistInfo>
-                                    </ArtistInfoCont>
-                                : 
-                                <NoDataContainer>
-                                    <NoDataTitle><strong>:(</strong></NoDataTitle> 
-                                    <NoDataInfo>Not in your past 4 weeks ranking</NoDataInfo>  
-                                </NoDataContainer>
-                                }
-                            </Col>
-                            <Col desktop={4} tablet={6} mobile={12}>
-                                {artistSixMonths ? 
-                                    <ArtistInfoCont>
-                                        <Position>#<strong>{artistSixMonths}</strong></Position>
-                                        <ArtistInfo>In your most listened artists list for the <strong>past 6 months</strong>.</ArtistInfo>
-                                    </ArtistInfoCont>
-                                : 
-                                <NoDataContainer>
-                                    <NoDataTitle><strong>:(</strong></NoDataTitle> 
-                                    <NoDataInfo>Not in your past 6 months ranking</NoDataInfo>  
-                                </NoDataContainer>
-                                }
-                            </Col>
-                            <Col desktop={4} tablet={6} mobile={12}>
-                                {artistSeveralYears ? 
-                                    <ArtistInfoCont>
-                                        <Position>#<strong>{artistSeveralYears}</strong></Position>
-                                        <ArtistInfo>In your most listened artists list for the <strong>past several years</strong>.</ArtistInfo>
-                                    </ArtistInfoCont>
-                                : 
-                                <NoDataContainer>
-                                    <NoDataTitle><strong>:(</strong></NoDataTitle> 
-                                    <NoDataInfo>Not in your lifetime ranking</NoDataInfo>  
-                                </NoDataContainer>
-                                }
-                            </Col>
-                        </Grid>
-                    </section>
-                : null}
+                <Inner>
 
-                {loadingTime && tracksFourWeeks.length > 0 || tracksSixMonths.length > 0 || tracksSeveralYears.length > 0 ? 
-                    <section>
-                        <Title size="h4" margin="60px 0 0 0">{artist.name}'s tracks appeareances in your tracks ranking</Title>
-                        <Grid colGap={30} rowGap={40}>
+                    {loadingTime ? 
+                    <Grid colGap={30} rowGap={40}>
+                        <Col desktop={12} tablet={6} mobile={12}>
+                            <Container>
+                                <ContainerImage>
+                                {artist.images && <ArtistImage src={artist.images[0].url} />}
+                                </ContainerImage>
+                                <ContainerInfo>
+                                    <ArtistName>{artist.name}</ArtistName>
+                                    {!!follow && <Button onClick={handleFollow}>{follow === 'true' ? 'following' : 'follow'}</Button> }  
+                                </ContainerInfo>
+                            </Container>
+                        </Col>
+                    </Grid>
+                    : 
+                    <LoadingContainer>
+                    <LoadingImage src="/loading.gif" alt="loading" />
+                    <LoadingText>Just loading...</LoadingText>
+                    </LoadingContainer>
+                    }
+
+                    {loadingTime ? 
+                        <section>
+                            <Grid colGap={30} rowGap={40}>
                                 <Col desktop={4} tablet={6} mobile={12}>
-                                    {tracksFourWeeks.length > 0 ?<ArtistInfoCont>
-                                        <Position><strong>{tracksFourWeeks.length}</strong></Position>
-                                        <ArtistInfo>{tracksFourWeeks.length > 1 ? 'times' : 'time'} appeared in your top 50 tracks from the <strong>past 4 weeks</strong>.</ArtistInfo>
-                                    </ArtistInfoCont>
+                                    <Title size="h4" margin="0 0 0 0">Genres</Title>
+                                    <GenresContainer>
+                                        {artist.genres && artist.genres.map(genre => <ArtistGenres>{genre}</ArtistGenres>)}
+                                    </GenresContainer>
+                                </Col>
+                                <Col desktop={4} tablet={6} mobile={12}>
+                                    <Title size="h4" margin="0 0 0 0">Popularity</Title>
+                                    {artist.popularity && <Position><strong>{artist.popularity} / 100</strong></Position>}
+                                </Col>
+                                <Col desktop={4} tablet={6} mobile={12}>
+                                    <Title size="h4" margin="0 0 0 0">Followers</Title>
+                                    {artist.genres && <Position><strong>{artist.followers.total}</strong></Position>}
+                                </Col>
+                            </Grid>
+                        </section>
+                    : null}
+
+                    {loadingTime && artistFourWeeks || artistSixMonths || artistSeveralYears ? 
+                        <section>
+                            <Title size="h4" margin="60px 0 0 0">{artist.name} appeareances in your artist ranking</Title>
+                            <Grid colGap={30} rowGap={40}>
+                                <Col desktop={4} tablet={6} mobile={12}>
+                                    {artistFourWeeks ? 
+                                        <ArtistInfoCont>
+                                            <Position>#<strong>{artistFourWeeks}</strong></Position>
+                                            <ArtistInfo>In your most listened artists list for the <strong>past 4 weeks</strong>.</ArtistInfo>
+                                        </ArtistInfoCont>
                                     : 
                                     <NoDataContainer>
                                         <NoDataTitle><strong>:(</strong></NoDataTitle> 
@@ -458,10 +423,11 @@ export default function Artist() {
                                     }
                                 </Col>
                                 <Col desktop={4} tablet={6} mobile={12}>
-                                    {tracksSixMonths.length > 0 ? <ArtistInfoCont>
-                                        <Position><strong>{tracksSixMonths.length}</strong></Position>
-                                        <ArtistInfo>{tracksSixMonths.length > 1 ? 'times' : 'time'} appeared in your top 50 tracks from the <strong>past 6 months</strong>.</ArtistInfo>
-                                    </ArtistInfoCont>
+                                    {artistSixMonths ? 
+                                        <ArtistInfoCont>
+                                            <Position>#<strong>{artistSixMonths}</strong></Position>
+                                            <ArtistInfo>In your most listened artists list for the <strong>past 6 months</strong>.</ArtistInfo>
+                                        </ArtistInfoCont>
                                     : 
                                     <NoDataContainer>
                                         <NoDataTitle><strong>:(</strong></NoDataTitle> 
@@ -470,10 +436,11 @@ export default function Artist() {
                                     }
                                 </Col>
                                 <Col desktop={4} tablet={6} mobile={12}>
-                                    {tracksSeveralYears.length > 0 ? <ArtistInfoCont>
-                                        <Position><strong>{tracksSeveralYears.length}</strong></Position>
-                                        <ArtistInfo>{tracksSeveralYears.length > 1 ? 'times' : 'time'} appeared in your top 50 tracks <strong>lifetime</strong>.</ArtistInfo>
-                                    </ArtistInfoCont>
+                                    {artistSeveralYears ? 
+                                        <ArtistInfoCont>
+                                            <Position>#<strong>{artistSeveralYears}</strong></Position>
+                                            <ArtistInfo>In your most listened artists list for the <strong>past several years</strong>.</ArtistInfo>
+                                        </ArtistInfoCont>
                                     : 
                                     <NoDataContainer>
                                         <NoDataTitle><strong>:(</strong></NoDataTitle> 
@@ -481,31 +448,78 @@ export default function Artist() {
                                     </NoDataContainer>
                                     }
                                 </Col>
-                        </Grid>
-                    </section>
-                : null}
+                            </Grid>
+                        </section>
+                    : null}
 
-                {loadingTime ? 
+                    {loadingTime && tracksFourWeeks.length > 0 || tracksSixMonths.length > 0 || tracksSeveralYears.length > 0 ? 
+                        <section>
+                            <Title size="h4" margin="60px 0 0 0">{artist.name}'s tracks appeareances in your tracks ranking</Title>
+                            <Grid colGap={30} rowGap={40}>
+                                    <Col desktop={4} tablet={6} mobile={12}>
+                                        {tracksFourWeeks.length > 0 ?<ArtistInfoCont>
+                                            <Position><strong>{tracksFourWeeks.length}</strong></Position>
+                                            <ArtistInfo>{tracksFourWeeks.length > 1 ? 'times' : 'time'} appeared in your top 50 tracks from the <strong>past 4 weeks</strong>.</ArtistInfo>
+                                        </ArtistInfoCont>
+                                        : 
+                                        <NoDataContainer>
+                                            <NoDataTitle><strong>:(</strong></NoDataTitle> 
+                                            <NoDataInfo>Not in your past 4 weeks ranking</NoDataInfo>  
+                                        </NoDataContainer>
+                                        }
+                                    </Col>
+                                    <Col desktop={4} tablet={6} mobile={12}>
+                                        {tracksSixMonths.length > 0 ? <ArtistInfoCont>
+                                            <Position><strong>{tracksSixMonths.length}</strong></Position>
+                                            <ArtistInfo>{tracksSixMonths.length > 1 ? 'times' : 'time'} appeared in your top 50 tracks from the <strong>past 6 months</strong>.</ArtistInfo>
+                                        </ArtistInfoCont>
+                                        : 
+                                        <NoDataContainer>
+                                            <NoDataTitle><strong>:(</strong></NoDataTitle> 
+                                            <NoDataInfo>Not in your past 6 months ranking</NoDataInfo>  
+                                        </NoDataContainer>
+                                        }
+                                    </Col>
+                                    <Col desktop={4} tablet={6} mobile={12}>
+                                        {tracksSeveralYears.length > 0 ? <ArtistInfoCont>
+                                            <Position><strong>{tracksSeveralYears.length}</strong></Position>
+                                            <ArtistInfo>{tracksSeveralYears.length > 1 ? 'times' : 'time'} appeared in your top 50 tracks <strong>lifetime</strong>.</ArtistInfo>
+                                        </ArtistInfoCont>
+                                        : 
+                                        <NoDataContainer>
+                                            <NoDataTitle><strong>:(</strong></NoDataTitle> 
+                                            <NoDataInfo>Not in your lifetime ranking</NoDataInfo>  
+                                        </NoDataContainer>
+                                        }
+                                    </Col>
+                            </Grid>
+                        </section>
+                    : null}
+
+                    {loadingTime ? 
+                        <section>
+                            <Title size="h4" margin="120px 0 20px 0">Artist Top Tracks on Spotify</Title>
+                            <Grid colGap={30} rowGap={40} columns>
+                                {artistTopTracks && artistTopTracks.map((track, index) => (<TrackCard key={track._id} data={track} token={newToken} refreshToken={refresh_token} index={index} gridSize={2} singleTrack="100" playerArtistPage={playerArtistPage} setPlayerArtistPage={setPlayerArtistPage} blink={blink} setBlink={setBlink}/>))}
+                            </Grid>
+                        </section>
+                    : null}
+
+                    {loadingTime ? 
                     <section>
-                        <Title size="h4" margin="120px 0 20px 0">Artist Top Tracks on Spotify</Title>
+                        <Title size="h4" margin="120px 0 20px 0">Related Artists</Title>
                         <Grid colGap={30} rowGap={40} columns>
-                            {artistTopTracks && artistTopTracks.map((track, index) => (<TrackCard key={track._id} data={track} token={newToken} refreshToken={refresh_token} index={index} gridSize={2} singleTrack="100" playerArtistPage={playerArtistPage} setPlayerArtistPage={setPlayerArtistPage} blink={blink} setBlink={setBlink}/>))}
+                            {relatedArtists && relatedArtists.map((artist) => (<ArtistCard key={artist._id} data={artist} gridSize={2} token={newToken} refreshToken={refresh_token}/>))}
                         </Grid>
                     </section>
-                : null}
+                    : null}
 
-                {loadingTime ? 
-                <section>
-                    <Title size="h4" margin="120px 0 20px 0">Related Artists</Title>
-                    <Grid colGap={30} rowGap={40} columns>
-                        {relatedArtists && relatedArtists.map((artist) => (<ArtistCard key={artist._id} data={artist} gridSize={2} token={newToken} refreshToken={refresh_token}/>))}
-                    </Grid>
-                </section>
-                : null}
+                    <Footer /> 
+                </Inner>
 
-                <Footer /> 
-            </Inner>
+                </MasterContainer>
             
+            </SuperContainer>
             
         </div>
     )

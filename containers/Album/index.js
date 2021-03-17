@@ -5,7 +5,7 @@ import TrackCard from '../../components/trackCard'
 import {Grid, Col} from '../../components/Grid'
 import Title from '../../components/Title'
 import Inner from '../../components/Inner'
-import {ContainerAlbum, Subtitle, AlbumInfo, ContainerInfo, ContainerImage, ContainerAlbumName, Button, TrackImage, RecommendationsButtonsContainer, TrackName, Container, ArtistName, Icon, TextContainer, Text, RecommendationsContainer, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection} from './styled'
+import {ContainerAlbum, Subtitle, AlbumInfo, ContainerInfo, ContainerImage, ContainerAlbumName, Button, TrackImage, RecommendationsButtonsContainer, TrackName, Container, ArtistName, Icon, TextContainer, Text, RecommendationsContainer, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer} from './styled'
 import BarChart from "../../components/BarChart";
 import NavMenu from '../../components/NavMenu'
 import Modal from '../../components/Modal'
@@ -447,168 +447,173 @@ export default function Album() {
       <div>
         
         <ParticlesBackground />
-        <NavMenu access_token={token} refresh_token={refresh_token} />
-        <Inner>
-          
-          {loadingTime ? (
-            <div>
-              {playing && (
-                <CurrentlyPlayingCard
-                  data={playing}
-                  token={token}
-                  refreshToken={refresh_token} 
-                  playingData={playingData}
-                  playingRightNow={playingRightNow}
-                  setPlayingRightNow={setPlayingRightNow}
-                  setPlaying={setPlaying}
-                  blink={blink}
-                  setBlink={setBlink}
-                />
-              )}
-              <Container>
-                {!activeDevices && (
-                  <Modal
-                    modalIsOpen={modalIsOpen}
-                    setModalIsOpen={setModalIsOpen}
-                    title={"No encontramos reproductores activos"}
-                    text={
-                      "Para reproducir esta canción es necesario que tengas algún reproductor de Spotify abierto. Para que el dispositivo pueda ser detectado hay que empezar a reproducir una canción. Cuando lo hagas podés volver a intentar :)"
-                    }
-                    buttonText={"Try again"}
-                  />
-                )}
-                
-                <ContainerImage onClick={playTrack}>
-                  <a onClick={playTrack} target="_blank">
-                    {!!album.images && (
-                      <TrackImage src={cover} onClick={openModal}/>
-                    )}
-                    <TextContainer onClick={openModal}>
-                      <Text onClick={openModal}>Play On Spotify</Text>
-                    </TextContainer>
-                  </a>
-                </ContainerImage>
-                <ContainerAlbumName>
-                  <TrackName>{album.name}</TrackName>
-                  <ArtistName>{artistName.join(", ")}</ArtistName>
-                  <RecommendationsButtonsContainer>
-                    {save && (
-                      <Button onClick={handleSave}>
-                        <Icon src={saveIcon} alt="save_button" />
-                        {save === "true" ? "unsave" : "save"}
-                      </Button>
-                    )}
-                  </RecommendationsButtonsContainer>
-                </ContainerAlbumName>
-              </Container>
-            </div>
-          ) : (
-            <LoadingContainer>
-              <LoadingImage src="/loading.gif" alt="loading" />
-              <LoadingText>Just loading...</LoadingText>
-            </LoadingContainer>
-          )}
 
-          {loadingTime ? (
-            <section>
-              <Grid colGap={30} rowGap={40}>
-                <Col desktop={2} tablet={6} mobile={12}>
-                  <ContainerAlbum>
-                    <ContainerInfo>
-                      <Subtitle>Type</Subtitle>
-                      {album.album_type && (
-                        <AlbumInfo>
-                          {album.album_type.charAt(0).toUpperCase() +
-                            album.album_type.slice(1)}
-                        </AlbumInfo>
-                      )}
-                    </ContainerInfo>
-                    <ContainerInfo>
-                      <Subtitle>Release Date</Subtitle>
-                      <AlbumInfo>{album.release_date}</AlbumInfo>
-                    </ContainerInfo>
-                    <ContainerInfo>
-                      <Subtitle>Label</Subtitle>
-                      <AlbumInfo>{album.label}</AlbumInfo>
-                    </ContainerInfo>
-                    <ContainerInfo>
-                      <Subtitle>Popularity</Subtitle>
-                      <AlbumInfo>{album.popularity}/100</AlbumInfo>
-                    </ContainerInfo>
-                  </ContainerAlbum>
-                </Col>
-                <Col desktop={10} tablet={6} mobile={12}>
-                  {tracks &&
-                    tracks.map((track) => (
-                      <TracklistCard
-                        data={track}
-                        token={newToken}
-                        refreshToken={refresh_token}
-                        playerAlbumPage={playerAlbumPage}
-                        setPlayerAlbumPage={setPlayerAlbumPage}
-                        blink={blink}
-                        setBlink={setBlink}
-                        activeDevices={activeDevices}
+        <SuperContainer>
+        
+          <NavContainer>
+            <NavMenu access_token={token} refresh_token={refresh_token} />
+          </NavContainer> 
+
+          <MasterContainer>
+
+          {loadingTime ? 
+            playing && <CurrentlyPlayingCard data={playing} token={token} refreshToken={refresh_token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying}
+            blink={blink} setBlink={setBlink} />
+          : null}
+
+            <Inner>
+              
+              {loadingTime ? (
+                <div>
+                  
+                  <Container>
+                    {!activeDevices && (
+                      <Modal
+                        modalIsOpen={modalIsOpen}
+                        setModalIsOpen={setModalIsOpen}
+                        title={"No encontramos reproductores activos"}
+                        text={
+                          "Para reproducir esta canción es necesario que tengas algún reproductor de Spotify abierto. Para que el dispositivo pueda ser detectado hay que empezar a reproducir una canción. Cuando lo hagas podés volver a intentar :)"
+                        }
+                        buttonText={"Try again"}
                       />
-                    ))}
-                </Col>
-              </Grid>
-            </section>
-          ) : null}
+                    )}
+                    
+                    <ContainerImage onClick={playTrack}>
+                      <a onClick={playTrack} target="_blank">
+                        {!!album.images && (
+                          <TrackImage src={cover} onClick={openModal}/>
+                        )}
+                        <TextContainer onClick={openModal}>
+                          <Text onClick={openModal}>Play On Spotify</Text>
+                        </TextContainer>
+                      </a>
+                    </ContainerImage>
+                    <ContainerAlbumName>
+                      <TrackName>{album.name}</TrackName>
+                      <ArtistName>{artistName.join(", ")}</ArtistName>
+                      <RecommendationsButtonsContainer>
+                        {save && (
+                          <Button onClick={handleSave}>
+                            <Icon src={saveIcon} alt="save_button" />
+                            {save === "true" ? "unsave" : "save"}
+                          </Button>
+                        )}
+                      </RecommendationsButtonsContainer>
+                    </ContainerAlbumName>
+                  </Container>
+                </div>
+              ) : (
+                <LoadingContainer>
+                  <LoadingImage src="/loading.gif" alt="loading" />
+                  <LoadingText>Just loading...</LoadingText>
+                </LoadingContainer>
+              )}
 
-          {loadingTime ? (
-            <section>
-              <Grid colGap={30} rowGap={40}>
-                <Col desktop={12} tablet={6} mobile={12}>
-                  <RecommendationsContainer>
-                    <Title size="h3" margin="90px 0 60px 0">
-                      Albums recommendations
-                    </Title>
-                    <RecommendationsButtonsContainer>
-                      <Button onClick={() => setNewRec(!newRec)}>
-                        <Icon src="/refresh.svg" alt="refresh_icon" />
-                        Refresh recommendations
-                      </Button>
-                    </RecommendationsButtonsContainer>
-                  </RecommendationsContainer>
-                </Col>
-              </Grid>
-            </section>
-          ) : null}
+              {loadingTime ? (
+                <section>
+                  <Grid colGap={30} rowGap={40}>
+                    <Col desktop={2} tablet={6} mobile={12}>
+                      <ContainerAlbum>
+                        <ContainerInfo>
+                          <Subtitle>Type</Subtitle>
+                          {album.album_type && (
+                            <AlbumInfo>
+                              {album.album_type.charAt(0).toUpperCase() +
+                                album.album_type.slice(1)}
+                            </AlbumInfo>
+                          )}
+                        </ContainerInfo>
+                        <ContainerInfo>
+                          <Subtitle>Release Date</Subtitle>
+                          <AlbumInfo>{album.release_date}</AlbumInfo>
+                        </ContainerInfo>
+                        <ContainerInfo>
+                          <Subtitle>Label</Subtitle>
+                          <AlbumInfo>{album.label}</AlbumInfo>
+                        </ContainerInfo>
+                        <ContainerInfo>
+                          <Subtitle>Popularity</Subtitle>
+                          <AlbumInfo>{album.popularity}/100</AlbumInfo>
+                        </ContainerInfo>
+                      </ContainerAlbum>
+                    </Col>
+                    <Col desktop={10} tablet={6} mobile={12}>
+                      {tracks &&
+                        tracks.map((track) => (
+                          <TracklistCard
+                            data={track}
+                            token={newToken}
+                            refreshToken={refresh_token}
+                            playerAlbumPage={playerAlbumPage}
+                            setPlayerAlbumPage={setPlayerAlbumPage}
+                            blink={blink}
+                            setBlink={setBlink}
+                            activeDevices={activeDevices}
+                          />
+                        ))}
+                    </Col>
+                  </Grid>
+                </section>
+              ) : null}
 
-          {loadingTime ? (
-            <section>
-              <Grid colGap={30} rowGap={40} columns>
-                {recommendations ? (
-                  recommendations.map((album) => (
-                    <AlbumCard
-                      key={album.id}
-                      albumRecommendations={album}
-                      token={newToken}
-                      refreshToken={refresh_token}
-                      gridSize={2}
-                      singleTrack="100"
-                      playerAlbumPage={playerAlbumPage}
-                      setPlayerAlbumPage={setPlayerAlbumPage}
-                      blink={blink}
-                      setBlink={setBlink}
-                      activeDevices={activeDevices}
-                    />
-                  ))
-                ) : (
-                  <Col desktop={12} tablet={6} mobile={12}>
-                    <LoadingContainerSection>
-                      <LoadingImage src="/loading.gif" alt="loading" />
-                      <LoadingText>Just loading...</LoadingText>
-                    </LoadingContainerSection>
-                  </Col>
-                )}
-              </Grid>
-            </section>
-          ) : null}
+              {loadingTime ? (
+                <section>
+                  <Grid colGap={30} rowGap={40}>
+                    <Col desktop={12} tablet={6} mobile={12}>
+                      <RecommendationsContainer>
+                        <Title size="h3" margin="90px 0 60px 0">
+                          Albums recommendations
+                        </Title>
+                        <RecommendationsButtonsContainer>
+                          <Button onClick={() => setNewRec(!newRec)}>
+                            <Icon src="/refresh.svg" alt="refresh_icon" />
+                            Refresh recommendations
+                          </Button>
+                        </RecommendationsButtonsContainer>
+                      </RecommendationsContainer>
+                    </Col>
+                  </Grid>
+                </section>
+              ) : null}
 
-          <Footer />
-        </Inner>
+              {loadingTime ? (
+                <section>
+                  <Grid colGap={30} rowGap={40} columns>
+                    {recommendations ? (
+                      recommendations.map((album) => (
+                        <AlbumCard
+                          key={album.id}
+                          albumRecommendations={album}
+                          token={newToken}
+                          refreshToken={refresh_token}
+                          gridSize={2}
+                          singleTrack="100"
+                          playerAlbumPage={playerAlbumPage}
+                          setPlayerAlbumPage={setPlayerAlbumPage}
+                          blink={blink}
+                          setBlink={setBlink}
+                          activeDevices={activeDevices}
+                        />
+                      ))
+                    ) : (
+                      <Col desktop={12} tablet={6} mobile={12}>
+                        <LoadingContainerSection>
+                          <LoadingImage src="/loading.gif" alt="loading" />
+                          <LoadingText>Just loading...</LoadingText>
+                        </LoadingContainerSection>
+                      </Col>
+                    )}
+                  </Grid>
+                </section>
+              ) : null}
+
+              <Footer />
+            </Inner>
+
+          </MasterContainer>
+
+        </SuperContainer>
       </div>
     );
 }

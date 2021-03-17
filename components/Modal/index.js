@@ -39,8 +39,6 @@ const Modal = props => {
         }
     }
 
-    
-
     useEffect(() => {
       const getArtists = () =>{
         if(props.data){

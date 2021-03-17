@@ -5,7 +5,7 @@ import TrackCard from '../../components/trackCard'
 import {Grid, Col} from '../../components/Grid'
 import Title from '../../components/Title'
 import Inner from '../../components/Inner'
-import { TrackImage, TrackName, TrackGenres, Container, ContainerImage, ContainerInfo, ArtistName, RecommendationsContainer, Button, RecommendationsButtonsContainer, Icon, Position, TrackInfo, TrackInfoCont, ContainerAlbum, ContainerAlbumImage, ContainerAlbumInfo, Text, TextContainer, NoDataContainer, NoDataInfo, NoDataTitle, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection} from './styled'
+import { TrackImage, TrackName, TrackGenres, Container, ContainerImage, ContainerInfo, ArtistName, RecommendationsContainer, Button, RecommendationsButtonsContainer, Icon, Position, TrackInfo, TrackInfoCont, ContainerAlbum, ContainerAlbumImage, ContainerAlbumInfo, Text, TextContainer, NoDataContainer, NoDataInfo, NoDataTitle, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer} from './styled'
 import BarChart from "../../components/BarChart";
 import NavMenu from '../../components/NavMenu'
 import Modal from '../../components/Modal'
@@ -483,7 +483,18 @@ export default function Track() {
         <div>
            
            <ParticlesBackground />
-           <NavMenu access_token={token} refresh_token={refresh_token}/>
+           <SuperContainer>
+
+            <NavContainer>
+              <NavMenu access_token={token} refresh_token={refresh_token}/>
+            </NavContainer>
+
+            <MasterContainer>
+
+            {loadingTime ? 
+              playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink} setBlink={setBlink} refreshToken={refresh_token} /> 
+            : null}
+
             <Inner>
               
                 {playlistModalState && 
@@ -497,7 +508,7 @@ export default function Track() {
 
                 {loadingTime ? 
                   <div>
-                    {playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink} setBlink={setBlink} refreshToken={refresh_token} /> }
+                    
                     <Container>
                         <ContainerImage onClick={playTrack}>
                             {!activeDevices && 
@@ -660,7 +671,12 @@ export default function Track() {
                 : null}
 
                 <Footer />
+
             </Inner>
+
+            </MasterContainer>
+            
+            </SuperContainer>
             
         </div>
     )

@@ -174,4 +174,22 @@ const LoadingContainerSection = styled.div`
     flex-direction:column;
 `
 
-export {ContainerAlbum, Subtitle, AlbumInfo, ContainerInfo, ContainerImage, ContainerAlbumName, Button, TrackImage, RecommendationsButtonsContainer, TrackName, Container, ArtistName, Icon, Text, TextContainer, RecommendationsContainer, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection}
+const MasterContainer = styled.div`
+    width:93%;
+    display:flex;
+    justify-content:center;
+`
+
+const SuperContainer = styled.div`
+    width:100%;
+    display:flex;
+    flex-direction:row;
+`
+
+const NavContainer = styled.div`
+    width:7%;
+    height:100vh;
+    position:relative;
+`
+
+export {ContainerAlbum, Subtitle, AlbumInfo, ContainerInfo, ContainerImage, ContainerAlbumName, Button, TrackImage, RecommendationsButtonsContainer, TrackName, Container, ArtistName, Icon, Text, TextContainer, RecommendationsContainer, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer}
