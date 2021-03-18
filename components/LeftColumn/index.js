@@ -69,9 +69,8 @@ const LeftColumn = props =>{
             const user_id = responseUserProfile.data.id;
             const base_url = `https://api.spotify.com/v1/users/${user_id}/playlists`
             const playlistName = {
-              'tracks': 'Recommendations by  your favorites tracks - My Spotify Data Center',
+              'tracks': 'Recommendations by your favorites tracks - My Spotify Data Center',
               'artists': 'Recommendations by your favorites artists - My Spotify Data Center',
-              'genres': 'Recommendations by your favorites genres - My Spotify Data Center',
             }
             setPlaylistName(playlistName[props.typeTerm])
             axios({
@@ -196,29 +195,6 @@ const LeftColumn = props =>{
     const handleShare = () => {
       setModalIsOpen(!modalIsOpen);
       setDataImage(true)
-      /*
-      let node = document.getElementById(`content-to-be-copied`);
-      domtoimage
-        .toPng(node)
-        .then(dataUrl => {
-          axios
-            .post(
-              "http://localhost:9000/imagetotweet",
-              {
-                dataUrl: dataUrl,
-              }
-            )
-            .then(res => {
-              const title = res.data.message;
-              const twitterURL = 
-              `https://twitter.com/intent/tweet/text=${title}`;
-              window.open(twitterURL,"twitter");
-             //openTwitterUrl(twitterURL); //optional 
-            })
-            .catch(err => console.log(err, "Error trying to tweet"))
-        })
-        .catch(err => console.log(err));
-        */
     };
 
     return(
@@ -253,14 +229,22 @@ const LeftColumn = props =>{
                   </MainButtonContainer>
               </ContainerButtons>
               :
-              <ContainerButtons>
-                  <Button activeButton={props.handlerButton('tracks')} onClick={ () => props.setTypeTerm('tracks')}>Tracks</Button>
-                  <Button activeButton={props.handlerButton('artists')} onClick={ () => props.setTypeTerm('artists')}>Artists</Button>
-                  <MainButtonContainer>
-                    <MainButton onClick={() => props.setNewRec(!props.newRec)}>Refresh recommendations</MainButton>
-                    <MainButton onClick={createPlaylistWithRecommendations}>Create playlist</MainButton>
-                  </MainButtonContainer>
-              </ContainerButtons>
+              <div>
+                <ContainerButtons>
+                    <Button activeButton={props.handlerButton('tracks')} onClick={ () => props.setTypeTerm('tracks')}>Tracks</Button>
+                    <Button activeButton={props.handlerButton('artists')} onClick={ () => props.setTypeTerm('artists')}>Artists</Button>
+                </ContainerButtons>
+                <Text margin>{props.showBy}:</Text>
+                <ContainerButtons>
+                    <Button activeButton={props.handlerButtonRecommendations('short_term')} onClick={ () => props.setTypeTermRecommendations('short_term')}>Past 4 weeks</Button>
+                    <Button activeButton={props.handlerButtonRecommendations('medium_term')} onClick={ () => props.setTypeTermRecommendations('medium_term')}>Past 6 months</Button>
+                    <Button activeButton={props.handlerButtonRecommendations('long_term')} onClick={ () => props.setTypeTermRecommendations('long_term')}>Several years</Button>
+                    <MainButtonContainer>
+                      <MainButton onClick={() => props.setNewRec(!props.newRec)}>Refresh recommendations</MainButton>
+                      <MainButton onClick={createPlaylistWithRecommendations}>Create playlist</MainButton>
+                    </MainButtonContainer>
+                </ContainerButtons>
+              </div>
               }
 
               {/*<Button activeButton={handleRecommendationsButton('albums')} onClick={ () => setRecommendationsTerm('albums')}>By Albums</Button>*/}

@@ -149,7 +149,9 @@ const DataImageTitle = styled.h1`
 
 const MainArtistContainer = styled.div`
     width: 33%;
-    background-color: rgb(15,15,15,0.8);
+    //background-color: rgb(15,15,15,0.8);
+    background-color:rgba(0,0,0,0.4);
+    backdrop-filter:blur(5px);
     display:flex;
     flex-direction:column;
     justify-content:center;
@@ -196,13 +198,15 @@ const OtherArtistsContainer = styled.div`
 const ArtistCard = styled.div`
     display:flex;
     flex-direction:column;
-    background-color:rgb(17,17,17,0.8);
+    //background-color:rgb(17,17,17,0.8);
+    background-color:rgba(10,10,10,0.4);
+    backdrop-filter:blur(5px);
     width:100%;
     justify-content:center;
 `
 
 const ArtistCardContainer = styled.div`
-    border-bottom:1px solid rgb(23, 23, 23, 1);
+    border-bottom:1px solid rgb(14, 25, 20, 1);
     display:flex;
     flex-direction:row;
     align-items:center;

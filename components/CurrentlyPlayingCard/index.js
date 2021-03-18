@@ -8,7 +8,7 @@ import Lyrics from '../Lyrics'
 const CurrentlyPlayingCard = props =>{
 
     const ref = useRef()
-    console.log(props)
+    
     const {name, artists, album, external_urls, id, uri, track_number} = props.data
     const [isPlaying, setIsPlaying] = useState(true)
     const [progress, setProgress] = useState('')
@@ -118,6 +118,42 @@ const CurrentlyPlayingCard = props =>{
             }
         }
     };
+
+          // Check Currently Playing
+          const checkCurrentlyPlaying = async () => {
+            if(token){
+              try {
+                const responsePlaying = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
+                  headers: {
+                    'Authorization': 'Bearer ' + token
+                  }
+                });
+                if(responsePlaying.data.is_playing === true){
+                  setIcon('/pause.svg');
+                }else{
+                  setIcon('/play.svg');
+                }
+              } catch (error) {
+                console.error('este es mi error',error);
+                  if (error.response.status === 401) {
+                    getNewToken();
+                  }
+                  if (error.response.status === 500) {
+                    console.log(err);
+                  }
+                  if (error.response.status === 504) {
+                    console.log(err);
+                  }
+              }
+            }
+          };
+          useEffect(()=>{
+            checkCurrentlyPlaying()
+            const interval=setInterval(()=>{
+              checkCurrentlyPlaying()
+             },3000)
+             return()=>clearInterval(interval)
+          },[token])
 
     // Check if track is saved
     useEffect(() => {

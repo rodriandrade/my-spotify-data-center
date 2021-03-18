@@ -103,6 +103,9 @@ export default function Album() {
 
               try {
 
+                setLoadingTime(false)
+                //console.log("YAAAAAAAAAAAAAAAAAAAAAAAAAAY")
+                console.log(id)
                 const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
                   headers: {
                   'Authorization': 'Bearer ' + newToken
@@ -121,6 +124,7 @@ export default function Album() {
                     }
                 }); 
                 setAlbum(responseAlbum.data);
+                console.log(responseAlbum.data)
                 setTracks(responseAlbum.data.tracks.items);
 
                 const albumCover = responseAlbum.data.images[0].url;
@@ -145,39 +149,6 @@ export default function Album() {
                   setSaveIcon('/heart_no_fill.svg');
                 }
 
-                /*
-                const trackID = responseAlbum.data.tracks.items[0].id;
-                const artistsIDS = responseAlbum.data.artists.map(artist =>{
-                  return artist.id
-                });
-
-                const responseRecommendations = await axios.get(`https://api.spotify.com/v1/recommendations?market=US&seed_artists=${artistsIDS}&seed_tracks=${trackID}&min_energy=0.4&min_popularity=50`, {
-                    headers: {
-                    'Authorization': 'Bearer ' + newToken
-                    }
-                });
-                //console.log(responseRecommendations.data.tracks)
-
-                const getAlbumsFromRecommendations = responseRecommendations.data.tracks.map(track =>{
-                  return track.album;
-                })
-
-                const checkRepetitions = getAlbumsFromRecommendations.reduce((p,c) => (c.name !== album.name && p.push(c),p),[])
-                
-                setRecommendations(checkRepetitions);
-                */
-
-                const responsePlaying = await axios.get(
-                  `https://api.spotify.com/v1/me/player/currently-playing`,
-                  {
-                    headers: {
-                      Authorization: "Bearer " + newToken,
-                    },
-                  }
-                );
-                setPlaying(responsePlaying.data.item);
-                setPlayingData(responsePlaying.data);
-
                 setLoadingTime(true);
 
             } catch (error) {
@@ -199,6 +170,38 @@ export default function Album() {
         
         fetchData()
         
+    }, [id, newToken])
+
+    // Playing
+    useEffect(() => {
+      const fetchRecommendations = async () =>{
+        if(newToken){
+          try{
+            const responsePlaying = await axios.get(
+              `https://api.spotify.com/v1/me/player/currently-playing`,
+              {
+                headers: {
+                  Authorization: "Bearer " + newToken,
+                },
+              }
+            );
+            setPlaying(responsePlaying.data.item);
+            setPlayingData(responsePlaying.data);
+          } catch (error){
+            console.error("este es mi error", error);
+            if (error.response.status === 401) {
+              getNewToken();
+            }
+            if (error.response.status === 500) {
+              console.log(error);
+            }
+            if (error.response.status === 504) {
+              console.log(error);
+            }
+          }
+        }
+      }
+      fetchRecommendations();
     }, [id, playerAlbumPage, blink, newToken])
 
     useEffect(() => {
@@ -227,9 +230,10 @@ export default function Album() {
             const checkRepetitions = getAlbumsFromRecommendations.reduce((p,c) => (c.name !== album.name && p.push(c),p),[])
             
             var uniqueRecommendations = _.uniqBy(checkRepetitions, 'name'); 
-            console.log(uniqueRecommendations)
+            //console.log(uniqueRecommendations)
 
             if(uniqueRecommendations.length < 20){
+              //console.log("I'm in")
               const fillValue = 20 - uniqueRecommendations.length;
               const responseRecommendations = await axios.get(`https://api.spotify.com/v1/recommendations?limit=${fillValue}&market=US&seed_artists=${artistsIDS}&seed_tracks=${trackID}&min_energy=0.4&min_popularity=50`, {
                     headers: {
@@ -240,12 +244,17 @@ export default function Album() {
                 return track.album
               })
               const recommendationsToShow = [...newValue, ...uniqueRecommendations];
+              setLoadingTime(true)
               setRecommendations(recommendationsToShow);
             } else{
+              //console.log("I'm in, but else")
+              setLoadingTime(true)
               setRecommendations(uniqueRecommendations);
             }
 
-        
+            
+            console.log(loadingTime)
+            console.log(recommendations)
           } catch (error){
             console.error("este es mi error", error);
             if (error.response.status === 401) {
@@ -420,7 +429,7 @@ export default function Album() {
           });
           setPlaying(responsePlaying.data.item);
           setPlayingData(responsePlaying.data)
-        } catch (err) {
+        } catch (error) {
           console.error('este es mi error',error);
             if (error.response.status === 401) {
               getNewToken();

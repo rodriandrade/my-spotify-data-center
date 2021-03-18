@@ -71,9 +71,6 @@ export default function Track() {
 
     ////////// EFFECTS & FUNCTIONS //////////
 
-    
-    
-
     const getNewToken = async () =>{
         const responseRefreshToken = await axios.get(`https://my-spotify-data-center-server.vercel.app/refresh_token`, {
             params: {
@@ -89,6 +86,8 @@ export default function Track() {
         const fetchData = async () => {
 
             try {
+
+                setLoadingTime(false)
 
                 const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
                   headers: {
@@ -215,17 +214,7 @@ export default function Track() {
                 })
                 setTracksSeveralYears(trackPositionSeveralYears + 1);
 
-                const responsePlaying = await axios.get(
-                  `https://api.spotify.com/v1/me/player/currently-playing`,
-                  {
-                    headers: {
-                      Authorization: "Bearer " + newToken,
-                    },
-                  }
-                );
-                setPlaying(responsePlaying.data.item);
-                setPlayingData(responsePlaying.data);
-
+                
                 setLoadingTime(true)
 
                 
@@ -246,8 +235,39 @@ export default function Track() {
         
         fetchData()
         
-    }, [newToken, newRec, id, playerTrackPage, blink])
+    }, [newToken, id])
 
+    // Playing
+    useEffect(() => {
+      const fetchRecommendations = async () =>{
+        if(newToken){
+          try{
+            const responsePlaying = await axios.get(
+              `https://api.spotify.com/v1/me/player/currently-playing`,
+              {
+                headers: {
+                  Authorization: "Bearer " + newToken,
+                },
+              }
+            );
+            setPlaying(responsePlaying.data.item);
+            setPlayingData(responsePlaying.data);
+          } catch (error){
+            console.error("este es mi error", error);
+            if (error.response.status === 401) {
+              getNewToken();
+            }
+            if (error.response.status === 500) {
+              console.log(error);
+            }
+            if (error.response.status === 504) {
+              console.log(error);
+            }
+          }
+        }
+      }
+      fetchRecommendations();
+    }, [newRec, newToken, id, playerTrackPage, blink])
 
     // Recommendations
     useEffect(() => {
@@ -456,7 +476,7 @@ export default function Track() {
           });
           setPlaying(responsePlaying.data.item);
           setPlayingData(responsePlaying.data)
-        } catch (err) {
+        } catch (error) {
           console.error('este es mi error',error);
             if (error.response.status === 401) {
               getNewToken();
@@ -579,7 +599,7 @@ export default function Track() {
                 </Grid>
                 : null}
 
-                {loadingTime && tracksFourWeeks || tracksSixMonths || tracksSeveralYears ? 
+                {loadingTime && (tracksFourWeeks || tracksSixMonths || tracksSeveralYears) ? 
                   <section>
                   <Title size="h4" margin="60px 0 0 0">{track.name} appeareances in your artist ranking</Title>
                   <Grid colGap={30} rowGap={40}>

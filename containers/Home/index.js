@@ -21,23 +21,12 @@ import TypingEffect from '../../components/TypingEffect'
 
 import {Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshIcon, IconContainer, MainButton, LoadingImage, LoadingContainer, LoadingText, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer, WelcomeContainer} from './styled'
 
-const Home = () =>{
+const Home = props =>{
 
     const router = useRouter()
+    const [token, setToken] = useState(props.token);
+    const [refreshToken, setRefreshToken] = useState(props.refreshToken);
 
-    const [token, setToken] = useState('');
-    const [refreshToken, setRefreshToken] = useState('');
-    /*
-    if(router.query.access_token){
-      console.log("jamiroquai");
-      setToken(router.query.access_token)
-      /*
-      const token = router.query.token;
-      const refresh_token = router.query.refreshToken
-      setToken(token);
-      
-    }
-    */
     function getHashParams() {
         if (typeof window !== "undefined") {
         var hashParams = {};
@@ -64,15 +53,20 @@ const Home = () =>{
       const [genresTerm, setGenresTerm] = useState('short_term');
       const [albumsTerm, setAlbumsTerm] = useState('short_term');
 
+      // Term for recommendations
+      const [typeTermRecommendations, setTypeTermRecommendations] = useState('short_term')
+
       // Artistas
       const [artistsTopTen, setArtistsTopTen] = useState([]);
       const [artists, setArtists] = useState([]);
       const [totalArtists, setTotalArtists] = useState([]);
+      const [artistsFilterRecommendations, setArtistsFilterRecommendations] = useState([])
 
       // Canciones
       const [tracksTopTen, setTracksTopTen] = useState([]);
       const [tracks, setTracks] = useState([]);
       const [totalTracks, setTotalTracks] = useState([]);
+      const [tracksFilterRecommendations, setTracksFilterRecommendations] = useState([])
 
       // Albums
       const [albums, setAlbums] = useState([]);
@@ -116,6 +110,7 @@ const Home = () =>{
       // Loading
       const [loadingTime, setLoadingTime] = useState(false)
 
+      // Loading Text
       useEffect(() => {
         const randomLoadingText = () =>{
           const loadingText = ["Are you listening to this? Well...", "Hello :)", "You have a wonderful taste", "Just loading..."]
@@ -124,6 +119,7 @@ const Home = () =>{
         }
         randomLoadingText();
       }, [])
+
 
       // Get New Token (Refresh)
       const getNewToken = async () =>{
@@ -141,6 +137,7 @@ const Home = () =>{
         setToken(responseRefreshToken.data.access_token)
       }
 
+      /*
       // Get Token
       useEffect(() => {
         const getToken = () =>{
@@ -160,6 +157,7 @@ const Home = () =>{
         }
         getToken();
       }, [router.query.access_token])
+      */
 
       // Artists
       useEffect(() => {
@@ -358,7 +356,7 @@ const Home = () =>{
               } else if(albumsTerm === "long_term"){
                 setTimePeriodAlbums('You listen to these albums for the most part in the past several years! You spend a lot of time listening to')
               }
-              const access_token = params.access_token;
+              
               const responseTracksFourWeeks = await axios.get(`https://api.spotify.com/v1/me/top/tracks?time_range=${albumsTerm}&limit=50`, {
                   headers: {
                     'Authorization': 'Bearer ' + token
@@ -446,7 +444,7 @@ const Home = () =>{
               } else if(genresTerm === "long_term"){
                 setTimePeriodGenres('You listen to these genres for the most part in the past several years! You spend a lot of time listening to')
               }
-              const access_token = params.access_token;
+
               let artistsID = [];
               
               let more = [];
@@ -533,10 +531,17 @@ const Home = () =>{
           if(token){
             try{
               setRecommendations('')
-              const access_token = params.access_token;
-              if(tracks.length > 0){
+              
                 if(recommendationsTerm === "tracks"){
-                  const moreTracks = tracks.filter((artist, index) => {
+                  console.log("tracks")
+                  const responseTracks = await axios.get(`https://api.spotify.com/v1/me/top/tracks?time_range=${typeTermRecommendations}&limit=50`, {
+                    headers: {
+                      'Authorization': 'Bearer ' + token
+                    }
+                  });
+                  setTracksFilterRecommendations(responseTracks.data.items)
+
+                  const moreTracks = responseTracks.data.items.filter((artist, index) => {
                     return index < 5;
                   })
                   const getNames = moreTracks.map(track=>{
@@ -551,8 +556,16 @@ const Home = () =>{
                             'Authorization': 'Bearer ' + token
                             }
                   });
+                  console.log(responseRecommendations.data.tracks)
                   setRecommendations(responseRecommendations.data.tracks);
-                  setRecommendationsDescription(`We prepare a list of recommendations based in your most listened tracks in the past 4 weeks, which includes`)
+
+                  if(typeTermRecommendations === "short_term"){
+                    setRecommendationsDescription(`We prepare a list of recommendations based in your most listened tracks in the past 4 weeks, which includes`)
+                  } else if(typeTermRecommendations === "medium_term"){
+                    setRecommendationsDescription(`We prepare a list of recommendations based in your most listened tracks in the past 6 months, which includes`)
+                  } else if(typeTermRecommendations === "long_term"){
+                    setRecommendationsDescription(`We prepare a list of recommendations based in your most listened tracks in the past several years, which includes`)
+                  }
                 } 
                 else if(recommendationsTerm === "albums")
                 {
@@ -627,13 +640,25 @@ const Home = () =>{
                 } 
                 else if(recommendationsTerm === "artists")
                 {
-                    const moreArtists = artists.filter((artist, index) => {
+                    console.log("artists")
+                    const responseArtists = await axios.get(
+                      `https://api.spotify.com/v1/me/top/artists?time_range=${typeTermRecommendations}&limit=50`,
+                      {
+                        headers: {
+                          Authorization: "Bearer " + token,
+                        },
+                      }
+                    );
+                    setArtistsFilterRecommendations(responseArtists.data.items)
+
+                    const moreArtists = responseArtists.data.items.filter((artist, index) => {
                       return index < 5;
                     })
                     const getNames = moreArtists.map(artist=>{
                       return artist.name
                     })
                     setRecommendationsArtistsNames(getNames);
+
                     const getArtistsIds = moreArtists.map(track=>{
                       return track.id
                     })
@@ -643,10 +668,18 @@ const Home = () =>{
                               'Authorization': 'Bearer ' + token
                               }
                     });
+                    console.log(responseRecommendations.data.tracks)
                     setRecommendations(responseRecommendations.data.tracks);
-                    setRecommendationsDescription(`We prepare a list of recommendations based in your most listened artists in the past 4 weeks, which includes`)
+
+                    if(typeTermRecommendations === "short_term"){
+                      setRecommendationsDescription(`We prepare a list of recommendations based in your most listened artists in the past 4 weeks, which includes`)
+                    } else if(typeTermRecommendations === "medium_term"){
+                      setRecommendationsDescription(`We prepare a list of recommendations based in your most listened artists in the past 6 months, which includes`)
+                    } else if(typeTermRecommendations === "long_term"){
+                      setRecommendationsDescription(`We prepare a list of recommendations based in your most listened artists in the past several years, which includes`)
+                    }
                 }
-              }
+              
             } catch(error) {
               console.error('este es mi error',error);
               if (error.response.status === 401) {
@@ -663,7 +696,7 @@ const Home = () =>{
           
         }
         fetchRecommendations();
-      }, [tracks, recommendationsTerm, newRec, token])
+      }, [recommendationsTerm, newRec, token, typeTermRecommendations])
       
       // Check Currently Playing
       const checkCurrentlyPlaying = async () => {
@@ -675,6 +708,7 @@ const Home = () =>{
               }
             });
             setPlaying(responsePlaying.data.item);
+            console.log(responsePlaying.data)
             setPlayingData(responsePlaying.data)
             setBlink(true)
             setPlayingRightNow(responsePlaying.data.item);
@@ -703,7 +737,7 @@ const Home = () =>{
       // Create Playlist
       const createPlaylistWithRecommendations = async () => {
         if(token){
-          const access_token = params.access_token;
+          
           try {
               const responseUserProfile = await axios.get(`https://api.spotify.com/v1/me`, {
                   headers: {
@@ -780,7 +814,11 @@ const Home = () =>{
         return recommendationsTerm === buttonTerm;
       }
 
-      //  {!user && <a href="http://localhost:8888/login"></a>
+      function handleRecommendationsTermButton(buttonTerm){
+        return typeTermRecommendations === buttonTerm;
+      }
+
+      
      
 
       return (
@@ -788,7 +826,7 @@ const Home = () =>{
         <div>
           
           <Head>
-            <title>Create Next App</title>
+            <title>My Spotify Data Center</title>
             <link rel="icon" href="/favicon.ico" />
           </Head>
           <ParticlesBackground />
@@ -801,6 +839,7 @@ const Home = () =>{
 
           <MasterContainer>
 
+{/*}
           {!token ? 
             <WelcomeContainer>
               <section id="home_section">
@@ -808,7 +847,7 @@ const Home = () =>{
                   <Col desktop={12} tablet={6} mobile={12}>
                     <ContainerHero>
                       <TypingEffect title/>
-                        {!user && <a href="https://spotify-server-seven.vercel.app/login">
+                        {!user && <a href="http://localhost:8888/login">
                         <MainButton>Login with Spotify</MainButton>
                       </a>}
                     </ContainerHero>
@@ -817,6 +856,7 @@ const Home = () =>{
               </section>
             </WelcomeContainer>
           : null}
+          */}
 
           {user && playing && <CurrentlyPlayingCard data={playing} token={token} refreshToken={refreshToken} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink}/>}
 
@@ -1028,6 +1068,9 @@ const Home = () =>{
                     isRecommendation
                     token={token}
                     refreshToken={refreshToken}
+                    typeTermRecommendations={typeTermRecommendations}
+                    setTypeTermRecommendations={setTypeTermRecommendations}
+                    handlerButtonRecommendations={handleRecommendationsTermButton}
                 />
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>

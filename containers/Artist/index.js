@@ -98,6 +98,13 @@ export default function Artist() {
             if(newToken){
                 try {
 
+                    setArtistFourWeeks('')
+                    setArtistSixMonths('')
+                    setArtistSeveralYears('')
+                    setTracksFourWeeks('')
+                    setTracksSixMonths('')
+                    setTracksSeveralYears('')
+                    setLoadingTime(false)
                     // Traer artista
                     const responseArtist = await axios.get(`https://api.spotify.com/v1/artists/${id}`, {
                         headers: {
@@ -321,7 +328,7 @@ export default function Artist() {
             });
             setPlaying(responsePlaying.data.item);
             setPlayingData(responsePlaying.data)
-          } catch (err) {
+          } catch (error) {
             console.error('este es mi error',error);
               if (error.response.status === 401) {
                 getNewToken();
@@ -405,7 +412,7 @@ export default function Artist() {
                         </section>
                     : null}
 
-                    {loadingTime && artistFourWeeks || artistSixMonths || artistSeveralYears ? 
+                    {loadingTime && (artistFourWeeks || artistSixMonths || artistSeveralYears) ? 
                         <section>
                             <Title size="h4" margin="60px 0 0 0">{artist.name} appeareances in your artist ranking</Title>
                             <Grid colGap={30} rowGap={40}>
@@ -452,7 +459,7 @@ export default function Artist() {
                         </section>
                     : null}
 
-                    {loadingTime && tracksFourWeeks.length > 0 || tracksSixMonths.length > 0 || tracksSeveralYears.length > 0 ? 
+                    {loadingTime && (tracksFourWeeks.length > 0 || tracksSixMonths.length > 0 || tracksSeveralYears.length > 0) ? 
                         <section>
                             <Title size="h4" margin="60px 0 0 0">{artist.name}'s tracks appeareances in your tracks ranking</Title>
                             <Grid colGap={30} rowGap={40}>
