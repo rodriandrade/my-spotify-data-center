@@ -113,7 +113,7 @@ const Home = props =>{
       // Loading Text
       useEffect(() => {
         const randomLoadingText = () =>{
-          const loadingText = ["Are you listening to this? Well...", "Hello :)", "You have a wonderful taste", "Just loading..."]
+          const loadingText = ["Are you listening to this? Well...", "Hello :)", "Judging your music taste, this would take a moment", "Just loading..."]
           const pickLoading = loadingText[Math.floor(Math.random() * 3)]
           setPickLoadingText(pickLoading)
         }
