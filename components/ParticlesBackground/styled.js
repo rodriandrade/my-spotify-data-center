@@ -6,6 +6,10 @@ const ParticlesCont = styled.div`
     z-index: 0;
     width: 100%;
     height: 100vh;
+
+    @media (max-width: 480px) {
+        height:400px;
+    }
 `
 
 export default ParticlesCont;

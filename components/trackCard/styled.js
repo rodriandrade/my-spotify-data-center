@@ -129,6 +129,10 @@ const TrackName = styled.p`
     :hover{
         text-decoration: underline 3px solid #47ffbb;
     }
+
+    @media (max-width: 480px) {
+       font-size:22px;
+    }
 `
 
 const ArtistName = styled.p`
@@ -138,6 +142,10 @@ const ArtistName = styled.p`
     margin:0;
     text-align: center;
     z-index:4;
+
+    @media (max-width: 480px) {
+       font-size:14px;
+    }
 `
 
 export { Container, TrackName, ArtistName, TrackImage, TrackPosition, PlayOnSpotify, ImageContainer, ContainerTrack, Text, TextContainer}

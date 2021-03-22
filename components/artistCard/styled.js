@@ -67,6 +67,10 @@ const ArtistName = styled.p`
     :hover{
         text-decoration: underline 3px solid #47ffbb;
     }
+
+    @media (max-width: 480px) {
+       font-size:22px;
+    }
 `
 
 const TimePlayed = styled.p`

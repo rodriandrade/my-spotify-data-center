@@ -28,6 +28,10 @@ const Text = styled.p`
     color:#fff;
     margin:${(props) => (props.margin ? props.margin : "0 0 0 0")};
     margin-bottom:${(props) => (props.margin ? "10px" : "30px")};
+
+    @media (max-width: 480px) {
+       font-size:16px;
+    }
 `
 
 const Button = styled.div`
@@ -48,6 +52,10 @@ const Button = styled.div`
     :hover{ 
         background-color: ${(props) => (props.activeButton ? "rgba(72, 74, 62, 0.1)" : "rgb(10,10,10,0.5)")};
     }
+
+    @media (max-width: 480px) {
+       font-size:16px;
+    }
 `
 
 const MostListened = styled.span`
@@ -58,6 +66,10 @@ const MostListened = styled.span`
     color:#47ffbb;
     margin:0px 0;
     margin-bottom:30px;
+
+    @media (max-width: 480px) {
+       font-size:16px;
+    }
 `
 
 const MainButton = styled.button`
@@ -79,6 +91,10 @@ const MainButton = styled.button`
 
     :hover{
         background-color: rgb(10,10,10,0.5)   
+    }
+
+    @media (max-width: 480px) {
+       font-size:16px;
     }
 `
 
