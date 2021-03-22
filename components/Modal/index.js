@@ -57,32 +57,23 @@ const Modal = props => {
             if(props.type === "artists"){
                 setMainName(firstArtistFilter[0].name)
                 setFirstArtistsImages(firstArtistFilter[0].images[0].url)
-                /*
-                const imagesFirstArtist = topArtistsFilter.map(artist =>{
-                    return artist.images[0].url
-                })
-                */
                 const namesTopArtists = topArtistsFilter.map(artist =>{
                     return artist.name
                 })
                 setTopNames(namesTopArtists)
-
                 const imagesTopArtists = topArtistsFilter.map(artist =>{
                     return artist.images[0].url
                 })
-                
                 setTopArtistsImages(imagesTopArtists)
             }
 
             if(props.type === "tracks"){
-
                 // MAIN NAMES
                 setMainName(firstArtistFilter[0].name)
                 const namesTopArtists = topArtistsFilter.map(track =>{
                     return track.name
                 })
                 setTopNames(namesTopArtists)
-
                 // NAMES
                 const artistsNames = topArtistsFilter.map(track =>{
                     const boca = track.artists.map(artist =>{
@@ -98,7 +89,6 @@ const Modal = props => {
                     return boca
                 })
                 setFirstArtistsNames(topArtistNames)
-
                 // IMAGES
                 const imagesFirstArtist = firstArtistFilter.map(artist =>{
                     return artist.album.images[0].url
@@ -108,18 +98,15 @@ const Modal = props => {
                     return artist.album.images[0].url
                 })
                 setTopArtistsImages(imagesTopArtists)
-                
             }
 
             if(props.type === "albums"){
-
                 // MAIN NAMES
                 setMainName(firstArtistFilter[0].name)
                 const namesTopArtists = topArtistsFilter.map(album =>{
                     return album.name
                 })
                 setTopNames(namesTopArtists)
-
                 // IMAGES
                 const imagesFirstArtist = firstArtistFilter.map(album =>{
                     return album.image
@@ -129,7 +116,6 @@ const Modal = props => {
                     return artist.image
                 })
                 setTopArtistsImages(imagesTopArtists)
-
                 // NAMES
                 const artistsNames = topArtistsFilter.map(album =>{
                     return album.artist
@@ -142,10 +128,6 @@ const Modal = props => {
             }
 
             if(props.type === "genres"){
-
-                console.log(firstArtistFilter)
-                console.log(topArtistsFilter)
-
                 // NAMES
                 setMainName(firstArtistFilter[0])
                 const namesTopArtists = topArtistsFilter.map(genre =>{

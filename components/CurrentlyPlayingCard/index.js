@@ -265,6 +265,31 @@ const CurrentlyPlayingCard = props =>{
     }
 
     //<Inner></Inner>
+    /*
+    {/*
+                <TrackSave
+                  onClick={() => setAvailableDevices(!availableDevices)}
+                  src="/responsive.svg"
+                  alt="devices_icon"
+                />
+
+                {availableDevices ? (
+                  <DevicesMenuContainer>
+                    <DevicesMenuTitle>Available devices</DevicesMenuTitle>
+                    {devices.map(device => (
+                        <DeviceContainer active={device.is_active} onClick={ () => props.setSelectDevice(device.id)}>
+                            <TrackSave src={deviceIcon[device.type]} alt="device-icon" />
+                            <DeviceInfo>
+                                <DeviceName active={device.is_active}>{device.name}</DeviceName>
+                                <DeviceType>{device.type}</DeviceType>
+                            </DeviceInfo>
+                        </DeviceContainer>
+                    ))}
+                  </DevicesMenuContainer>
+                ) : null}
+ 
+                    */
+    
 
     return (
       <>
@@ -285,6 +310,7 @@ const CurrentlyPlayingCard = props =>{
             >
               <TimePlayed blink={props.blink}>Currently Playing</TimePlayed>
             </CurrentlyPlayingCont>
+            
             <Cont>
               <ContainerTrack>
                 <SoundContainer isPlaying={isPlaying}>
@@ -329,29 +355,7 @@ const CurrentlyPlayingCard = props =>{
                     alt="lyrics_icon"
                   />
                 </IconsContainer>
-                {/*
-                <TrackSave
-                  onClick={() => setAvailableDevices(!availableDevices)}
-                  src="/responsive.svg"
-                  alt="devices_icon"
-                />
-
-                {availableDevices ? (
-                  <DevicesMenuContainer>
-                    <DevicesMenuTitle>Available devices</DevicesMenuTitle>
-                    {devices.map(device => (
-                        <DeviceContainer active={device.is_active} onClick={ () => props.setSelectDevice(device.id)}>
-                            <TrackSave src={deviceIcon[device.type]} alt="device-icon" />
-                            <DeviceInfo>
-                                <DeviceName active={device.is_active}>{device.name}</DeviceName>
-                                <DeviceType>{device.type}</DeviceType>
-                            </DeviceInfo>
-                        </DeviceContainer>
-                    ))}
-                  </DevicesMenuContainer>
-                ) : null}
- 
-                    */}
+                
               </ContainerTrack>
               <ContainerPlay>
                 <PlayState src={icon} alt="pause_button" onClick={player} />

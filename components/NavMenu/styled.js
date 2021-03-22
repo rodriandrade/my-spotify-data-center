@@ -24,6 +24,8 @@ const Container = styled.div`
   -webkit-transform:rotate(-90deg) translateX(-100%);
 
     @media (max-width: 480px) {
+        display:none;
+        /*
         width:100%;
         background-color: #fff;
         margin:0 auto;
@@ -31,11 +33,12 @@ const Container = styled.div`
         position: ${({ open }) => open ? 'flex' : 'fixed'};
         top:0;
         padding:20px 0;
+        */
     }
 `
 
 const List = styled.li`
-    margin-right:20px;
+    margin-right:18px;
     float:right;
     height:100%;
     line-height:60px;
@@ -43,7 +46,8 @@ const List = styled.li`
     text-decoration:none;
 
     a{
-            padding:0 10px;
+            padding:0 5px;
+            font-size:16px;
             text-decoration: none;
             color:#fff;
             transition:0.3s;

@@ -7,7 +7,7 @@ const Container = styled.div`
         display: flex;
         align-items: center;
         width:100%;
-        background-color: #fff;
+        background-color: rgba(10,10,10,1);
         height:100vh;
         position:fixed;
         top:0;
@@ -37,8 +37,12 @@ const List = styled.li`
         display:block;
         text-align:center;
         padding:20px 0;
-        border-bottom: 1px solid rgb(240, 240, 240);
+        border-bottom: 1px solid rgb(20, 20, 20);
         font-size:24px;
+
+        a{
+            color:#fff;
+        }
 
         :last-child{
             border-bottom: none

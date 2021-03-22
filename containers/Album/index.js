@@ -204,6 +204,7 @@ export default function Album() {
       fetchRecommendations();
     }, [id, playerAlbumPage, blink, newToken])
 
+    // Recommendations
     useEffect(() => {
       const fetchRecommendations = async () =>{
         if(newToken){
@@ -243,6 +244,7 @@ export default function Album() {
               const newValue = responseRecommendations.data.tracks.map(track =>{
                 return track.album
               })
+              
               const recommendationsToShow = [...newValue, ...uniqueRecommendations];
               setLoadingTime(true)
               setRecommendations(recommendationsToShow);
@@ -365,54 +367,54 @@ export default function Album() {
             console.log(error);
           }
       }
-  }
+    }
 
-  const checkPlayTrack = (responseUserDevices) =>{
-    console.log("holanda")
-      if(tracks){
-        try {
-          const devices = responseUserDevices.data.devices;
-          if(devices.length == 0){
-              setActiveDevices(false);
-          } else{
-              setActiveDevices(true)
-              const deviceID = responseUserDevices.data.devices[0].id
-              if(deviceID){
-                const trackID = tracks[0].id
-                const requestData = {
-                    "uris": [`spotify:track:${trackID}`],
-                    "position_ms": 0
+    const checkPlayTrack = (responseUserDevices) =>{
+      console.log("holanda")
+        if(tracks){
+          try {
+            const devices = responseUserDevices.data.devices;
+            if(devices.length == 0){
+                setActiveDevices(false);
+            } else{
+                setActiveDevices(true)
+                const deviceID = responseUserDevices.data.devices[0].id
+                if(deviceID){
+                  const trackID = tracks[0].id
+                  const requestData = {
+                      "uris": [`spotify:track:${trackID}`],
+                      "position_ms": 0
+                  }
+                  const base_url = `https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`;
+                  axios({
+                      method: 'put',
+                      url: base_url,
+                      data: requestData,
+                      headers: { 'Authorization': 'Bearer ' + token }
+                  })
+                  .then(function (response) {
+                      //console.log(response);
+                      setPlayingRightNow(id);
+                      setPlayingStatus(id)
+                      setBlink(true)
+                  });
+                } else{
+                    console.log("No hay devices activos")
                 }
-                const base_url = `https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`;
-                axios({
-                    method: 'put',
-                    url: base_url,
-                    data: requestData,
-                    headers: { 'Authorization': 'Bearer ' + token }
-                })
-                .then(function (response) {
-                    //console.log(response);
-                    setPlayingRightNow(id);
-                    setPlayingStatus(id)
-                    setBlink(true)
-                });
-              } else{
-                  console.log("No hay devices activos")
+            }
+          } catch(error){
+              if (error.response.status === 401) {
+                  getNewToken();
+              }
+              if (error.response.status === 500) {
+                  console.log(error);
+              }
+              if (error.response.status === 504) {
+                console.log(error);
               }
           }
-        } catch(error){
-            if (error.response.status === 401) {
-                getNewToken();
-            }
-            if (error.response.status === 500) {
-                console.log(error);
-            }
-            if (error.response.status === 504) {
-              console.log(error);
-            }
         }
-      }
-  }
+    }
 
     const openModal = () =>{
       setModalIsOpen(!modalIsOpen)
@@ -617,8 +619,9 @@ export default function Album() {
                 </section>
               ) : null}
 
-              <Footer />
             </Inner>
+
+            <Footer />
 
           </MasterContainer>
 

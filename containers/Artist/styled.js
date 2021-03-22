@@ -6,6 +6,11 @@ const ContainerInfo = styled.div`
     justify-content: center; 
     align-items: flex-start;
     margin-left:30px;
+
+    @media (max-width: 480px) {
+        align-items:center;
+        margin:0;
+    }
 `
 
 const ContainerImage = styled.div`
@@ -13,6 +18,7 @@ const ContainerImage = styled.div`
     flex-direction: row; 
     justify-content: center; 
     align-items: center;
+    position:relative;
 `
 
 const Container = styled.div`
@@ -23,19 +29,34 @@ const Container = styled.div`
     margin:20px 0 40px 0;
     display: flex;
     flex-direction: row;
+
+    @media (max-width: 480px) {
+        flex-direction:column;
+    }
 `
 
 const ArtistImage = styled.img`
-    max-width:220px;
-    max-height:220px;
-    border-radius:220px;
+    max-width:200px;
+    max-height:200px;
+    border-radius:200px;
+    position: relative;
+
+    @media (max-width: 480px) {
+        max-width:150px;
+        max-height:150px;
+        border-radius:150px;
+    }
 `
 
 const ArtistName = styled.h1`
-    font-size:48px;
+    font-size:42px;
     color:#fff;
     margin:0;
     position: relative;
+
+    @media (max-width: 480px) {
+        font-size:28px;
+    }
 `
 
 const GenresContainer = styled.div`
@@ -46,7 +67,7 @@ const GenresContainer = styled.div`
 `
 
 const ArtistGenres = styled.p`
-    font-size:16px;
+    font-size:14px;
     color:rgb(200,200,200);
     margin:5px 10px 5px 0;
     background-color: rgba(15,15,15);
@@ -60,7 +81,7 @@ const Button = styled.button`
     border: none;
     color: #47ffbb;
     font-family: Poppins;
-    font-size: 16px;
+    font-size: 14px;
     //font-weight: bold;
     background-color: rgb(10,10,10,0.0);
     border-radius:5px;
@@ -84,25 +105,33 @@ const ArtistInfoCont = styled.div`
 `
 
 const Position = styled.h1`
-    font-size:72px;
+    font-size:64px;
     color:#47ffbb; 
     margin:0;
     font-weight:lighter;
     position: relative;
+
+    @media (max-width: 480px) {
+        font-size:36px;
+    }
 `
 
 const ArtistInfo = styled.p`
-    font-size:16px;
+    font-size:14px;
     color:#fff; 
     margin:0;
     position: relative;
 `
 
 const NoDataTitle = styled.h1`
-    font-size:72px;
+    font-size:64px;
     color:rgba(100,100,100,1);
     margin:0;
     position: relative;
+
+    @media (max-width: 480px) {
+        font-size:24px;
+    }
 `
 
 const NoDataContainer = styled.div`
@@ -115,7 +144,7 @@ const NoDataContainer = styled.div`
 `
 
 const NoDataInfo = styled.p`
-    font-size:16px;
+    font-size:14px;
     color:rgba(100,100,100,1);
     margin:0;
     position: relative;
@@ -154,6 +183,11 @@ const MasterContainer = styled.div`
     width:93%;
     display:flex;
     justify-content:center;
+    flex-direction:column;
+
+    @media (max-width: 480px) {
+        width:100%;
+    }
 `
 
 const SuperContainer = styled.div`
@@ -166,6 +200,10 @@ const NavContainer = styled.div`
     width:7%;
     height:100vh;
     position:relative;
+
+    @media (max-width: 480px) {
+        display:none;
+    }
 `
 
 export {ContainerInfo, ContainerImage, Container, ArtistImage, ArtistName, ArtistGenres, Position, ArtistInfo, ArtistInfoCont, Button, GenresContainer, NoDataContainer, NoDataInfo, NoDataTitle, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer}

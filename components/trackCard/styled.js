@@ -20,7 +20,8 @@ const Text = styled.p`
     left:50%;
     color: rgb(12,12,12);
     text-align:center;
-    font-size:20px;
+    //font-size:20px;
+    font-size:18px;
     opacity:1; 
     margin:0;
     width:100%;
@@ -42,8 +43,10 @@ const ContainerTrack = styled.div`
 `
 
 const TrackImage = styled.img`
-    max-height:200px;
-    max-width: 200px;
+    //max-height:200px;
+    //max-width: 200px;
+    max-height:180px;
+    max-width: 180px;
     //max-height: ${(props) => (props.singleTrack ? "100%" : "200px")};
     //max-width: ${(props) => (props.singleTrack ? "100%" : "200px")};
     cursor: pointer;    
@@ -63,8 +66,10 @@ const PlayOnSpotify = styled.p`
 const ImageContainer = styled.div`
     //max-height: ${(props) => (props.singleTrack ? "100%" : "200px")};
     //max-width: ${(props) => (props.singleTrack ? "100%" : "200px")};
-    width:200px;  
-    height:200px;
+    //max-height:200px;
+    //max-width: 200px;
+    max-height:180px;
+    max-width: 180px;
     position: relative;
     margin:0 auto;
     &:hover ${TextContainer} {
@@ -83,8 +88,8 @@ const ImageContainer = styled.div`
 `
 
 const TrackPosition = styled.p`
-    //font-size:32px;
-    font-size:60px;
+    //font-size:60px;
+    font-size:54px;
     color: #fff;
     margin:0;
     text-align: center;
@@ -111,7 +116,8 @@ const TrackPosition = styled.p`
 `
 
 const TrackName = styled.p`
-    font-size:16px;
+    //font-size:16px;
+    font-size:14px;
     //color: #47ffbb;
     color: #fff;
     text-transform:uppercase;
@@ -126,7 +132,7 @@ const TrackName = styled.p`
 `
 
 const ArtistName = styled.p`
-    font-size:14px;
+    font-size:13px;
     //color: #fff;
     color:#47ffbb;
     margin:0;

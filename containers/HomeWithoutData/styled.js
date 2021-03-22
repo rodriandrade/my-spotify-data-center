@@ -7,6 +7,13 @@ const ContainerHero = styled.div`
     flex-direction:column;
     justify-content:center;
     align-items:center;
+
+    @media (max-width: 480px) {
+       width:90%;
+       margin:0;
+       justify-content:center;
+        align-items:center;
+    }
 `
 
 const MainButton = styled.button`
@@ -14,7 +21,7 @@ const MainButton = styled.button`
     border: none;
     color: #fff;
     font-family: Poppins;
-    font-size: 16px;
+    font-size: 14px;
     //font-weight: bold;
     background-color: rgb(10,10,10,1);
     border-radius:5px;

@@ -14,9 +14,11 @@ const NavMenuMobile = ({open, setOpen}) => {
                 <nav>
                     <Menu>
                         <List onClick={() => setOpen(!open)}><a href="#home_section">Home</a></List>
-                        <List onClick={() => setOpen(!open)}><a href="#sobre_mi_section">Sobre mi</a></List>
-                        <List onClick={() => setOpen(!open)}><a href="#relatos_section">Relatos</a></List>
-                        <List onClick={() => setOpen(!open)}><a href="#multimedia_section">Contenido Multimedia</a></List>
+                        <List onClick={() => setOpen(!open)}><a href="#sobre_mi_section">Artists</a></List>
+                        <List onClick={() => setOpen(!open)}><a href="#relatos_section">Tracks</a></List>
+                        <List onClick={() => setOpen(!open)}><a href="#multimedia_section">Albums</a></List>
+                        <List onClick={() => setOpen(!open)}><a href="#multimedia_section">Genres</a></List>
+                        <List onClick={() => setOpen(!open)}><a href="#multimedia_section">Recommendations</a></List>
                     </Menu>
                 </nav>
                     <ContainerSocial>

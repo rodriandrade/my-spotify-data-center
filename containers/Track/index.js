@@ -599,6 +599,7 @@ export default function Track() {
                 </Grid>
                 : null}
 
+
                 {loadingTime && (tracksFourWeeks || tracksSixMonths || tracksSeveralYears) ? 
                   <section>
                   <Title size="h4" margin="60px 0 0 0">{track.name} appeareances in your artist ranking</Title>
@@ -645,7 +646,7 @@ export default function Track() {
                   </Grid>
                   </section>
                 : null}
- 
+
                 {loadingTime ?
                   <section>
                     <Title size="h3" margin="90px 0 60px 0">Audio features</Title>
@@ -690,9 +691,9 @@ export default function Track() {
                   </section>
                 : null}
 
-                <Footer />
-
             </Inner>
+            
+            <Footer />
 
             </MasterContainer>
             

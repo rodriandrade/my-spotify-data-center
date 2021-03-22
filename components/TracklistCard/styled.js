@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
 const TrackPlay = styled.img`
-    max-width:20px;
-    max-height:20px;
+    max-width:18px;
+    max-height:18px;
     margin:0 20px;
     cursor:pointer;
     opacity:0;
@@ -16,9 +16,15 @@ const ContainerTrack = styled.div`
     justify-content:space-between;
     border-bottom:1px solid rgb(20,20,20);
 
+    ::last-child{
+        border-bottom:none;
+    }
+
     &:hover ${TrackPlay} {
         opacity: 1;
     }
+
+    
 `
 
 const ContainerTrackData = styled.div`
@@ -30,7 +36,7 @@ const ContainerTrackData = styled.div`
 `
 
 const TrackName = styled.p`
-    font-size:16px;
+    font-size:14px;
     color:#fff;
     cursor: pointer;
     position: relative;
@@ -41,22 +47,22 @@ const TrackName = styled.p`
 `
 
 const TrackNumber = styled.p`
-    font-size:16px;
+    font-size:14px;
     color:#fff;
     margin-right:10px;
     position: relative;
 `
 
 const TrackDuration = styled.p`
-    font-size:16px;
+    font-size:14px;
     color:#fff;
     margin:0 20px;
     position: relative;
 `
 
 const TrackSave = styled.img`
-    max-width:20px;
-    max-height:20px;
+    max-width:18px;
+    max-height:18px;
     margin:0 20px;
     cursor:pointer;
     position: relative;

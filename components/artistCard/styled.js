@@ -16,8 +16,10 @@ const ArtistImage = styled.img`
    // max-height: ${props => props.imageSizeLarge ? "430px" : "200px"};
    // max-width: ${props => props.imageSizeLarge ? "430px" : "200px"};
    // border-radius:${props => props.imageSizeLarge ? "430px" : "200px"};
-   min-height: 200px;
-   min-width:200px;
+   //min-height: 200px;
+   //min-width:200px;
+   min-height: 180px;
+   min-width:180px;
    z-index:1;
    border-radius:200px;
 
@@ -27,8 +29,8 @@ const ArtistImage = styled.img`
 `
 
 const ArtistPosition = styled.p`
-    font-size:60px;
-    //font-size:30px;
+    //font-size:60px;
+    font-size:54px;
     color: #fff;
     margin:0;
     text-align: center;
@@ -53,7 +55,8 @@ const ArtistPosition = styled.p`
 `
 
 const ArtistName = styled.p`
-    font-size:16px;
+    //font-size:16px;
+    font-size:14px;
     //color: #47ffbb;
     color: #fff;
     margin-top:40px;
@@ -73,8 +76,8 @@ const TimePlayed = styled.p`
 `
 
 const ImageContainer = styled.div`
-    width: 200px;
-    height: 200px;
+    width: 180px;
+    height: 180px;
     overflow: hidden;
     border-radius:200px;
     margin:0 auto;

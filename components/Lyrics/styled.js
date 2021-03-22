@@ -11,6 +11,11 @@ const Container = styled.div`
     overflow: scroll;
     background-color:rgba(0,0,0,0.8);
     backdrop-filter:blur(20px);
+
+    @media (max-width: 480px) {
+        width:100%;
+        left:0;
+    }
     /*
     animation: gradient-movement 5s alternate infinite;
 
@@ -45,21 +50,30 @@ const Blur = styled.div`
 
 const TrackLyrics = styled.p`
     color:#fff;
-    font-size:30px;
+    font-size:25px;
     margin:40px 0 160px 0;
     white-space: pre-wrap;
+
+    @media (max-width: 480px) {
+        font-size:18px;
+    }
 `
 
 const TrackTitle = styled.h1`
     color:#47ffbb;
-    font-size:54px;
+    font-size:48px;
     padding:20px 0 0 0;
     font-weight:600px;
+
+    @media (max-width: 480px) {
+        padding:0;
+        margin:0;
+    }
 `
 
 const TrackArtist = styled.p`
     color:rgba(100,100,100,1);
-    font-size:26px;
+    font-size:22px;
     padding:0;
     margin:0;
     font-weight:200px;
@@ -67,10 +81,16 @@ const TrackArtist = styled.p`
 
 const TrackName = styled.h1`
     color:#47ffbb;
-    font-size:54px;
+    font-size:48px;
     padding:20px 0 0 0;
     margin:20px 0 0 0;
     font-weight:600px;
+
+    @media (max-width: 480px) {
+        padding:0;
+        margin:0;
+        font-size:36px;
+    }
 `
 
 const CloseButton = styled.img`
@@ -83,7 +103,7 @@ const CloseButton = styled.img`
 
     @media (max-width: 480px) {
         top:0;
-        right:20px;
+        left:300px;
         position:relative;
         padding:20px 0px;
         align-self:flex-end;

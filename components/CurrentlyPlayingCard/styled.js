@@ -1,7 +1,8 @@
 import styled from 'styled-components'
 
 const TimePlayed = styled.p`
-    font-size:16px;
+    //font-size:16px;
+    font-size:14px;
     color: #000;
     margin:0;
     animation: ${(props) => (props.blink ? "blink-text 1s ease-out" : "")};
@@ -23,7 +24,7 @@ const TimePlayed = styled.p`
 const CurrentlyPlayingCont = styled.div`
     background-color: #47ffbb;
     width:100%;
-    height:25px;
+    height:22px;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -56,7 +57,7 @@ const CurrentlyPlayingCont = styled.div`
 const Container = styled.div`
     //background-color: rgba(10,10,10,1);
     width:93%;
-    height:100px;
+    //height:100px;
     margin:0;
     position: fixed;
     display:flex;
@@ -68,33 +69,54 @@ const Container = styled.div`
     z-index:20000;
     transition:1s;
     //transform: translateX(-50%);
-    transform:${(props) => (props.showPlayer ? "translate(0%, 0px)" : "translate(0%, 75px)")};
+    transform:${(props) => (props.showPlayer ? "translate(0%, 0px)" : "translate(0%, 70px)")};
     background-color:rgba(0,0,0,0.8);
     backdrop-filter:blur(20px);
+
+    @media (max-width: 480px) {
+       width:100%;
+       transform:${(props) => (props.showPlayer ? "translate(0%, -50px)" : "translate(0%, 35px)")};
+    }
 `
 
+
 const TrackImage = styled.img`
-    max-height:50px;
-    max-width: 50px;
+    //max-height:50px;
+    //max-width: 50px;
+    max-height:45px;
+    max-width: 45px;
     text-align: center;
     :hover{
         opacity:0.6;
+    }
+
+    @media (max-width: 480px) {
+        max-height:30px;
+        max-width: 30px;
     }
 `
 const ImageContainer = styled.div`
     margin:0 auto;
     width:50px;
+
+    @media (max-width: 480px) {
+        max-height:30px;
+        max-width: 30px;
+        margin-right:10px;
+    }
 `
 
 const ArtistName = styled.p`
-    font-size:12px;
+    //font-size:12px;
+    font-size:11px;
     color: #47ffbb;
     margin:0;
     text-align: center;
 `
 
 const TrackName = styled.p`
-    font-size:16px;
+    //font-size:16px;
+    font-size:14px;
     color: #fff;
     margin:0px;
     text-align: center;
@@ -105,12 +127,12 @@ const TrackName = styled.p`
     }
 `
 
-const TextContainer = styled.p`
+const TextContainer = styled.div`
     display:flex;
     align-items:flex-start;
     justify-content:flex-start;
     flex-direction:column;
-    margin-left:20px;
+    padding:16px 0;
 `
 
 const ContainerPlay = styled.div`
@@ -123,10 +145,14 @@ const ContainerPlay = styled.div`
 
 
 const Cont = styled.div`
-    width:1200px;
+    width:1080px;
     display:flex;
     justify-content:space-between;
     position:relative;
+
+    @media (max-width: 480px) {
+       width:90%;
+    }
 `
 
 const ContainerTrack = styled.div`
@@ -136,8 +162,8 @@ const ContainerTrack = styled.div`
 `
 
 const PlayState = styled.img`
-    width:25px;
-    height:25px;
+    width:22px;
+    height:22px;
     cursor:pointer;
 `
 
@@ -145,7 +171,7 @@ const SoundContainer = styled.div`
     display:flex;
     flex-direction:row;
     align-items: flex-end;
-    height:20px;
+    height:18px;
     margin-right:20px;
 
     div{
@@ -172,7 +198,7 @@ const SoundContainer = styled.div`
             opacity:1;
         }
         50% {
-            height: 20px;
+            height: 18px;
             opacity:0.7;
         }
         100% {
@@ -180,12 +206,21 @@ const SoundContainer = styled.div`
             opacity:1;
         }
     }
+
+    @media (max-width: 480px) {
+
+        margin-right:10px;
+
+       div{
+           width:3px;
+       }
+    }
 `
 
 
 const TrackSave = styled.img`
-    max-width:20px;
-    max-height:20px;
+    max-width:18px;
+    max-height:18px;
     margin-right:20px;
     cursor:pointer;
 `

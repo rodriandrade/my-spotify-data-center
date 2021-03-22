@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 const InfoContainer = styled.div`
     background-color: rgb(10,10,10);
-    width:500px;
+    width:450px;
     padding:40px;
     border-radius:5px;
     display:flex;
@@ -12,15 +12,16 @@ const InfoContainer = styled.div`
     border-bottom:10px solid #47ffbb;
 
     @media (max-width: 480px) {
-        max-width:80%;
+        max-width:60%;
         display:flex;
         flex-direction:column;
+        padding:0 40px;
     }
 `
 
 const InfoText = styled.p`
     text-align:${(props) => (props.align ? "left" : "center")};
-    font-size:16px;
+    font-size:14px;
     color:#fff;
     margin:30px 0;
 
@@ -31,25 +32,27 @@ const InfoText = styled.p`
 
 const InfoTitle = styled.h3`
     text-align:${(props) => (props.align ? props.align : "center")};
-    font-size:20px;
+    font-size:18px;
     color:${(props) => (props.color ? "#fff" : "#47ffbb")};
     margin:${(props) => (props.margin ? "20px 0 10px 0" : "0")};
 
     @media (max-width: 480px) {
-        
+        font-size:16px;
+        margin:0;
+        padding:0;
     }
 `
 
 const CloseButton = styled.img`
     cursor: pointer;
-    width:30px;
+    width:24px;
     color: #fff;
     position:absolute;
     top:30px;
     right:80px;
 
     @media (max-width: 480px) {
-        top:0;
+        top:-50px;
         right:20px;
         position:relative;
         padding:20px 0px;
@@ -79,7 +82,7 @@ const Button = styled.button`
     color: ${(props) => (props.look ? "#47ffbb" : "rgb(10,10,10,1)")};
     border: none;
     padding:10px;
-    font-size:16px;
+    font-size:14px;
     cursor:pointer;
     font-weight:600;
     font-family: Poppins;
@@ -102,7 +105,7 @@ const MainButton = styled.button`
     border: none;
     color: #fff;
     font-family: Poppins;
-    font-size: 16px;
+    font-size: 14px;
     //font-weight: bold;
     background-color: rgb(10,10,10,0.0);
     border-radius:5px;
@@ -142,7 +145,7 @@ const DataTitleContainer = styled.div`
 `
 
 const DataImageTitle = styled.h1`
-    font-size:36px;
+    font-size:30px;
     color: #fff;
     text-align:center;
 `
@@ -165,8 +168,8 @@ const MainArtistImageContainer = styled.div`
 `
 
 const MainArtistImage = styled.img`
-    max-width: 250px;
-    border-radius:${(props) => (props.track ? "0" : "300px")};
+    max-width: 225px;
+    border-radius:${(props) => (props.track ? "0" : "225px")};
 `
 
 const MainArtistName = styled.h2`
@@ -179,7 +182,7 @@ const MainArtistName = styled.h2`
 `
 
 const MainArtistPosition = styled.h2`
-    font-size:84px;
+    font-size:75px;
     color: #fff;
     margin:0;
     text-shadow: 0px 0px 11px rgba(0, 0, 0, 1);
@@ -218,28 +221,28 @@ const ArtistCardContainer = styled.div`
 `
 
 const ArtistCardImageContainer = styled.div`
-    max-height:70px;
-    max-width:70px;
+    max-height:62px;
+    max-width:62px;
     //overflow:hidden;
-    border-radius:${(props) => (props.track ? "0" : "70px")};
+    border-radius:${(props) => (props.track ? "0" : "62px")};
     margin:0 20px;
 `
 
 const ArtistCardImage = styled.img`
-    max-height: 70px;
-    max-width:70px;
-    border-radius:${(props) => (props.track ? "0" : "70px")};
+    max-height: 62px;
+    max-width:62px;
+    border-radius:${(props) => (props.track ? "0" : "62px")};
 `
 
 const ArtistCardName = styled.h2`
-    font-size:${(props) => (props.track ? "16px" : "20px")};
+    font-size:${(props) => (props.track ? "14px" : "18px")};
     color: ${(props) => (props.track ? "rgba(100,100,100,1)" : "#fff")};
     margin:0;
     font-weight:400;
 `
 
 const ArtistCardPosition = styled.h2`
-    font-size:32px;
+    font-size:28px;
     color: #fff;
     margin:0;
     margin-left:20px;

@@ -7,10 +7,10 @@ const ChartContainer = styled.div`
 
 const BarDescription = styled.div`
     color:rgb(10,10,10);
-    font-size:16px;
+    font-size:14px;
     width:350px;
-    padding:20px;
-    line-height:26px;
+    padding:16px;
+    line-height:23px;
 
     ::after{
         content:'';

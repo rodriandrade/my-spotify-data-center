@@ -1,7 +1,8 @@
 import styled from 'styled-components'
 
 const Text = styled.span`
-    font-size:72px;
+    //font-size:72px;
+    font-size:64px;
     font-weight:bold;
     font-family: Poppins;
     margin-bottom:60px;
@@ -9,6 +10,10 @@ const Text = styled.span`
 
     span{
         color:#47ffbb
+    }
+
+    @media (max-width: 480px) {
+        font-size:36px;
     }
 `
 

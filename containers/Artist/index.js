@@ -371,25 +371,27 @@ export default function Artist() {
                 <Inner>
 
                     {loadingTime ? 
-                    <Grid colGap={30} rowGap={40}>
-                        <Col desktop={12} tablet={6} mobile={12}>
-                            <Container>
-                                <ContainerImage>
-                                {artist.images && <ArtistImage src={artist.images[0].url} />}
-                                </ContainerImage>
-                                <ContainerInfo>
-                                    <ArtistName>{artist.name}</ArtistName>
-                                    {!!follow && <Button onClick={handleFollow}>{follow === 'true' ? 'following' : 'follow'}</Button> }  
-                                </ContainerInfo>
-                            </Container>
-                        </Col>
-                    </Grid>
+                        <Grid colGap={30} rowGap={40}>
+                            <Col desktop={12} tablet={6} mobile={12}>
+                                <Container>
+                                    <ContainerImage>
+                                    {artist.images && <ArtistImage src={artist.images[0].url} />}
+                                    </ContainerImage>
+                                    <ContainerInfo>
+                                        <ArtistName>{artist.name}</ArtistName>
+                                        {!!follow && <Button onClick={handleFollow}>{follow === 'true' ? 'following' : 'follow'}</Button> }  
+                                    </ContainerInfo>
+                                </Container>
+                            </Col>
+                        </Grid>
                     : 
-                    <LoadingContainer>
-                    <LoadingImage src="/loading.gif" alt="loading" />
-                    <LoadingText>Just loading...</LoadingText>
-                    </LoadingContainer>
+                        <LoadingContainer>
+                            <LoadingImage src="/loading.gif" alt="loading" />
+                            <LoadingText>Just loading...</LoadingText>
+                        </LoadingContainer>
                     }
+
+                  
 
                     {loadingTime ? 
                         <section>
@@ -459,6 +461,8 @@ export default function Artist() {
                         </section>
                     : null}
 
+
+
                     {loadingTime && (tracksFourWeeks.length > 0 || tracksSixMonths.length > 0 || tracksSeveralYears.length > 0) ? 
                         <section>
                             <Title size="h4" margin="60px 0 0 0">{artist.name}'s tracks appeareances in your tracks ranking</Title>
@@ -520,9 +524,10 @@ export default function Artist() {
                         </Grid>
                     </section>
                     : null}
-
-                    <Footer /> 
+    
                 </Inner>
+
+                <Footer /> 
 
                 </MasterContainer>
             

@@ -20,7 +20,7 @@ const Text = styled.p`
     left:50%;
     color: rgb(12,12,12);
     text-align:center;
-    font-size:20px;
+    font-size:18px;
     opacity:1; 
     margin:0;
     width:100%;
@@ -47,24 +47,34 @@ const ContainerInfo = styled.div`
 `
 
 const Subtitle = styled.p`
-    font-size:14px;
+    font-size:12px;
     color: rgb(100,100,100);
     margin:0;
+
+    @media (max-width: 480px) {
+        font-size:16px;
+    }
+    
 `
 
 const AlbumInfo = styled.p`
-    font-size:18px;
+    font-size:16px;
     color:#fff;
     margin:0;
 `
 
 const ContainerImage = styled.div`
-    width:220px;
-    height:220px;
+    width:200px;
+    height:200px;
     position:relative;
 
     &:hover ${TextContainer} {
         opacity: 1;
+    }
+
+    @media (max-width: 480px) {
+        max-width:150px;
+        max-height:150px;
     }
 `
 
@@ -77,24 +87,44 @@ const Container = styled.div`
     display: flex;
     flex-direction: row;
     padding-top:50px;
+
+    @media (max-width: 480px) {
+        flex-direction:column;
+        align-items:center;
+    }
 `
 
 const TrackImage = styled.img`
-    max-width:${(props) => (props.album ? "50px" : "220px")};
-    max-height:${(props) => (props.album ? "50px" : "220px")};
+    max-width:${(props) => (props.album ? "45px" : "200px")};
+    max-height:${(props) => (props.album ? "45px" : "200px")};
+
+    @media (max-width: 480px) {
+        max-width:${(props) => (props.album ? "45px" : "150px")};
+        max-height:${(props) => (props.album ? "45px" : "150px")};
+    }
 `
 
 const TrackName = styled.h1`
-    font-size:48px;
+    font-size:42px;
     color:#fff;
     margin:0;
     position: relative;
+
+    @media (max-width: 480px) {
+        font-size:28px;
+    }
 `
 
 const RecommendationsButtonsContainer = styled.div`
     display: flex; 
     flex-direction: row; 
     position: relative;
+
+    @media (max-width: 480px) {
+       flex-direction:column;
+       width:100%;
+       margin-bottom:60px;
+    }
 `
 
 const Button = styled.button`
@@ -102,7 +132,7 @@ const Button = styled.button`
     border: none;
     color: #fff;
     font-family: Poppins;
-    font-size: 16px;
+    font-size: 14px;
     //font-weight: bold;
     background-color: rgb(10,10,10,0);
     border-radius:5px;
@@ -123,18 +153,26 @@ const ContainerAlbumName = styled.div`
     justify-content: center; 
     align-items: flex-start;
     margin-left:30px;
+
+    @media (max-width: 480px) {
+        margin:0;
+    }
 `
 
 const ArtistName = styled.p`
-    font-size:22px;
+    font-size:20px;
     color:#fff;
     margin:0;
     position: relative;
+
+    @media (max-width: 480px) {
+        font-size:16px;
+    }
 `
 
 const Icon = styled.img`
-    max-width:20px;
-    max-height:20px;
+    max-width:18px;
+    max-height:18px;
     margin-right:10px;
 `
 
@@ -143,6 +181,11 @@ const RecommendationsContainer = styled.div`
     flex-direction: row; 
     justify-content:space-between;
     align-items:center;
+
+    @media (max-width: 480px) {
+       flex-direction:column;
+       width:100%;
+    }
 `
 
 const LoadingContainer = styled.div`
@@ -178,6 +221,11 @@ const MasterContainer = styled.div`
     width:93%;
     display:flex;
     justify-content:center;
+    flex-direction:column;
+
+    @media (max-width: 480px) {
+        width:100%;
+    }
 `
 
 const SuperContainer = styled.div`
@@ -190,6 +238,10 @@ const NavContainer = styled.div`
     width:7%;
     height:100vh;
     position:relative;
+
+    @media (max-width: 480px) {
+        display:none;
+    }
 `
 
 export {ContainerAlbum, Subtitle, AlbumInfo, ContainerInfo, ContainerImage, ContainerAlbumName, Button, TrackImage, RecommendationsButtonsContainer, TrackName, Container, ArtistName, Icon, Text, TextContainer, RecommendationsContainer, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer}

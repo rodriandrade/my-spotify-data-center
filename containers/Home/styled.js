@@ -41,6 +41,10 @@ const Text = styled.p`
     color:#fff;
     margin:${(props) => (props.margin ? props.margin : "0 0 0 0")};
     margin-bottom:30px;
+
+    @media (max-width: 480px) {
+        font-size:14px;
+    }
 `
 
 const MostListened = styled.span`
@@ -131,6 +135,11 @@ const MasterContainer = styled.div`
     width:93%;
     display:flex;
     justify-content:center;
+    flex-direction:column;
+
+    @media (max-width: 480px) {
+        width:100%;
+    }
 `
 
 const SuperContainer = styled.div`
@@ -143,6 +152,10 @@ const NavContainer = styled.div`
     width:7%;
     height:100vh;
     position:relative;
+
+    @media (max-width: 480px) {
+        display:none;
+    }
 `
 
 const WelcomeContainer = styled.div`

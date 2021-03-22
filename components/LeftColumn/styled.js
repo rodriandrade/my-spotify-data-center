@@ -21,7 +21,8 @@ const ContainerLeftColumn = styled.div`
 `
 
 const Text = styled.p`
-    font-size:16px;
+    //font-size:16px;
+    font-size:14px;
     font-family: 'Poppins', sans-serif;
     text-align:left;
     color:#fff;
@@ -34,7 +35,8 @@ const Button = styled.div`
     border: none;
     color: ${(props) => (props.activeButton ? "#47ffbb" : "rgb(100,100,100)")};
     font-family: Poppins;
-    font-size: 16px;
+    //font-size: 16px;
+    font-size:14px;
     font-weight: bold;
     background-color: ${(props) => (props.activeButton ? "rgba(42, 74, 62, 0.1)" : "rgb(10,10,10,0.0)")};
     border-radius:5px;
@@ -49,7 +51,8 @@ const Button = styled.div`
 `
 
 const MostListened = styled.span`
-    font-size:16px;
+    //font-size: 16px;
+    font-size:14px;
     font-family: 'Poppins', sans-serif;
     text-align:left;
     color:#47ffbb;
@@ -62,7 +65,8 @@ const MainButton = styled.button`
     border: none;
     color: #fff;
     font-family: Poppins;
-    font-size: 16px;
+    //font-size: 16px;
+    font-size:14px;
     //font-weight: bold;
     background-color: rgb(10,10,10,0.0);
     border-radius:5px;

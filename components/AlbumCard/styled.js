@@ -9,8 +9,10 @@ const Container = styled.div`
 `
 
 const TrackImage = styled.img`
-    max-height:200px;
-    max-width: 200px;
+    //max-height:200px;
+    //max-width: 200px;
+    max-height:180px;
+    max-width: 180px;
     cursor: pointer;    
     opacity:1;
 `
@@ -45,7 +47,8 @@ const Text = styled.p`
     left:50%;
     color: rgb(12,12,12);
     text-align:center;
-    font-size:20px;
+    //font-size:20px;
+    font-size:18px;
     opacity:1; 
     margin:0;
     width:100%;
@@ -55,8 +58,10 @@ const Text = styled.p`
 `
 
 const ImageContainer = styled.div`
-    width:200px;  
-    height:200px;
+    //width:200px;  
+    //height:200px;
+    width:180px;
+    height:180px;
     position: relative;
     margin:0 auto;
 
@@ -66,7 +71,8 @@ const ImageContainer = styled.div`
 `
 
 const TrackPosition = styled.p`
-    font-size:60px;
+    //font-size:60px;
+    font-size:54px;
     color: #fff;
     margin:0;
     text-align: center;
@@ -91,7 +97,8 @@ const TrackPosition = styled.p`
 `
 
 const TrackName = styled.p`
-    font-size:16px;
+    //font-size:16px;
+    font-size:14px;
     color: #fff;
     margin: ${(props) => (props.margin ? props.margin : "40px 0 5px 0")};
     text-align: center;
@@ -106,7 +113,8 @@ const TrackName = styled.p`
 `
 
 const ArtistName = styled.p`
-    font-size:14px;
+    //font-size:14px;
+    font-size:13px;
     color: #47ffbb;
     margin:0;
     text-align: center;

@@ -12,6 +12,7 @@ body {
   background-attachment: fixed;
   background-blend-mode: multiply;
   scroll-behavior: smooth;
+  margin:0;
 }
 
 /*
@@ -92,3 +93,8 @@ text{
   }
 }
 
+@media (max-width: 480px) {
+  .ityped-cursor {
+    font-size:36px;
+  }
+}

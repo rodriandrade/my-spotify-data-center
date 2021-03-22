@@ -120,7 +120,6 @@ const Home = props =>{
         randomLoadingText();
       }, [])
 
-
       // Get New Token (Refresh)
       const getNewToken = async () =>{
         let refresh_token = '';
@@ -270,6 +269,8 @@ const Home = props =>{
                       setActiveDevices(true)
                   }
                   //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                  /*
                   // PLAYLISTS DATA
                   const responsePlaylists = await axios.get(`https://api.spotify.com/v1/me/playlists?limit=50`, {
                     headers: {
@@ -287,6 +288,8 @@ const Home = props =>{
                   setPlaying(responsePlaying.data.item);
                   setPlayingData(responsePlaying.data)
                   //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                  
                   // RECENTLY PLAYED DATA
                   const responseRecentlyPlayed = await axios.get(`https://api.spotify.com/v1/me/player/recently-played?limit=50`, {
                     headers: {
@@ -314,7 +317,10 @@ const Home = props =>{
                   }, 0);
                   let minutesListenedToShow = (totalDuration / 60000).toFixed(0);
                   setMinutesListened(minutesListenedToShow)
+                  */
+
                   //////////////////////////////////////////////////////////////////////////////////////////////////////
+
                   // USER DATA
                   const responseUser = await axios.get(`https://api.spotify.com/v1/me`, {
                     headers: {
@@ -818,7 +824,24 @@ const Home = props =>{
         return typeTermRecommendations === buttonTerm;
       }
 
-      
+      /*
+      {!token ? 
+            <WelcomeContainer>
+              <section id="home_section">
+                <Grid colGap={30} rowGap={40}>
+                  <Col desktop={12} tablet={6} mobile={12}>
+                    <ContainerHero>
+                      <TypingEffect title/>
+                        {!user && <a href="http://localhost:8888/login">
+                        <MainButton>Login with Spotify</MainButton>
+                      </a>}
+                    </ContainerHero>
+                  </Col>
+                </Grid>
+              </section>
+            </WelcomeContainer>
+          : null}
+        */
      
 
       return (
@@ -838,25 +861,6 @@ const Home = props =>{
           </NavContainer>
 
           <MasterContainer>
-
-{/*}
-          {!token ? 
-            <WelcomeContainer>
-              <section id="home_section">
-                <Grid colGap={30} rowGap={40}>
-                  <Col desktop={12} tablet={6} mobile={12}>
-                    <ContainerHero>
-                      <TypingEffect title/>
-                        {!user && <a href="http://localhost:8888/login">
-                        <MainButton>Login with Spotify</MainButton>
-                      </a>}
-                    </ContainerHero>
-                  </Col>
-                </Grid>
-              </section>
-            </WelcomeContainer>
-          : null}
-          */}
 
           {user && playing && <CurrentlyPlayingCard data={playing} token={token} refreshToken={refreshToken} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink}/>}
 
@@ -879,6 +883,8 @@ const Home = props =>{
             <LoadingText>{pickLoadingText}</LoadingText>
           </LoadingContainer>
           }
+
+          
 
           {user ?
           <section id="artists_section">             
@@ -920,6 +926,8 @@ const Home = props =>{
             </Grid>
           </section>  
           : null }
+
+
 
           {user ?
           <section id="tracks_section">             
@@ -964,6 +972,8 @@ const Home = props =>{
           </section>
           : null }
 
+
+
           {user ?
           <section id="albums_section">             
             <Grid colGap={30} rowGap={40}>
@@ -1003,6 +1013,8 @@ const Home = props =>{
           </section>  
           : null }
 
+ 
+
           {user ?
           <section id="genres_section">             
             <Grid colGap={30} rowGap={40}>
@@ -1027,7 +1039,7 @@ const Home = props =>{
                 />
               </Col>
               <Col desktop={9} tablet={6} mobile={12}>
-                <Grid colGap={60} rowGap={40}>
+                <Grid colGap={30} rowGap={40}>
                   {genres ?
                     genres && genres.map((genre, index) => (<TopGenresCard key={genre} genre={genre} token={token} index={index} gridSize={3} refreshToken={refreshToken} />))
                   :
@@ -1043,6 +1055,8 @@ const Home = props =>{
             </Grid>
           </section>  
           : null }
+
+
 
           {user ?
           <section id="recommendations_section">             
@@ -1091,9 +1105,13 @@ const Home = props =>{
           </section>
           : null }
 
-           <Footer />
 
           </Inner>
+
+          
+
+
+          <Footer />
                 
           </MasterContainer>
           
