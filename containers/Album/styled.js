@@ -61,6 +61,10 @@ const AlbumInfo = styled.p`
     font-size:16px;
     color:#fff;
     margin:0;
+
+    @media (max-width: 480px) {
+        font-size:22px;
+    }
 `
 
 const ContainerImage = styled.div`
@@ -119,7 +123,7 @@ const RecommendationsButtonsContainer = styled.div`
     @media (max-width: 480px) {
        flex-direction:column;
        width:100%;
-       margin-bottom:60px;
+       margin-bottom:0px;
     }
 `
 
@@ -154,6 +158,7 @@ const ContainerAlbumName = styled.div`
         margin:0;
         align-items:center;
         margin-top:20px;
+        text-align:center;
     }
 `
 

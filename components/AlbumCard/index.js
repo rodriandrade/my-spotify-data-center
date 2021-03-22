@@ -202,7 +202,7 @@ const AlbumCard = props =>{
     return (
         <>
             {!albumRecommendation ?
-                <Col desktop={props.gridSize} tablet={6} mobile={12}>
+                <Col desktop={props.gridSize} tablet={6} mobile={6}>
                     {!activeDevices && 
                         <Modal 
                             modalIsOpen={modalIsOpen} 
@@ -237,7 +237,7 @@ const AlbumCard = props =>{
                     {albumToShow && <ArtistName>{albumToShow.artist}</ArtistName>}
                 </Col>
              :
-                <Col desktop={props.gridSize} tablet={6} mobile={12}>
+                <Col desktop={props.gridSize} tablet={6} mobile={6}>
                     {!activeDevices && 
                         <Modal 
                             modalIsOpen={modalIsOpen} 

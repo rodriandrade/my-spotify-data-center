@@ -154,7 +154,7 @@ const TrackCard = props =>{
     })
 
     return(
-        <Col desktop={props.gridSize} tablet={6} mobile={12}>
+        <Col desktop={props.gridSize} tablet={6} mobile={6}>
             <ContainerTrack>
             <div>
                 {!activeDevices && 

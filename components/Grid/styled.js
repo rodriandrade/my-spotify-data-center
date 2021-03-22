@@ -9,6 +9,9 @@ const GridContainer = styled.div`
     grid-row-gap: ${props => props.rowGap || 0}px;
     width:100%;
     //justify-items: center;
+    @media (max-width: 480px) {
+        grid-template-columns: repeat(12, 1fr);
+    }
 `
 
 const ColContainer = styled.div`

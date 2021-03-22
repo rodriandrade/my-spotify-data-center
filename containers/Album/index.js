@@ -16,6 +16,8 @@ import Link from 'next/link'
 import CurrentlyPlayingCard from '../../components/CurrentlyPlayingCard'
 import AlbumCard from '../../components/AlbumCard'
 import _ from 'lodash';
+import NavMenuMobile from '../../components/NavMenuMobile'
+import BurgerMenu from '../../components/BurgerMenu'
 
 export default function Album() {
     const router = useRouter()
@@ -23,6 +25,8 @@ export default function Album() {
     const refresh_token = router.query.refreshToken;
     const id = router.query.id;
 
+    const [open, setOpen] = useState(false)
+    
     // Album
     const [album, setAlbum] = useState([]);
     const [tracks, setTracks] = useState([]);
@@ -471,6 +475,9 @@ export default function Album() {
             playing && <CurrentlyPlayingCard data={playing} token={token} refreshToken={refresh_token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying}
             blink={blink} setBlink={setBlink} />
           : null}
+
+            <BurgerMenu open={open} setOpen={setOpen}/>
+            <NavMenuMobile open={open} setOpen={setOpen} access_token={token} refresh_token={refresh_token} />
 
             <Inner>
               

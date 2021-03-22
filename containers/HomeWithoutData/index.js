@@ -19,7 +19,7 @@ const HomeWithoutData = () =>{
                   <Col desktop={12} tablet={6} mobile={12}>
                     <ContainerHero>
                       <TypingEffect title/>
-                        <a href="http://localhost:8888/login">
+                        <a href="https://spotify-server-seven.vercel.app/login">
                             <MainButton>Login with Spotify</MainButton>
                         </a>
                     </ContainerHero>

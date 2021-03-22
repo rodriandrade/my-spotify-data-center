@@ -7,7 +7,7 @@ const ArtistCard = props =>{
     const position = props.index + 1;
     
     return(
-        <Col desktop={props.gridSize} tablet={6} mobile={12}>
+        <Col desktop={props.gridSize} tablet={6} mobile={6}>
             <ContainerArtist>
                 <ImageContainer>
                 <a href={external_urls.spotify} target="_blank">

@@ -18,6 +18,8 @@ import NavMenu from '../../components/NavMenu'
 import Footer from '../../components/Footer'
 import LeftColumn from '../../components/LeftColumn'
 import TypingEffect from '../../components/TypingEffect'
+import NavMenuMobile from '../../components/NavMenuMobile'
+import BurgerMenu from '../../components/BurgerMenu'
 
 import {Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshIcon, IconContainer, MainButton, LoadingImage, LoadingContainer, LoadingText, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer, WelcomeContainer} from './styled'
 
@@ -842,6 +844,8 @@ const Home = props =>{
             </WelcomeContainer>
           : null}
         */
+
+       const [open, setOpen] = useState(false)
      
 
       return (
@@ -863,9 +867,12 @@ const Home = props =>{
           <MasterContainer>
 
           {user && playing && <CurrentlyPlayingCard data={playing} token={token} refreshToken={refreshToken} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink}/>}
+          
+          <BurgerMenu open={open} setOpen={setOpen}/>
+          <NavMenuMobile open={open} setOpen={setOpen} access_token={token} refresh_token={refreshToken} />
 
           <Inner>
-        
+
           {user ? 
             <section id="home_section">
             <Grid colGap={30} rowGap={40}>

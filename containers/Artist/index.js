@@ -11,12 +11,16 @@ import NavMenu from '../../components/NavMenu'
 import Footer from '../../components/Footer'
 import ParticlesBackground from '../../components/ParticlesBackground'
 import CurrentlyPlayingCard from '../../components/CurrentlyPlayingCard'
+import NavMenuMobile from '../../components/NavMenuMobile'
+import BurgerMenu from '../../components/BurgerMenu'
 
 export default function Artist() {
     const router = useRouter()
     const token = router.query.token;
     const refresh_token = router.query.refreshToken;
     const id = router.query.id;
+
+    const [open, setOpen] = useState(false)
 
     // State relacionados al artista
     const [artist, setArtist] = useState([]);
@@ -367,6 +371,9 @@ export default function Artist() {
                 {loadingTime ? 
                     playing && <CurrentlyPlayingCard data={playing} token={token} refreshToken={refresh_token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink} setBlink={setBlink} /> 
                 : null}
+
+                <BurgerMenu open={open} setOpen={setOpen}/>
+                <NavMenuMobile open={open} setOpen={setOpen} access_token={token} refresh_token={refresh_token} />
 
                 <Inner>
 

@@ -14,6 +14,8 @@ import Footer from '../../components/Footer'
 import Link from 'next/link'
 import CurrentlyPlayingCard from '../../components/CurrentlyPlayingCard'
 import lyricsFinder from 'lyrics-finder'
+import NavMenuMobile from '../../components/NavMenuMobile'
+import BurgerMenu from '../../components/BurgerMenu'
 
 export default function Track() {
     const router = useRouter()
@@ -22,6 +24,8 @@ export default function Track() {
     const id = router.query.id;
 
     ////////// STATES //////////
+
+    const [open, setOpen] = useState(false)
 
     // State información a mostrar: track, audioFeatures y recommendations
     const [track, setTrack] = useState([]);
@@ -514,6 +518,9 @@ export default function Track() {
             {loadingTime ? 
               playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink} setBlink={setBlink} refreshToken={refresh_token} /> 
             : null}
+
+            <BurgerMenu open={open} setOpen={setOpen}/>
+            <NavMenuMobile open={open} setOpen={setOpen} access_token={token} refresh_token={refresh_token} />
 
             <Inner>
               
