@@ -38,6 +38,8 @@ const ContainerInfo = styled.div`
     
     @media (max-width: 480px) {
         margin:0;
+        align-items:center;
+        margin-top:20px;
     }
 `
 
@@ -73,8 +75,8 @@ const ContainerImage = styled.div`
     }
 
     @media (max-width: 480px) {
-        max-width:150px;
-        max-height:150px;
+        max-width:200px;
+        max-height:200px;
     }
 `
 
@@ -100,8 +102,8 @@ const TrackImage = styled.img`
     position:relative;
 
     @media (max-width: 480px) {
-        max-width:${(props) => (props.album ? "45px" : "150px")};
-        max-height:${(props) => (props.album ? "45px" : "150px")};
+        max-width:${(props) => (props.album ? "45px" : "200px")};
+        max-height:${(props) => (props.album ? "45px" : "200px")};
     }
 `
 
@@ -173,7 +175,7 @@ const Position = styled.h1`
     position: relative;
 
     @media (max-width: 480px) {
-        font-size:36px;
+        font-size:48px;
     }
 `
 
@@ -194,6 +196,10 @@ const TrackInfo = styled.p`
     color:#fff; 
     margin:0;
     position: relative;
+
+    @media (max-width: 480px) {
+        font-size:16px;
+    }
 `
 
 const ContainerAlbum = styled.div`
@@ -230,7 +236,7 @@ const NoDataTitle = styled.h1`
     position:relative;
 
     @media (max-width: 480px) {
-        font-size:24px;
+        font-size:48px;
     }
 `
 
@@ -248,6 +254,10 @@ const NoDataInfo = styled.p`
     color:rgba(100,100,100,1);
     margin:0;
     position: relative;
+
+    @media (max-width: 480px) {
+        font-size:16px;
+    }
 `
 
 const LoadingContainer = styled.div`
