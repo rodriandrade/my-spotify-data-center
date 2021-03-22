@@ -10,6 +10,7 @@ const ContainerInfo = styled.div`
     @media (max-width: 480px) {
         align-items:center;
         margin:0;
+        margin-top:20px;
     }
 `
 
@@ -42,9 +43,6 @@ const ArtistImage = styled.img`
     position: relative;
 
     @media (max-width: 480px) {
-        max-width:150px;
-        max-height:150px;
-        border-radius:150px;
     }
 `
 
@@ -55,7 +53,7 @@ const ArtistName = styled.h1`
     position: relative;
 
     @media (max-width: 480px) {
-        font-size:28px;
+        font-size:36px;
     }
 `
 
@@ -74,6 +72,10 @@ const ArtistGenres = styled.p`
     border-radius:10px;
     padding:10px;
     position: relative;
+
+    @media (max-width: 480px) {
+        font-size:16px;
+    }
 `
 
 const Button = styled.button`
@@ -112,7 +114,7 @@ const Position = styled.h1`
     position: relative;
 
     @media (max-width: 480px) {
-        font-size:36px;
+        font-size:48px;
     }
 `
 
@@ -121,6 +123,10 @@ const ArtistInfo = styled.p`
     color:#fff; 
     margin:0;
     position: relative;
+
+    @media (max-width: 480px) {
+        font-size:16px;
+    }
 `
 
 const NoDataTitle = styled.h1`
@@ -130,7 +136,7 @@ const NoDataTitle = styled.h1`
     position: relative;
 
     @media (max-width: 480px) {
-        font-size:24px;
+        font-size:48px;
     }
 `
 

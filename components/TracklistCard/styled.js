@@ -44,6 +44,10 @@ const TrackName = styled.p`
     :hover{
         text-decoration:underline 1px solid #47ffbb;
     }
+
+    @media (max-width: 480px) {
+        font-size:16px;
+    }
 `
 
 const TrackNumber = styled.p`
@@ -51,6 +55,10 @@ const TrackNumber = styled.p`
     color:#fff;
     margin-right:10px;
     position: relative;
+
+    @media (max-width: 480px) {
+        font-size:16px;
+    }
 `
 
 const TrackDuration = styled.p`
@@ -58,6 +66,10 @@ const TrackDuration = styled.p`
     color:#fff;
     margin:0 20px;
     position: relative;
+
+    @media (max-width: 480px) {
+        font-size:16px;
+    }
 `
 
 const TrackSave = styled.img`

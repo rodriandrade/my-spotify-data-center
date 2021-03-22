@@ -73,8 +73,6 @@ const ContainerImage = styled.div`
     }
 
     @media (max-width: 480px) {
-        max-width:150px;
-        max-height:150px;
     }
 `
 
@@ -99,8 +97,6 @@ const TrackImage = styled.img`
     max-height:${(props) => (props.album ? "45px" : "200px")};
 
     @media (max-width: 480px) {
-        max-width:${(props) => (props.album ? "45px" : "150px")};
-        max-height:${(props) => (props.album ? "45px" : "150px")};
     }
 `
 
@@ -111,7 +107,7 @@ const TrackName = styled.h1`
     position: relative;
 
     @media (max-width: 480px) {
-        font-size:28px;
+        font-size:36px;
     }
 `
 
@@ -156,6 +152,8 @@ const ContainerAlbumName = styled.div`
 
     @media (max-width: 480px) {
         margin:0;
+        align-items:center;
+        margin-top:20px;
     }
 `
 

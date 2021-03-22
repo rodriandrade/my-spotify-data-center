@@ -75,7 +75,7 @@ const Container = styled.div`
 
     @media (max-width: 480px) {
        width:100%;
-       transform:${(props) => (props.showPlayer ? "translate(0%, 0px)" : "translate(0%, 35px)")};
+       transform:${(props) => (props.showPlayer ? "translate(0%, 0px)" : "translate(0%, 70px)")};
     }
 `
 
