@@ -96,4 +96,8 @@ text{
   .ityped-cursor {
     font-size:36px;
   }
+
+  .generateImageButton{
+    display:none;
+  }
 }

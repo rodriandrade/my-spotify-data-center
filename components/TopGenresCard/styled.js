@@ -16,6 +16,10 @@ const GenreTitle = styled.h1`
     margin:0;
     color: #47ffbb;
     position:relative;
+
+    @media (max-width: 480px) {
+        text-align:center;
+    }
 `
 
 const GenrePosition = styled.h1`

@@ -225,7 +225,7 @@ const LeftColumn = props =>{
                   <Button activeButton={props.handlerButton('medium_term')} onClick={ () => props.setTypeTerm('medium_term')}>Past 6 months</Button>
                   <Button activeButton={props.handlerButton('long_term')} onClick={ () => props.setTypeTerm('long_term')}>Several years</Button>
                   <MainButtonContainer>
-                    <MainButton onClick={handleShare}>Generate image</MainButton>
+                    <MainButton onClick={handleShare} className="generateImageButton">Generate image</MainButton>
                   </MainButtonContainer>
               </ContainerButtons>
               :

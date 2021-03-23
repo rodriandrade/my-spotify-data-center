@@ -40,6 +40,7 @@ const ContainerInfo = styled.div`
         margin:0;
         align-items:center;
         margin-top:20px;
+        text-align:center;
     }
 `
 
