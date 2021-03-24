@@ -897,7 +897,7 @@ const Home = props =>{
           <section id="artists_section">             
             <Grid colGap={30} rowGap={40}>
               <Col desktop={6} tablet={6} mobile={12}>
-                  <Title size="extra-large">These are your favorites artists</Title>
+                  <Title size="extra-large" margin="title">These are your favorites artists</Title>
               </Col>
             </Grid>
             <Grid colGap={30} rowGap={40}>
@@ -940,7 +940,7 @@ const Home = props =>{
           <section id="tracks_section">             
             <Grid colGap={30} rowGap={40}>
               <Col desktop={6} tablet={6} mobile={12}>
-                  <Title size="extra-large">These are your favorites tracks</Title>
+                  <Title size="extra-large" margin="title">These are your favorites tracks</Title>
               </Col>
             </Grid>
             <Grid colGap={30} rowGap={40}>
@@ -985,7 +985,7 @@ const Home = props =>{
           <section id="albums_section">             
             <Grid colGap={30} rowGap={40}>
               <Col desktop={7} tablet={6} mobile={12}>
-                  <Title size="extra-large">These are your favorites albums</Title>
+                  <Title size="extra-large" margin="title">These are your favorites albums</Title>
               </Col>
             </Grid>
             <Grid colGap={30} rowGap={40}>
@@ -1026,7 +1026,7 @@ const Home = props =>{
           <section id="genres_section">             
             <Grid colGap={30} rowGap={40}>
               <Col desktop={7} tablet={6} mobile={12}>
-                  <Title size="extra-large">These are your favorites genres</Title>
+                  <Title size="extra-large" margin="title">These are your favorites genres</Title>
               </Col>
             </Grid>
             <Grid colGap={30} rowGap={40}>
@@ -1069,7 +1069,7 @@ const Home = props =>{
           <section id="recommendations_section">             
             <Grid colGap={30} rowGap={40}>
               <Col desktop={6} tablet={6} mobile={12}>
-                  <Title size="extra-large">Recommendations</Title>
+                  <Title size="extra-large" margin="title">Recommendations</Title>
               </Col>
             </Grid>
             <Grid colGap={30} rowGap={40}>

@@ -404,17 +404,17 @@ export default function Artist() {
                         <section>
                             <Grid colGap={30} rowGap={40}>
                                 <Col desktop={4} tablet={6} mobile={12}>
-                                    <Title size="h4" margin="0 0 0 0">Genres</Title>
+                                    <Title size="h4" margin="none">Genres</Title>
                                     <GenresContainer>
                                         {artist.genres && artist.genres.map(genre => <ArtistGenres>{genre}</ArtistGenres>)}
                                     </GenresContainer>
                                 </Col>
                                 <Col desktop={4} tablet={6} mobile={12}>
-                                    <Title size="h4" margin="0 0 0 0">Popularity</Title>
+                                    <Title size="h4" margin="none">Popularity</Title>
                                     {artist.popularity && <Position><strong>{artist.popularity} / 100</strong></Position>}
                                 </Col>
                                 <Col desktop={4} tablet={6} mobile={12}>
-                                    <Title size="h4" margin="0 0 0 0">Followers</Title>
+                                    <Title size="h4" margin="none">Followers</Title>
                                     {artist.genres && <Position><strong>{artist.followers.total}</strong></Position>}
                                 </Col>
                             </Grid>
@@ -423,7 +423,7 @@ export default function Artist() {
 
                     {loadingTime && (artistFourWeeks || artistSixMonths || artistSeveralYears) ? 
                         <section>
-                            <Title size="h4" margin="60px 0 0 0">{artist.name} appeareances in your artist ranking</Title>
+                            <Title size="h4" margin="data-subtitle">{artist.name} appeareances in your artist ranking</Title>
                             <Grid colGap={30} rowGap={40}>
                                 <Col desktop={4} tablet={6} mobile={12}>
                                     {artistFourWeeks ? 
@@ -472,7 +472,7 @@ export default function Artist() {
 
                     {loadingTime && (tracksFourWeeks.length > 0 || tracksSixMonths.length > 0 || tracksSeveralYears.length > 0) ? 
                         <section>
-                            <Title size="h4" margin="60px 0 0 0">{artist.name}'s tracks appeareances in your tracks ranking</Title>
+                            <Title size="h4" margin="data-subtitle">{artist.name}'s tracks appeareances in your tracks ranking</Title>
                             <Grid colGap={30} rowGap={40}>
                                     <Col desktop={4} tablet={6} mobile={12}>
                                         {tracksFourWeeks.length > 0 ?<ArtistInfoCont>
@@ -516,7 +516,7 @@ export default function Artist() {
 
                     {loadingTime ? 
                         <section>
-                            <Title size="h4" margin="120px 0 20px 0">Artist Top Tracks on Spotify</Title>
+                            <Title size="h4" margin="bigger-subtitle">Artist Top Tracks on Spotify</Title>
                             <Grid colGap={30} rowGap={40} columns>
                                 {artistTopTracks && artistTopTracks.map((track, index) => (<TrackCard key={track._id} data={track} token={newToken} refreshToken={refresh_token} index={index} gridSize={2} singleTrack="100" playerArtistPage={playerArtistPage} setPlayerArtistPage={setPlayerArtistPage} blink={blink} setBlink={setBlink}/>))}
                             </Grid>
@@ -525,7 +525,7 @@ export default function Artist() {
 
                     {loadingTime ? 
                     <section>
-                        <Title size="h4" margin="120px 0 20px 0">Related Artists</Title>
+                        <Title size="h4" margin="bigger-subtitle">Related Artists</Title>
                         <Grid colGap={30} rowGap={40} columns>
                             {relatedArtists && relatedArtists.map((artist) => (<ArtistCard key={artist._id} data={artist} gridSize={2} token={newToken} refreshToken={refresh_token}/>))}
                         </Grid>

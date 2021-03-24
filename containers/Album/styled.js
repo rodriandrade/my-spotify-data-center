@@ -38,6 +38,20 @@ const ContainerAlbum = styled.div`
     padding:10px;
     position:sticky;
     top:0;
+
+    @media (max-width: 480px) {
+        padding:0;
+
+        ::before{
+            content:'Album details';
+            font-size:24px;
+            color:#fff;
+            display:block;
+            margin-bottom:20px;
+            position:relative;
+            font-weight:600;
+        }
+    }
 `
 
 const ContainerInfo = styled.div`
@@ -63,7 +77,7 @@ const AlbumInfo = styled.p`
     margin:0;
 
     @media (max-width: 480px) {
-        font-size:22px;
+        font-size:20px;
     }
 `
 
@@ -93,6 +107,7 @@ const Container = styled.div`
     @media (max-width: 480px) {
         flex-direction:column;
         align-items:center;
+        margin-bottom: 10px;
     }
 `
 
@@ -122,8 +137,8 @@ const RecommendationsButtonsContainer = styled.div`
 
     @media (max-width: 480px) {
        flex-direction:column;
-       width:100%;
-       margin-bottom:0px;
+       width:${(props) => (props.mobileSize ? "150px" : "100%")};
+       margin-bottom:40px;
     }
 `
 
@@ -170,6 +185,8 @@ const ArtistName = styled.p`
 
     @media (max-width: 480px) {
         font-size:16px;
+        margin: 10px 0;
+        color: #47ffbb;
     }
 `
 
@@ -188,6 +205,7 @@ const RecommendationsContainer = styled.div`
     @media (max-width: 480px) {
        flex-direction:column;
        width:100%;
+       align-items:flex-start;
     }
 `
 
@@ -247,4 +265,21 @@ const NavContainer = styled.div`
     }
 `
 
-export {ContainerAlbum, Subtitle, AlbumInfo, ContainerInfo, ContainerImage, ContainerAlbumName, Button, TrackImage, RecommendationsButtonsContainer, TrackName, Container, ArtistName, Icon, Text, TextContainer, RecommendationsContainer, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer}
+const TracklistContainer = styled.div`
+
+    ::before{
+        content:'Tracklist';
+        font-size:24px;
+        color:#fff;
+        display:block;
+        margin-bottom:20px;
+        position:relative;
+        font-weight:600;
+    }
+
+    @media (max-width: 480px) {
+        width:100%;
+    }
+`
+
+export {ContainerAlbum, Subtitle, AlbumInfo, ContainerInfo, ContainerImage, ContainerAlbumName, Button, TrackImage, RecommendationsButtonsContainer, TrackName, Container, ArtistName, Icon, Text, TextContainer, RecommendationsContainer, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer, TracklistContainer}

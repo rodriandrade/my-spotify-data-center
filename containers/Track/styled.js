@@ -53,6 +53,7 @@ const RecommendationsContainer = styled.div`
     @media (max-width: 480px) {
        flex-direction:column;
        width:100%;
+       align-items:flex-start;
     }
 `
 
@@ -62,7 +63,8 @@ const RecommendationsButtonsContainer = styled.div`
 
     @media (max-width: 480px) {
        flex-direction:column;
-       width:100%;
+       width:${(props) => (props.mobileSize ? "150px" : "100%")};
+       margin-bottom:40px;
     }
 `
 
@@ -94,6 +96,7 @@ const Container = styled.div`
     @media (max-width: 480px) {
         flex-direction:column;
         align-items:center;
+        margin-bottom: 10px;
     }
 `
 
@@ -112,6 +115,13 @@ const Icon = styled.img`
     max-width:18px;
     max-height:18px;
     margin-right:10px;
+
+    @media (max-width: 480px) {
+        max-width:${(props) => (props.refreshIcon ? "25px" : "18px")};
+        max-height:${(props) => (props.refreshIcon ? "25px" : "18px")};
+        cursor:pointer;
+        position:relative;
+    }
 `
 
 const TrackName = styled.h1`
@@ -122,7 +132,7 @@ const TrackName = styled.h1`
     position: relative;
 
     @media (max-width: 480px) {
-        font-size:28px;
+        font-size:36px;
     }
 `
 
@@ -134,6 +144,8 @@ const ArtistName = styled.p`
 
     @media (max-width: 480px) {
         font-size:${(props) => (props.size ? "14px" : "16px")};
+        margin: ${(props) => (props.margin ? "10px 0" : "0px")};
+        color: #47ffbb;
     }
 `
 
@@ -163,7 +175,10 @@ const Button = styled.button`
     @media (max-width: 480px) {
        width:100%;
        margin-left:0;
-       margin-bottom:10px;
+       margin-bottom:0px;
+       /*
+       display:none;
+       */
     }
 `
 
@@ -218,6 +233,10 @@ const ContainerAlbum = styled.div`
     position:relative;
 
     :hover{
+        border-bottom:3px solid #47ffbb;
+    }
+
+    @media (max-width: 480px) {
         border-bottom:3px solid #47ffbb;
     }
 `
@@ -316,4 +335,12 @@ const NavContainer = styled.div`
         display:none;
     }
 `
-export {ContainerInfo, ContainerImage, Container, TrackImage, TrackName, TrackGenres, ArtistName, RecommendationsContainer, Button, RecommendationsButtonsContainer, Icon, Position, TrackInfo, TrackInfoCont, ContainerAlbum, ContainerAlbumImage, ContainerAlbumInfo, Text, TextContainer, NoDataContainer, NoDataInfo, NoDataTitle, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer}
+
+const AudioFeaturesContainer = styled.div`
+    
+    @media (max-width: 480px) {
+        display:none;
+    }
+`
+
+export {ContainerInfo, ContainerImage, Container, TrackImage, TrackName, TrackGenres, ArtistName, RecommendationsContainer, Button, RecommendationsButtonsContainer, Icon, Position, TrackInfo, TrackInfoCont, ContainerAlbum, ContainerAlbumImage, ContainerAlbumInfo, Text, TextContainer, NoDataContainer, NoDataInfo, NoDataTitle, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer, AudioFeaturesContainer}

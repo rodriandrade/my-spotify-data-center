@@ -131,7 +131,7 @@ const TrackName = styled.p`
     }
 
     @media (max-width: 480px) {
-       font-size:22px;
+       font-size:16px;
     }
 `
 

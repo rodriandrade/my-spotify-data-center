@@ -1,12 +1,14 @@
-import { StyledBurger } from './styled';
+import { StyledBurger, MenuContainer } from './styled';
 
 const BurgerMenu = ({ open, setOpen }) => {
   return (
-    <StyledBurger open={open} onClick={() => setOpen(!open)}>
-      <div />
-      <div />
-      <div />
-    </StyledBurger>
+    <MenuContainer>
+      <StyledBurger open={open} onClick={() => setOpen(!open)}>
+        <div />
+        <div />
+        <div />
+      </StyledBurger>
+    </MenuContainer>
   )
 }
 

@@ -14,6 +14,7 @@ const Text = styled.span`
 
     @media (max-width: 480px) {
         font-size:36px;
+        text-align:center;
     }
 `
 

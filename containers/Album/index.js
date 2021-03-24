@@ -5,7 +5,7 @@ import TrackCard from '../../components/trackCard'
 import {Grid, Col} from '../../components/Grid'
 import Title from '../../components/Title'
 import Inner from '../../components/Inner'
-import {ContainerAlbum, Subtitle, AlbumInfo, ContainerInfo, ContainerImage, ContainerAlbumName, Button, TrackImage, RecommendationsButtonsContainer, TrackName, Container, ArtistName, Icon, TextContainer, Text, RecommendationsContainer, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer} from './styled'
+import {ContainerAlbum, Subtitle, AlbumInfo, ContainerInfo, ContainerImage, ContainerAlbumName, Button, TrackImage, RecommendationsButtonsContainer, TrackName, Container, ArtistName, Icon, TextContainer, Text, RecommendationsContainer, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer, TracklistContainer} from './styled'
 import BarChart from "../../components/BarChart";
 import NavMenu from '../../components/NavMenu'
 import Modal from '../../components/Modal'
@@ -510,7 +510,7 @@ export default function Album() {
                     <ContainerAlbumName>
                       <TrackName>{album.name}</TrackName>
                       <ArtistName>{artistName.join(", ")}</ArtistName>
-                      <RecommendationsButtonsContainer>
+                      <RecommendationsButtonsContainer mobileSize>
                         {save && (
                           <Button onClick={handleSave}>
                             <Icon src={saveIcon} alt="save_button" />
@@ -557,19 +557,21 @@ export default function Album() {
                       </ContainerAlbum>
                     </Col>
                     <Col desktop={10} tablet={6} mobile={12}>
-                      {tracks &&
-                        tracks.map((track) => (
-                          <TracklistCard
-                            data={track}
-                            token={newToken}
-                            refreshToken={refresh_token}
-                            playerAlbumPage={playerAlbumPage}
-                            setPlayerAlbumPage={setPlayerAlbumPage}
-                            blink={blink}
-                            setBlink={setBlink}
-                            activeDevices={activeDevices}
-                          />
-                        ))}
+                      <TracklistContainer>
+                        {tracks &&
+                          tracks.map((track) => (
+                            <TracklistCard
+                              data={track}
+                              token={newToken}
+                              refreshToken={refresh_token}
+                              playerAlbumPage={playerAlbumPage}
+                              setPlayerAlbumPage={setPlayerAlbumPage}
+                              blink={blink}
+                              setBlink={setBlink}
+                              activeDevices={activeDevices}
+                            />
+                          ))}
+                      </TracklistContainer>
                     </Col>
                   </Grid>
                 </section>
@@ -580,7 +582,7 @@ export default function Album() {
                   <Grid colGap={30} rowGap={40}>
                     <Col desktop={12} tablet={6} mobile={12}>
                       <RecommendationsContainer>
-                        <Title size="h3" margin="90px 0 60px 0">
+                        <Title size="h3" margin="subtitle">
                           Albums recommendations
                         </Title>
                         <RecommendationsButtonsContainer>

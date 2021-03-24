@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-export const StyledBurger = styled.button`
+const StyledBurger = styled.button`
   position: fixed;
-  top: 22px;
+  top: 15px;
   right: 5%;
   display: none;
   flex-direction: column;
@@ -13,7 +13,7 @@ export const StyledBurger = styled.button`
   border: none;
   cursor: pointer;
   padding: 0;
-  z-index: 1000000000000000;
+  z-index: 100;
   position: fixed;
   &:focus {
     outline: none;
@@ -40,6 +40,20 @@ export const StyledBurger = styled.button`
 
   @media (max-width: 480px) {
       display:flex;
-      z-index:10;
+      z-index: 3001;
   }
 `;
+
+const MenuContainer = styled.div`
+/*
+    width:100%;
+    height:60px;
+    position:fixed;
+    top:0;
+    background-color:rgba(0,0,0,0.5);
+    z-index:70000000000000;
+    backdrop-filter:blur(20px);
+    */
+`
+
+export { StyledBurger, MenuContainer }

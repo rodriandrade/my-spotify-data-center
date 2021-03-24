@@ -15,7 +15,7 @@ const Container = styled.div`
         justify-content: center;
         transition: transform 0.3s ease-in-out;
         transform: ${({ open }) => open ? 'translateX(0)' : 'translateX(100%)'};
-        z-index:3;
+        z-index:3000;
     }
 `
 

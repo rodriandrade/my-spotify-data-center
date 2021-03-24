@@ -5,7 +5,7 @@ import TrackCard from '../../components/trackCard'
 import {Grid, Col} from '../../components/Grid'
 import Title from '../../components/Title'
 import Inner from '../../components/Inner'
-import { TrackImage, TrackName, TrackGenres, Container, ContainerImage, ContainerInfo, ArtistName, RecommendationsContainer, Button, RecommendationsButtonsContainer, Icon, Position, TrackInfo, TrackInfoCont, ContainerAlbum, ContainerAlbumImage, ContainerAlbumInfo, Text, TextContainer, NoDataContainer, NoDataInfo, NoDataTitle, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer} from './styled'
+import { TrackImage, TrackName, TrackGenres, Container, ContainerImage, ContainerInfo, ArtistName, RecommendationsContainer, Button, RecommendationsButtonsContainer, Icon, Position, TrackInfo, TrackInfoCont, ContainerAlbum, ContainerAlbumImage, ContainerAlbumInfo, Text, TextContainer, NoDataContainer, NoDataInfo, NoDataTitle, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer, AudioFeaturesContainer} from './styled'
 import BarChart from "../../components/BarChart";
 import NavMenu from '../../components/NavMenu'
 import Modal from '../../components/Modal'
@@ -554,8 +554,8 @@ export default function Track() {
                         </ContainerImage>
                         <ContainerInfo>
                             <TrackName>{track.name}</TrackName> 
-                            {!!artistsNames.length > 0 && <ArtistName>{artistsNames.join(", ")}</ArtistName>}
-                            <RecommendationsButtonsContainer>
+                            {!!artistsNames.length > 0 && <ArtistName margin>{artistsNames.join(", ")}</ArtistName>}
+                            <RecommendationsButtonsContainer mobileSize>
                               {save && <Button onClick={handleSave} margin><Icon src={saveIcon} alt="save_button" />{save === 'true' ? 'unsave' : 'save'}</Button> }
                             </RecommendationsButtonsContainer> 
                         </ContainerInfo>
@@ -571,7 +571,7 @@ export default function Track() {
                 {loadingTime ?
                 <Grid colGap={30} rowGap={40}>
                     <Col desktop={4} tablet={6} mobile={12}>
-                        <Title size="h4" margin="0 0 0 0">Album</Title>
+                        <Title size="h4" margin="none">Album</Title>
                         <ContainerAlbum>
                           <ContainerAlbumImage>
                             {track.album && <TrackImage album src={track.album.images[0].url} />}
@@ -596,11 +596,11 @@ export default function Track() {
                         </ContainerAlbum>
                     </Col>
                     <Col desktop={4} tablet={6} mobile={12}>
-                        <Title size="h4" margin="0 0 0 0">Popularity</Title>
+                        <Title size="h4" margin="none">Popularity</Title>
                         {track.popularity && <Position><strong>{track.popularity} / 100</strong></Position>}
                     </Col>
                     <Col desktop={4} tablet={6} mobile={12}>
-                        <Title size="h4" margin="0 0 0 0">Lenght</Title>
+                        <Title size="h4" margin="none">Lenght</Title>
                         <Position><strong>{trackLength}</strong></Position>
                     </Col>
                 </Grid>
@@ -609,7 +609,7 @@ export default function Track() {
 
                 {loadingTime && (tracksFourWeeks || tracksSixMonths || tracksSeveralYears) ? 
                   <section>
-                  <Title size="h4" margin="60px 0 0 0">{track.name} appeareances in your artist ranking</Title>
+                  <Title size="h4" margin="data-subtitle">{track.name} appeareances in your artist ranking</Title>
                   <Grid colGap={30} rowGap={40}>
                       {tracksFourWeeks ?
                         <Col desktop={4} tablet={6} mobile={12}>
@@ -656,12 +656,14 @@ export default function Track() {
 
                 {loadingTime ?
                   <section>
-                    <Title size="h3" margin="90px 0 60px 0">Audio features</Title>
-                    <Grid colGap={30} rowGap={40}>
-                        <Col desktop={12} tablet={6} mobile={12}>
-                            {audioFeatures != '' && <BarChart audioFeatures={audioFeatures} />}
-                        </Col>
-                    </Grid>
+                    <AudioFeaturesContainer>
+                      <Title size="h3" margin="subtitle">Audio features</Title>
+                      <Grid colGap={30} rowGap={40}>
+                          <Col desktop={12} tablet={6} mobile={12}>
+                              {audioFeatures != '' && <BarChart audioFeatures={audioFeatures} />}
+                          </Col>
+                      </Grid>
+                    </AudioFeaturesContainer>
                   </section>
                 : null}
 
@@ -670,10 +672,11 @@ export default function Track() {
                     <Grid colGap={30} rowGap={40}>
                         <Col desktop={12} tablet={6} mobile={12}>
                           <RecommendationsContainer>
-                            <Title size="h3" margin="90px 0 60px 0">Tracks recommendations</Title>
+                            <Title size="h3" margin="subtitle">Tracks recommendations</Title>
                             <RecommendationsButtonsContainer>
                               <Button onClick={() => setNewRec(!newRec)}><Icon src="/refresh.svg" alt="refresh_icon" />Refresh recommendations</Button>
                               <Button onClick={createPlaylistWithRecommendations}>Create playlist</Button>
+                              {/*<Icon refreshIcon onClick={() => setNewRec(!newRec)} src="/refresh.svg" alt="refresh_icon" />*/}
                             </RecommendationsButtonsContainer>
                           </RecommendationsContainer>
                         </Col>

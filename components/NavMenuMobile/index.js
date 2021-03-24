@@ -24,11 +24,31 @@ const NavMenuMobile = ({open, setOpen, access_token, refresh_token}) => {
                                 <a href="#home_section">Home</a>
                             </Link>
                         </List>
-                        <List onClick={() => setOpen(!open)}><a href="#artists_section">Artists</a></List>
-                        <List onClick={() => setOpen(!open)}><a href="#tracks_section">Tracks</a></List>
-                        <List onClick={() => setOpen(!open)}><a href="#albums_section">Albums</a></List>
-                        <List onClick={() => setOpen(!open)}><a href="#genres_section">Genres</a></List>
-                        <List onClick={() => setOpen(!open)}><a href="#recommendations_section">Recommendations</a></List>
+                        <List onClick={() => setOpen(!open)}>
+                            <Link href={{pathname: `/`, query: { access_token: access_token, refresh_token: refresh_token }}}>
+                                <a href="#artists_section">Artists</a>
+                            </Link>
+                        </List>
+                        <List onClick={() => setOpen(!open)}>
+                            <Link href={{pathname: `/`, query: { access_token: access_token, refresh_token: refresh_token }}}>
+                                <a href="#tracks_section">Tracks</a>
+                            </Link>
+                        </List>
+                        <List onClick={() => setOpen(!open)}>
+                            <Link href={{pathname: `/`, query: { access_token: access_token, refresh_token: refresh_token }}}>
+                                <a href="#albums_section">Albums</a>
+                            </Link>
+                        </List>
+                        <List onClick={() => setOpen(!open)}>
+                            <Link href={{pathname: `/`, query: { access_token: access_token, refresh_token: refresh_token }}}>
+                                <a href="#genres_section">Genres</a>
+                            </Link>
+                        </List>
+                        <List onClick={() => setOpen(!open)}>
+                            <Link href={{pathname: `/`, query: { access_token: access_token, refresh_token: refresh_token }}}>
+                                <a href="#recommendations_section">Recommendations</a>
+                            </Link>
+                        </List>
                     </Menu>
                 </nav>
                     <ContainerSocial>

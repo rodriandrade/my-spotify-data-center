@@ -77,6 +77,12 @@ const TrackArtist = styled.p`
     padding:0;
     margin:0;
     font-weight:200px;
+
+    @media (max-width: 480px) {
+        padding:0;
+        margin:0;
+        font-size:20px;
+    }
 `
 
 const TrackName = styled.h1`
@@ -89,7 +95,7 @@ const TrackName = styled.h1`
     @media (max-width: 480px) {
         padding:0;
         margin:0;
-        font-size:36px;
+        font-size:24px;
     }
 `
 
@@ -103,11 +109,12 @@ const CloseButton = styled.img`
 
     @media (max-width: 480px) {
         top:0;
-        left:300px;
+        left:90%;
         position:relative;
-        padding:20px 0px;
+        //padding:20px 0px;
         align-self:flex-end;
         width:20px;
+        padding:20px;
     }
 `
 

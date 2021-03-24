@@ -52,6 +52,12 @@ const CurrentlyPlayingCont = styled.div`
             background-color: #47ffbb;
         }
     }
+
+    @media (max-width: 480px) {
+        :hover{
+            opacity:1;
+        }
+    }
 `
 
 const Container = styled.div`
@@ -66,7 +72,7 @@ const Container = styled.div`
     bottom:0;
     justify-content:center;
     align-items:center;
-    z-index:20000;
+    z-index:2000;
     transition:1s;
     //transform: translateX(-50%);
     transform:${(props) => (props.showPlayer ? "translate(0%, 0px)" : "translate(0%, 70px)")};
@@ -76,6 +82,7 @@ const Container = styled.div`
     @media (max-width: 480px) {
        width:100%;
        transform:${(props) => (props.showPlayer ? "translate(0%, 0px)" : "translate(0%, 70px)")};
+       justify-content:flex-start;
     }
 `
 
@@ -91,17 +98,18 @@ const TrackImage = styled.img`
     }
 
     @media (max-width: 480px) {
-        max-height:30px;
-        max-width: 30px;
+        max-height:50px;
+        max-width: 50px;
     }
 `
+
 const ImageContainer = styled.div`
     margin:0 auto;
     width:50px;
 
     @media (max-width: 480px) {
-        max-height:30px;
-        max-width: 30px;
+        max-height:50px;
+        max-width: 50px;
         margin-right:10px;
     }
 `
@@ -112,6 +120,10 @@ const ArtistName = styled.p`
     color: #47ffbb;
     margin:0;
     text-align: center;
+
+    @media (max-width: 480px) {
+        text-align:left;
+    }
 `
 
 const TrackName = styled.p`
@@ -125,6 +137,10 @@ const TrackName = styled.p`
     :hover{
         text-decoration: underline 3px solid;
     }
+
+    @media (max-width: 480px) {
+        text-align:left;
+    }
 `
 
 const TextContainer = styled.div`
@@ -133,6 +149,15 @@ const TextContainer = styled.div`
     justify-content:flex-start;
     flex-direction:column;
     padding:16px 0;
+
+    @media (max-width: 480px) {
+        white-space: nowrap; 
+        max-width: 150px; 
+        overflow: hidden;
+        text-overflow: ellipsis; 
+        display:inline-block;
+        min-width: 0;
+    }
 `
 
 const ContainerPlay = styled.div`
@@ -142,7 +167,6 @@ const ContainerPlay = styled.div`
     flex-direction:column;
     margin-left:20px;
 `
-
 
 const Cont = styled.div`
     width:1080px;
