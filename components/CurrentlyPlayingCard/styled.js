@@ -149,6 +149,7 @@ const TextContainer = styled.div`
     justify-content:flex-start;
     flex-direction:column;
     padding:16px 0;
+    margin-left:10px;
 
     @media (max-width: 480px) {
         white-space: nowrap; 

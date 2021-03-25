@@ -266,19 +266,18 @@ const NavContainer = styled.div`
 `
 
 const TracklistContainer = styled.div`
-
-    ::before{
-        content:'Tracklist';
-        font-size:24px;
-        color:#fff;
-        display:block;
-        margin-bottom:20px;
-        position:relative;
-        font-weight:600;
-    }
-
+  
     @media (max-width: 480px) {
-        width:100%;
+        ::before{
+            content:'Tracklist';
+            font-size:24px;
+            color:#fff;
+            display:block;
+            margin-bottom:20px;
+            position:relative;
+            font-weight:600;
+            width:100%;
+        }
     }
 `
 

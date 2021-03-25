@@ -1,6 +1,6 @@
 import { init } from 'ityped'
 import { useRef, useEffect, useState } from 'react'
-import Text from './styled'
+import { TextContainer, Text } from './styled'
 
 const TypingEffect = props =>{
 
@@ -28,9 +28,9 @@ const TypingEffect = props =>{
     return(
         <div>
             {props.title ? 
-                <div>
+                <TextContainer>
                     <Text>Discover your favorites <span id="element" className=".ityped-cursor"></span></Text>
-                </div>
+                </TextContainer>
             : 
                 <div>
                     <Text id="welcome" className=".ityped-cursor"></Text>

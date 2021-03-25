@@ -133,6 +133,7 @@ const TrackName = styled.h1`
 
     @media (max-width: 480px) {
         font-size:36px;
+        text-align:center;
     }
 `
 

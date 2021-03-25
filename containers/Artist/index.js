@@ -44,6 +44,9 @@ export default function Artist() {
     const [blink, setBlink] = useState(false)
     const [playerArtistPage, setPlayerArtistPage] = useState([])
 
+    // Devices
+    const [activeDevices, setActiveDevices] = useState('');
+
     // State relacionados a las canciones del historial de escucha del usuario
     const [tracksRecentlyPlayed, setTracksRecentlyPlayed] = useState([]);
 
@@ -109,6 +112,18 @@ export default function Artist() {
                     setTracksSixMonths('')
                     setTracksSeveralYears('')
                     setLoadingTime(false)
+                    const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
+                      headers: {
+                      'Authorization': 'Bearer ' + token
+                      }
+                    });
+                    const devices = responseUserDevices.data.devices;
+                    if(devices.length == 0){
+                        setActiveDevices(false)
+                    } else{
+                        setActiveDevices(true)
+                    }
+
                     // Traer artista
                     const responseArtist = await axios.get(`https://api.spotify.com/v1/artists/${id}`, {
                         headers: {
@@ -116,6 +131,7 @@ export default function Artist() {
                         }
                     });
                     setArtist(responseArtist.data);
+                    console.log(responseArtist.data)
                     // Nombre del artista para buscarlo entre los 50 artistas más escuchados
                     const artistName = responseArtist.data.name;
                     
@@ -297,7 +313,7 @@ export default function Artist() {
             }
         }
         fetchData()
-    }, [id, playerArtistPage, blink])
+    }, [id/*, playerArtistPage, blink*/])
 
     const handleFollow = async () => {
         try{
@@ -382,7 +398,11 @@ export default function Artist() {
                             <Col desktop={12} tablet={6} mobile={12}>
                                 <Container>
                                     <ContainerImage>
-                                    {artist.images && <ArtistImage src={artist.images[0].url} />}
+                                        {artist.images[2].url ?
+                                            <ArtistImage src={artist.images[2].url} />
+                                            : 
+                                            <ArtistImage src={artist.images[1].url} />
+                                        }
                                     </ContainerImage>
                                     <ContainerInfo>
                                         <ArtistName>{artist.name}</ArtistName>
@@ -518,7 +538,7 @@ export default function Artist() {
                         <section>
                             <Title size="h4" margin="bigger-subtitle">Artist Top Tracks on Spotify</Title>
                             <Grid colGap={30} rowGap={40} columns>
-                                {artistTopTracks && artistTopTracks.map((track, index) => (<TrackCard key={track._id} data={track} token={newToken} refreshToken={refresh_token} index={index} gridSize={2} singleTrack="100" playerArtistPage={playerArtistPage} setPlayerArtistPage={setPlayerArtistPage} blink={blink} setBlink={setBlink}/>))}
+                                {artistTopTracks && artistTopTracks.map((track, index) => (<TrackCard key={track._id} data={track} token={newToken} refreshToken={refresh_token} index={index} gridSize={2} singleTrack="100" playerArtistPage={playerArtistPage} setPlayerArtistPage={setPlayerArtistPage} blink={blink} setBlink={setBlink} activeDevices={activeDevices}/>))}
                             </Grid>
                         </section>
                     : null}

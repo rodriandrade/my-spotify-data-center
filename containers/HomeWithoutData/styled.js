@@ -9,7 +9,7 @@ const ContainerHero = styled.div`
     align-items:center;
 
     @media (max-width: 480px) {
-       width:90%;
+       width:100%;
        margin:0;
        justify-content:center;
         align-items:center;

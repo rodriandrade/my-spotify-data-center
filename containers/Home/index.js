@@ -43,6 +43,8 @@ const Home = props =>{
 
       var params = getHashParams();
 
+      const [playing, setPlaying] = useState([]);
+
       const [selected, setSelected] = useState(false);
       const [timePeriodTracks, setTimePeriodTracks] = useState('You listen to these tracks for the most part in the past 4 weeks! You spend a lot of time listening to')
       const [timePeriodArtists, setTimePeriodArtists] = useState('You listen to these artists for the most part in the past 4 weeks! You spend a lot of time listening to')
@@ -79,7 +81,7 @@ const Home = props =>{
 
       // Player
       const [recentlyPlayed, setRecentlyPlayed] = useState([]);
-      const [playing, setPlaying] = useState([]);
+      
       const [playingData, setPlayingData] = useState([]);
       const [minutesListened, setMinutesListened] = useState('')
       const [streamsDays, setStreamsDay] = useState('')
@@ -126,10 +128,15 @@ const Home = props =>{
       const getNewToken = async () =>{
         let refresh_token = '';
         if(params.refresh_token){
+          console.log("Entre al params.refreshToken")
+          console.log(params.refreshToken)
           refresh_token = params.refresh_token
         } else if(router.query.refresh_token){
+          console.log("Entre al query.router")
+          console.log(router.query.refresh_token)
           refresh_token = router.query.refresh_token
         }
+        console.log("No entro en ninguno de los dos IF")
         const responseRefreshToken = await axios.get(`https://my-spotify-data-center-server.vercel.app/refresh_token`, {
             params: {
               'refresh_token': refresh_token
@@ -338,6 +345,7 @@ const Home = props =>{
                   console.error('este es mi error',error);
                   if (error.response.status === 401) {
                     getNewToken();
+                    console.log("holis")
                   }
                   if (error.response.status === 500) {
                     console.log(error);
@@ -541,7 +549,7 @@ const Home = props =>{
               setRecommendations('')
               
                 if(recommendationsTerm === "tracks"){
-                  console.log("tracks")
+                  //console.log("tracks")
                   const responseTracks = await axios.get(`https://api.spotify.com/v1/me/top/tracks?time_range=${typeTermRecommendations}&limit=50`, {
                     headers: {
                       'Authorization': 'Bearer ' + token
@@ -564,7 +572,7 @@ const Home = props =>{
                             'Authorization': 'Bearer ' + token
                             }
                   });
-                  console.log(responseRecommendations.data.tracks)
+                  //console.log(responseRecommendations.data.tracks)
                   setRecommendations(responseRecommendations.data.tracks);
 
                   if(typeTermRecommendations === "short_term"){
@@ -648,7 +656,7 @@ const Home = props =>{
                 } 
                 else if(recommendationsTerm === "artists")
                 {
-                    console.log("artists")
+                    //console.log("artists")
                     const responseArtists = await axios.get(
                       `https://api.spotify.com/v1/me/top/artists?time_range=${typeTermRecommendations}&limit=50`,
                       {
@@ -676,7 +684,7 @@ const Home = props =>{
                               'Authorization': 'Bearer ' + token
                               }
                     });
-                    console.log(responseRecommendations.data.tracks)
+                    //console.log(responseRecommendations.data.tracks)
                     setRecommendations(responseRecommendations.data.tracks);
 
                     if(typeTermRecommendations === "short_term"){
@@ -710,13 +718,25 @@ const Home = props =>{
       const checkCurrentlyPlaying = async () => {
         if(token){
           try {
+            const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
+                      headers: {
+                      'Authorization': 'Bearer ' + token
+                      }
+                  });
+                  const devices = responseUserDevices.data.devices;
+                  if(devices.length == 0){
+                      setActiveDevices(false)
+                  } else{
+                      setActiveDevices(true)
+                  }
+                  console.log(activeDevices)
             const responsePlaying = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
               headers: {
                 'Authorization': 'Bearer ' + token
               }
             });
             setPlaying(responsePlaying.data.item);
-            console.log(responsePlaying.data)
+            //console.log(responsePlaying.data)
             setPlayingData(responsePlaying.data)
             setBlink(true)
             setPlayingRightNow(responsePlaying.data.item);
@@ -724,6 +744,7 @@ const Home = props =>{
             console.error('este es mi error',error);
               if (error.response.status === 401) {
                 getNewToken();
+                //console.log("???????????????????????????????????")
               }
               if (error.response.status === 500) {
                 console.log(err);
@@ -866,7 +887,7 @@ const Home = props =>{
 
           <MasterContainer>
 
-          {user && playing && <CurrentlyPlayingCard data={playing} token={token} refreshToken={refreshToken} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink}/>}
+          {playing && user && <CurrentlyPlayingCard data={playing} token={token} refreshToken={refreshToken} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink}/>}
           
           <BurgerMenu open={open} setOpen={setOpen}/>
           <NavMenuMobile open={open} setOpen={setOpen} access_token={token} refresh_token={refreshToken} />

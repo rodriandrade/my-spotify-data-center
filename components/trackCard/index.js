@@ -32,6 +32,8 @@ const TrackCard = props =>{
         setModalIsOpen(!modalIsOpen)
     }
 
+    console.log(activeDevices)
+
     /*
     useEffect(() => {
         const fetchDevices = async () =>{
@@ -65,6 +67,7 @@ const TrackCard = props =>{
 
     const playTrack = async () =>{
         try{
+            //console.log("Holis")
             const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
                     headers: {
                     'Authorization': 'Bearer ' + token
@@ -73,9 +76,11 @@ const TrackCard = props =>{
             const devices = responseUserDevices.data.devices;
             if(devices.length == 0){
                 setActiveDevices(false)
+                //console.log("NO HAY DEVICES AMI")
                 checkPlayTrack(responseUserDevices);
             } else{
                 setActiveDevices(true)
+                //console.log("YAAAAY, HAY DEVICES")
                 checkPlayTrack(responseUserDevices);
             }
         } catch(error){
@@ -96,17 +101,19 @@ const TrackCard = props =>{
             const devices = responseUserDevices.data.devices;
             props.setBlink(false)
             if(devices.length == 0){
+                //console.log("No devices ami")
                 setActiveDevices(false);
             } else{
+                //console.log("Play track")
                 setActiveDevices(true)
                 const deviceID = responseUserDevices.data.devices[0].id
                 if(deviceID){
-                    console.log("Llegué acá")
+                    //console.log("Llegué acá")
                     const requestData = {
                         "uris": [`spotify:track:${id}`],
                         "position_ms": 0
                     }
-                    console.log(id)
+                    //console.log(id)
                     const base_url = `https://api.spotify.com/v1/me/player/play?device_id=${deviceID}`;
                     axios({
                         method: 'put',

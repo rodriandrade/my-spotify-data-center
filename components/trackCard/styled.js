@@ -68,8 +68,8 @@ const ImageContainer = styled.div`
     //max-width: ${(props) => (props.singleTrack ? "100%" : "200px")};
     //max-height:200px;
     //max-width: 200px;
-    max-height:180px;
-    max-width: 180px;
+    height:180px;
+    width: 180px;
     position: relative;
     margin:0 auto;
     &:hover ${TextContainer} {

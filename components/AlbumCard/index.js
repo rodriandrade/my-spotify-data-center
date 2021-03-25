@@ -110,7 +110,7 @@ const AlbumCard = props =>{
     }, [props.albumRecommendations])
 
     const playTrack = async () =>{
-        console.log("click")
+        //console.log("click")
         try{
             const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
                     headers: {
@@ -139,7 +139,7 @@ const AlbumCard = props =>{
     }
   
     const checkPlayTrack = (responseUserDevices) =>{
-        console.log("Hola")
+        //console.log("Hola")
         if(tracks){
             if(props.setBlink){
                 props.setBlink(false)
@@ -154,7 +154,7 @@ const AlbumCard = props =>{
               if(deviceID){
               //console.log("Holis");
               const trackID = tracks[0].id
-              console.log(trackID)
+              //console.log(trackID)
               const requestData = {
                   "uris": [`spotify:track:${trackID}`],
                   "position_ms": 0

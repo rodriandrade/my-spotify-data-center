@@ -18,4 +18,11 @@ const Text = styled.span`
     }
 `
 
-export default Text
+const TextContainer = styled.div`
+    
+    @media (max-width: 480px) {
+        text-align:center;
+    }
+`
+
+export {Text, TextContainer}

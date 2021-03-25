@@ -22,10 +22,6 @@ const ArtistImage = styled.img`
    min-width:180px;
    z-index:1;
    border-radius:200px;
-
-    :hover{
-        opacity:0.6;
-    }
 `
 
 const ArtistPosition = styled.p`

@@ -25,7 +25,13 @@ export default function Track() {
 
     ////////// STATES //////////
 
+    const [playing, setPlaying] = useState([]);
     const [open, setOpen] = useState(false)
+
+    const [showPlayer, setShowPlayer] = useState(false)
+    if(playing === null){
+      setShowPlayer(true)
+    }
 
     // State información a mostrar: track, audioFeatures y recommendations
     const [track, setTrack] = useState([]);
@@ -61,7 +67,7 @@ export default function Track() {
     const [playlistName, setPlaylistName] = useState('')
 
     // Player
-    const [playing, setPlaying] = useState([]);
+    
     const [playingData, setPlayingData] = useState([]);
     const [playingRightNow, setPlayingRightNow] = useState([]);
     const [blink, setBlink] = useState(false)
@@ -90,7 +96,7 @@ export default function Track() {
         const fetchData = async () => {
 
             try {
-
+                console.log(playing)
                 setLoadingTime(false)
 
                 const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
@@ -246,6 +252,7 @@ export default function Track() {
       const fetchRecommendations = async () =>{
         if(newToken){
           try{
+            console.log(playing)
             const responsePlaying = await axios.get(
               `https://api.spotify.com/v1/me/player/currently-playing`,
               {
@@ -516,7 +523,7 @@ export default function Track() {
             <MasterContainer>
 
             {loadingTime ? 
-              playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink} setBlink={setBlink} refreshToken={refresh_token} /> 
+              playing &&  <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink} setBlink={setBlink} refreshToken={refresh_token} /> 
             : null}
 
             <BurgerMenu open={open} setOpen={setOpen}/>

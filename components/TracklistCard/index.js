@@ -44,21 +44,34 @@ const TracklistCard = props =>{
         const checkSave = async () =>{
             setSave('')
             if(props.token){
-            const responseSavedTrack = await axios.get(`https://api.spotify.com/v1/me/tracks/contains?ids=${id}`, {
-                headers: {
-                'Authorization': 'Bearer ' + token
+                try{
+                    const responseSavedTrack = await axios.get(`https://api.spotify.com/v1/me/tracks/contains?ids=${id}`, {
+                        headers: {
+                        'Authorization': 'Bearer ' + token
+                        }
+                    });
+                    setSave(responseSavedTrack.data.toString());
+                    if(responseSavedTrack.data.toString() === "true"){
+                        setSaveIcon('/heart.svg');
+                    } else{
+                        setSaveIcon('/heart_no_fill.svg');
+                    }
+                } catch(error){
+                    console.log("HUBO UN ERROR EN TRACKLIST, ARREGLALO, VIEJO")
+                    if (error.response.status === 401) {
+                        getNewToken();
+                    }
+                    if (error.response.status === 500) {
+                        console.log(error);
+                    }
+                    if (error.response.status === 504) {
+                        console.log(error);
+                    }
                 }
-            });
-            setSave(responseSavedTrack.data.toString());
-            if(responseSavedTrack.data.toString() === "true"){
-                setSaveIcon('/heart.svg');
-              } else{
-                setSaveIcon('/heart_no_fill.svg');
-              }
             }
         }
         checkSave();
-    }, [props])
+    }, []) // Antes estaba pasando props como dependencia
 
     const handleSave = async () => {
         const base_url = `https://api.spotify.com/v1/me/tracks?ids=${id}`

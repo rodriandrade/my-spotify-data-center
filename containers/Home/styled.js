@@ -120,6 +120,10 @@ const LoadingText = styled.span`
     font-family: 'Poppins', sans-serif;
     color:#fff;
     margin-top:20px;
+
+    @media (max-width: 480px) {
+        text-align:center;
+    }
 `
 
 const LoadingContainerSection = styled.div`
@@ -132,7 +136,7 @@ const LoadingContainerSection = styled.div`
 `
 
 const MasterContainer = styled.div`
-    width:93%;
+    width:92%;
     display:flex;
     justify-content:center;
     flex-direction:column;
@@ -149,7 +153,7 @@ const SuperContainer = styled.div`
 `
 
 const NavContainer = styled.div`
-    width:7%;
+    width:8%;
     height:100vh;
     position:relative;
 

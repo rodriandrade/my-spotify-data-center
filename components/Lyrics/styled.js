@@ -101,7 +101,7 @@ const TrackName = styled.h1`
 
 const CloseButton = styled.img`
     cursor: pointer;
-    width:30px;
+    width:20px;
     color: #fff;
     position:absolute;
     top:30px;
@@ -118,4 +118,28 @@ const CloseButton = styled.img`
     }
 `
 
-export {Container, TrackLyrics, CloseButton, Blur, TrackTitle, TrackArtist, TrackName}
+const LoadingContainer = styled.div`
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    height:400px;
+`
+
+const LoadingImage = styled.img`
+    width:150px;
+    height:150px;
+`
+
+const LoadingText = styled.span`
+    font-size:16px;
+    font-family: 'Poppins', sans-serif;
+    color:#fff;
+    margin-top:20px;
+
+    @media (max-width: 480px) {
+        text-align:center;
+    }
+`
+
+export {Container, TrackLyrics, CloseButton, Blur, TrackTitle, TrackArtist, TrackName, LoadingContainer, LoadingImage, LoadingText}

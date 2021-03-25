@@ -5,15 +5,15 @@ import {ArtistImage, ArtistName, ArtistPosition, ContainerArtist, Overlay, Image
 const ArtistCard = props =>{
     const {genres, name, images, external_urls, id} = props.data
     const position = props.index + 1;
-    
+
     return(
         <Col desktop={props.gridSize} tablet={6} mobile={6}>
             <ContainerArtist>
                 <ImageContainer>
-                <a href={external_urls.spotify} target="_blank">
                     <Overlay></Overlay>
+                    {images.length >= 3 ? 
                     <ArtistImage src={images[2].url} alt={name} imageSizeLarge />
-                </a>
+                    : <ArtistImage src={images[1].url} alt={name} imageSizeLarge />}
                 </ImageContainer>
                 {!!position && <ArtistPosition>{position}</ArtistPosition>}                
                 <Link 

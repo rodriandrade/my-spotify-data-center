@@ -51,15 +51,21 @@ const CurrentlyPlayingCard = props =>{
     }
  
     const player = async () => {
+        console.log("Hi, I'm the player function")
+        /*
         const responsePlayingCheck = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
             headers: {
                 'Authorization': 'Bearer ' + token
             }
         });
         let isPlayingCheck = responsePlayingCheck.data.is_playing;
+        console.log(isPlaying)
+        console.log(isPlayingCheck)
         //console.log(isPlayingCheck);
-        if(isPlaying && isPlayingCheck){
+        */
+        if(isPlaying /*&& isPlayingCheck*/){
             try{
+                console.log("Si estoy acá es porque algo esta sonando y se tiene que pausar")
                 setIsPlaying(false);
                 setIcon('/play.svg');
                 axios({
@@ -89,8 +95,10 @@ const CurrentlyPlayingCard = props =>{
             }
         } else{
             try{
+                console.log("Si estoy acá es porque no hay nada sonando")
                 setIsPlaying(true);
                 setIcon('/pause.svg');
+                console.log(progress)
                 axios({
                     method: "put",
                     url: `https://api.spotify.com/v1/me/player/play`,
@@ -128,10 +136,16 @@ const CurrentlyPlayingCard = props =>{
                     'Authorization': 'Bearer ' + token
                   }
                 });
+                console.log(isPlaying)
                 if(responsePlaying.data.is_playing === true){
                   setIcon('/pause.svg');
+                  setIsPlaying(true)
+                  console.log("llegué a poner el icono de pausa")
                 }else{
                   setIcon('/play.svg');
+                  console.log("llegué a poner el icono de play")
+                  setIsPlaying(false)
+                  setProgress(responsePlaying.data.progress_ms)
                 }
               } catch (error) {
                 console.error('este es mi error',error);
@@ -151,7 +165,7 @@ const CurrentlyPlayingCard = props =>{
             checkCurrentlyPlaying()
             const interval=setInterval(()=>{
               checkCurrentlyPlaying()
-             },3000)
+             },2000)
              return()=>clearInterval(interval)
           },[token])
 
@@ -159,19 +173,33 @@ const CurrentlyPlayingCard = props =>{
     useEffect(() => {
         const checkSave = async () =>{
             if(token && id){
-            const responseSavedTrack = await axios.get(`https://api.spotify.com/v1/me/tracks/contains?ids=${id}`, {
-                headers: {
-                'Authorization': 'Bearer ' + token
-                }
-            });
-            setSave(responseSavedTrack.data.toString());
-            if(responseSavedTrack.data.toString() === "true"){
-                setSaveIcon('/heart.svg');
-              } else{
-                setSaveIcon('/heart_no_fill.svg');
+              try{
+                const responseSavedTrack = await axios.get(`https://api.spotify.com/v1/me/tracks/contains?ids=${id}`, {
+                    headers: {
+                    'Authorization': 'Bearer ' + token
+                    }
+                });
+                setSave(responseSavedTrack.data.toString());
+                if(responseSavedTrack.data.toString() === "true"){
+                    setSaveIcon('/heart.svg');
+                  } else{
+                    setSaveIcon('/heart_no_fill.svg');
+                  }
+              } catch (error) {
+                //console.log("ACÁ HUBO UN ERROR, VIEJO")
+                console.error('este es mi error',error);
+                  if (error.response.status === 401) {
+                    getNewToken();
+                  }
+                  if (error.response.status === 500) {
+                    console.log(err);
+                  }
+                  if (error.response.status === 504) {
+                    console.log(err);
+                  }
               }
             }
-        }
+          }
         checkSave();
     }, [props])
 
@@ -179,7 +207,8 @@ const CurrentlyPlayingCard = props =>{
     useEffect(() => {
       const checkLyrics = async () =>{
           try{
-            if(props.playingRightNow){
+            if(props.playingRightNow && artists){
+              setLyrics('')
               const getLyrics = await axios.get('/api/lyrics', {
                 params: {
                   'artist': artists[0].name,
@@ -190,6 +219,7 @@ const CurrentlyPlayingCard = props =>{
               console.log(getLyrics)
             }
           } catch(error){
+              console.error('este es mi error',error);
               if (error.response.status === 401) {
                   getNewToken();
               }
@@ -205,6 +235,7 @@ const CurrentlyPlayingCard = props =>{
   }, [id])
 
 
+  /*
     // Check devices
     useEffect(() => {
         const checkDevices = async () =>{
@@ -225,7 +256,7 @@ const CurrentlyPlayingCard = props =>{
                     setActiveDevices(true)
                     checkPlayTrack(responseUserDevices);
                 }
-                */
+                
             } catch(error){
                 if (error.response.status === 401) {
                     getNewToken();
@@ -240,6 +271,7 @@ const CurrentlyPlayingCard = props =>{
         }
         checkDevices()
     }, [])
+    */
 
     // Save or unsave track
     const handleSave = async () => {

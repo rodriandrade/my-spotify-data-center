@@ -68,6 +68,7 @@ export default function Album() {
         setNewToken(responseRefreshToken.data.access_token)
     }
 
+    /*
     useEffect(() => {
       const checkCurrentlyPlaying = async () =>{
         if(token){
@@ -98,6 +99,7 @@ export default function Album() {
     }
       checkCurrentlyPlaying()
     }, [playingStatus]);
+    */
 
     useEffect(() => {
 
@@ -109,7 +111,7 @@ export default function Album() {
 
                 setLoadingTime(false)
                 //console.log("YAAAAAAAAAAAAAAAAAAAAAAAAAAY")
-                console.log(id)
+                //console.log(id)
                 const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
                   headers: {
                   'Authorization': 'Bearer ' + newToken
@@ -128,7 +130,7 @@ export default function Album() {
                     }
                 }); 
                 setAlbum(responseAlbum.data);
-                console.log(responseAlbum.data)
+                //console.log(responseAlbum.data)
                 setTracks(responseAlbum.data.tracks.items);
 
                 const albumCover = responseAlbum.data.images[0].url;
@@ -156,9 +158,10 @@ export default function Album() {
                 setLoadingTime(true);
 
             } catch (error) {
+                //console.log("ACÁ HUBO UN ERROR, VIEJO")
                 console.error('este es mi error',error);
                 if (error.response.status === 401) {
-                    console.log("I'm here")
+                    //console.log("I'm here")
                     getNewToken();
                 }
                 if (error.response.status === 500) {
@@ -259,8 +262,8 @@ export default function Album() {
             }
 
             
-            console.log(loadingTime)
-            console.log(recommendations)
+            //console.log(loadingTime)
+            //console.log(recommendations)
           } catch (error){
             console.error("este es mi error", error);
             if (error.response.status === 401) {
@@ -300,7 +303,7 @@ export default function Album() {
               });
               setModalIsOpen(!modalIsOpen);
               setPlaylistModalState(true);
-              console.log(responseUserProfile)
+              //console.log(responseUserProfile)
               const user_id = responseUserProfile.data.id;
               const base_url = `https://api.spotify.com/v1/users/${user_id}/playlists`
               axios({
@@ -374,7 +377,7 @@ export default function Album() {
     }
 
     const checkPlayTrack = (responseUserDevices) =>{
-      console.log("holanda")
+      //console.log("holanda")
         if(tracks){
           try {
             const devices = responseUserDevices.data.devices;

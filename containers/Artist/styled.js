@@ -20,6 +20,10 @@ const ContainerImage = styled.div`
     justify-content: center; 
     align-items: center;
     position:relative;
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    border-radius:200px;
 `
 
 const Container = styled.div`
@@ -33,12 +37,13 @@ const Container = styled.div`
 
     @media (max-width: 480px) {
         flex-direction:column;
+        align-items:center;
     }
 `
 
 const ArtistImage = styled.img`
-    max-width:200px;
-    max-height:200px;
+    min-height: 200px;
+    min-width:200px;
     border-radius:200px;
     position: relative;
 
