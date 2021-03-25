@@ -28,11 +28,6 @@ export default function Track() {
     const [playing, setPlaying] = useState([]);
     const [open, setOpen] = useState(false)
 
-    const [showPlayer, setShowPlayer] = useState(false)
-    if(playing === null){
-      setShowPlayer(true)
-    }
-
     // State información a mostrar: track, audioFeatures y recommendations
     const [track, setTrack] = useState([]);
     const [audioFeatures, setAudioFeatures] = useState('');
@@ -523,7 +518,7 @@ export default function Track() {
             <MasterContainer>
 
             {loadingTime ? 
-              playing &&  <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink} setBlink={setBlink} refreshToken={refresh_token} /> 
+              playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink} setBlink={setBlink} refreshToken={refresh_token} /> 
             : null}
 
             <BurgerMenu open={open} setOpen={setOpen}/>
