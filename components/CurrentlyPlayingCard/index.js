@@ -153,10 +153,10 @@ const CurrentlyPlayingCard = props =>{
                     getNewToken();
                   }
                   if (error.response.status === 500) {
-                    console.log(err);
+                    console.log(error);
                   }
                   if (error.response.status === 504) {
-                    console.log(err);
+                    console.log(error);
                   }
               }
             }
@@ -192,10 +192,10 @@ const CurrentlyPlayingCard = props =>{
                     getNewToken();
                   }
                   if (error.response.status === 500) {
-                    console.log(err);
+                    console.log(error);
                   }
                   if (error.response.status === 504) {
-                    console.log(err);
+                    console.log(error);
                   }
               }
             }

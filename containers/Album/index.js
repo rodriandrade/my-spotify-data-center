@@ -44,6 +44,10 @@ export default function Album() {
     // Get new token
     const [newToken, setNewToken] = useState(token);
 
+    useEffect(() => {
+      setNewToken(token)
+    }, [token])
+
     // Recommendations 
     const [recommendations, setRecommendations] = useState([]);
     const [newRec, setNewRec] = useState(false);

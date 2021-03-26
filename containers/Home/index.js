@@ -21,7 +21,7 @@ import TypingEffect from '../../components/TypingEffect'
 import NavMenuMobile from '../../components/NavMenuMobile'
 import BurgerMenu from '../../components/BurgerMenu'
 
-import {Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshIcon, IconContainer, MainButton, LoadingImage, LoadingContainer, LoadingText, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer, WelcomeContainer} from './styled'
+import {Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshIcon, IconContainer, MainButton, LoadingImage, LoadingContainer, LoadingText, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer, WelcomeContainer, ScrollDown} from './styled'
 
 const Home = props =>{
 
@@ -127,10 +127,10 @@ const Home = props =>{
       // Get New Token (Refresh)
       const getNewToken = async () =>{
         let refresh_token = '';
-        if(params.refresh_token){
+        if(props.refresh_token){
           console.log("Entre al params.refreshToken")
-          console.log(params.refreshToken)
-          refresh_token = params.refresh_token
+          console.log(props.refreshToken)
+          refresh_token = props.refresh_token
         } else if(router.query.refresh_token){
           console.log("Entre al query.router")
           console.log(router.query.refresh_token)
@@ -718,6 +718,7 @@ const Home = props =>{
       const checkCurrentlyPlaying = async () => {
         if(token){
           try {
+            /*
             const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
                       headers: {
                       'Authorization': 'Bearer ' + token
@@ -729,7 +730,8 @@ const Home = props =>{
                   } else{
                       setActiveDevices(true)
                   }
-                  console.log(activeDevices)
+                  console.log("Esto es lo que seteo en home" + " " + activeDevices)
+            */      
             const responsePlaying = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
               headers: {
                 'Authorization': 'Bearer ' + token
@@ -740,6 +742,7 @@ const Home = props =>{
             setPlayingData(responsePlaying.data)
             setBlink(true)
             setPlayingRightNow(responsePlaying.data.item);
+            
           } catch (error) {
             console.error('este es mi error',error);
               if (error.response.status === 401) {
@@ -747,10 +750,13 @@ const Home = props =>{
                 //console.log("???????????????????????????????????")
               }
               if (error.response.status === 500) {
-                console.log(err);
+                console.log(error);
+              }
+              if (error.response.status === 503) {
+                console.log(error);
               }
               if (error.response.status === 504) {
-                console.log(err);
+                console.log(error);
               }
           }
         }
@@ -901,6 +907,10 @@ const Home = props =>{
                 <ContainerHero>
                   <TypingEffect user={user}/>
                   <Text>Welcome to your Spotify Data Center</Text>
+                  <ScrollDown>
+                    <span></span>
+                    <span></span>
+                  </ScrollDown>
                 </ContainerHero>
               </Col>
             </Grid>

@@ -52,8 +52,15 @@ export default function Artist() {
 
     // Loading
     const [loadingTime, setLoadingTime] = useState(false)
+    //console.log(token)
+    
+    const [newToken, setNewToken] = useState(token ? token : "");
 
-    const [newToken, setNewToken] = useState(token);
+    //console.log(newToken)
+
+    useEffect(() => {
+      setNewToken(token)
+    }, [token])
 
     const getNewToken = async () =>{
         const responseRefreshToken = await axios.get(`https://my-spotify-data-center-server.vercel.app/refresh_token`, {
@@ -102,7 +109,7 @@ export default function Artist() {
 
     useEffect(() => {
         const fetchData = async () => {
-            if(newToken){
+            if(newToken || token){
                 try {
 
                     setArtistFourWeeks('')
@@ -313,7 +320,7 @@ export default function Artist() {
             }
         }
         fetchData()
-    }, [id/*, playerArtistPage, blink*/])
+    }, [id/*, playerArtistPage, blink*/, newToken])
 
     const handleFollow = async () => {
         try{
@@ -339,7 +346,7 @@ export default function Artist() {
 
     // Check Currently Playing
     const checkCurrentlyPlaying = async () => {
-        if(token){
+        if(newToken || token){
           try {
             const responsePlaying = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
               headers: {
@@ -369,7 +376,7 @@ export default function Artist() {
           checkCurrentlyPlaying()
          },3000)
          return()=>clearInterval(interval)
-      },[token])
+      },[token, newToken])
 
     return (
         <div>

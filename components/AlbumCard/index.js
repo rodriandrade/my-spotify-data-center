@@ -37,6 +37,10 @@ const AlbumCard = props =>{
     }
 
     useEffect(() => {
+        setActiveDevices(props.activeDevices)
+    }, [props.activeDevices])
+
+    useEffect(() => {
         const fetchAlbumToShow = async () =>{
             if(props.data){
                 try{

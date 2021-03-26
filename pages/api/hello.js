@@ -12,6 +12,7 @@ const client = new Twitter({
   access_token_secret: "L5GAgiYeJsYKhWptB52ArO5kGrEfy8OhRhk6DkSGuA0lg"
 });
 
+/*
 export default async (req, res) => {
   
  // await runMiddleware(req, res, cors)
@@ -43,7 +44,7 @@ export default async (req, res) => {
   }
 }
 
-/*
+*/
 
 export default async (req, res) => {
   
@@ -55,37 +56,47 @@ export default async (req, res) => {
    // console.log(dataUrl);
    console.log("hola")
    //deleteImage();
-   ba64.writeImage("public/myimage", dataUrl, (err) => {
+   ba64.writeImage("myimage", dataUrl, (err) => {
      if (err) {
        console.log("Write image error", err);
      }
      console.log("Image saved successfully");
      
-     fs.readFile("public/myimage.png", (err, data) => {
+     fs.readFile("myimage.png", (err, data) => {
        if (err) {
          console.log("Read file err", err);
        }
        try {
-         console.log("try")
-         client.post(
-           "media/upload",
-           {
-             media: data,
-           },
-           
-           function (error, media, response) {
-             if (error) {
-               console.log("MEDIA UPLOAD", error);
-             } else {
-               res.send("listo")
-               console.log("Ahora estamos acá")
-               const status = {
-                 status: tweet,
-                 media_ids: media.media_id_string,
-               };
-             }
-           }
-         );
+        client.post(
+          "media/upload",
+          {
+            media: data,
+          },
+          function (error, media, response) {
+            if (error) {
+              console.log("MEDIA UPLOAD", error);
+            } else {
+              const status = {
+                status: tweet,
+                media_ids: media.media_id_string,
+              };
+              client.post("statuses/update", status, function (
+                error,
+                response
+              ) {
+                if (error) {
+                  console.log(error);
+                } else {
+                  console.log(response)
+                  res.status(200).json({
+                    message: response.entities.media[0].display_url,
+                  });
+                  // console.log("Display URL: ", response.entities.media[0].display_url);
+                }
+              });
+            }
+          }
+        );
        } catch (error) {
          res.status(500).json({ error: error.message });
        }
@@ -96,4 +107,4 @@ export default async (req, res) => {
    }
  }
 
- */
+ 

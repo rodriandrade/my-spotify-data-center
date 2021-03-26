@@ -169,7 +169,7 @@ const Modal = props => {
               )
               .then(res => {
                 if(res.status === 200){
-                    //console.log(res)
+                    console.log(res)
                     setTweetDone(true)
                 }
               })

@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
 const TrackPlay = styled.img`
-    max-width:18px;
-    max-height:18px;
+    max-width:16px;
+    max-height:16px;
     margin:0 20px;
     cursor:pointer;
     opacity:0;

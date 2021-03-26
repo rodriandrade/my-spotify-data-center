@@ -62,7 +62,7 @@ const CurrentlyPlayingCont = styled.div`
 
 const Container = styled.div`
     //background-color: rgba(10,10,10,1);
-    width:93%;
+    width:94%;
     //height:100px;
     margin:0;
     position: fixed;
@@ -135,7 +135,7 @@ const TrackName = styled.p`
     cursor: pointer;
 
     :hover{
-        text-decoration: underline 3px solid;
+        text-decoration: underline 3px solid #47ffbb;
     }
 
     @media (max-width: 480px) {

@@ -12,14 +12,14 @@ const HomeWithoutData = () =>{
 
     return(
         <div> 
-            <ParticlesBackground />
+            {/*<ParticlesBackground />*/}
               <section id="home_section">
                 <Inner>
                 <Grid colGap={30} rowGap={40}>
                   <Col desktop={12} tablet={6} mobile={12}>
                     <ContainerHero>
                       <TypingEffect title/>
-                        <a href="https://spotify-server-seven.vercel.app/login">
+                        <a href="https://spotify-server-seven.vercel.app/login"> 
                             <MainButton>Login with Spotify</MainButton>
                         </a>
                     </ContainerHero>

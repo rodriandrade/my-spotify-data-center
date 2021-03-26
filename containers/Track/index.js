@@ -56,6 +56,10 @@ export default function Track() {
     // Token
     const [newToken, setNewToken] = useState(token);
 
+    useEffect(() => {
+      setNewToken(token)
+    }, [token])
+
     const [activeDevices, setActiveDevices] = useState('');
 
     // Playlist 
@@ -77,6 +81,7 @@ export default function Track() {
     ////////// EFFECTS & FUNCTIONS //////////
 
     const getNewToken = async () =>{
+      console.log("Este es el refresh token para mandar" + " " + refresh_token)
         const responseRefreshToken = await axios.get(`https://my-spotify-data-center-server.vercel.app/refresh_token`, {
             params: {
               'refresh_token': refresh_token

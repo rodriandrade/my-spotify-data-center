@@ -32,7 +32,10 @@ const TrackCard = props =>{
         setModalIsOpen(!modalIsOpen)
     }
 
-    console.log(activeDevices)
+    useEffect(() => {
+        console.log("activated")
+      setActiveDevices(props.activeDevices)
+    }, [props.activeDevices])
 
     /*
     useEffect(() => {
@@ -164,14 +167,14 @@ const TrackCard = props =>{
         <Col desktop={props.gridSize} tablet={6} mobile={6}>
             <ContainerTrack>
             <div>
-                {!activeDevices && 
+                {activeDevices == false && 
                     <Modal 
-                    modalIsOpen={modalIsOpen} 
-                    setModalIsOpen={setModalIsOpen}
-                    title={"No encontramos reproductores activos"}
-                    text={"Para reproducir esta canción es necesario que tengas algún reproductor de Spotify abierto. Para que el dispositivo pueda ser detectado hay que empezar a reproducir una canción. Cuando lo hagas podés volver a intentar :)"}
-                    buttonText={"Try again"}
-                 />
+                        modalIsOpen={modalIsOpen} 
+                        setModalIsOpen={setModalIsOpen}
+                        title={"No encontramos reproductores activos"}
+                        text={"Para reproducir esta canción es necesario que tengas algún reproductor de Spotify abierto. Para que el dispositivo pueda ser detectado hay que empezar a reproducir una canción. Cuando lo hagas podés volver a intentar :)"}
+                        buttonText={"Try again"}
+                    />
                 }
                 <ImageContainer onClick={openModal} singleTrack={props.singleTrack}>
                     <a onClick={playTrack} target="_blank">

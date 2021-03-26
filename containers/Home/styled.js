@@ -136,7 +136,7 @@ const LoadingContainerSection = styled.div`
 `
 
 const MasterContainer = styled.div`
-    width:92%;
+    width:94%;
     display:flex;
     justify-content:center;
     flex-direction:column;
@@ -153,7 +153,7 @@ const SuperContainer = styled.div`
 `
 
 const NavContainer = styled.div`
-    width:8%;
+    width:6%;
     height:100vh;
     position:relative;
 
@@ -167,4 +167,48 @@ const WelcomeContainer = styled.div`
     flex-direction:column;
 `
 
-export {TitleTest, Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshIcon, IconContainer, MainButton, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer, WelcomeContainer}
+const ScrollDown = styled.div`
+    position:absolute;
+    bottom:100px;
+    animation: blink-cont 1s ;
+    transition:1s;
+
+    span{
+        display: block;
+        width: 30px;
+        height: 30px;
+        border-bottom: 5px solid #fff;
+        border-right: 5px solid #fff;
+        transform: rotate(45deg);
+        margin: -10px;
+        animation: animate 2s infinite;
+    }
+
+    span:nth-child(2){
+        animation-delay: -0.2s;
+    }
+    span:nth-child(3){
+        animation-delay: -0.4s;
+    }
+
+    @keyframes animate {
+        0%{
+            opacity: 0;
+            transform: rotate(45deg) translate(-20px,-20px);
+        }
+        50%{
+            opacity: 1;
+        }
+        100%{
+            opacity: 0;
+            transform: rotate(45deg) translate(20px,20px);
+        }
+    }
+
+    @media (max-width: 480px) {
+        width: 20px;
+        height: 20px;
+    }
+`
+
+export {TitleTest, Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshIcon, IconContainer, MainButton, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer, WelcomeContainer, ScrollDown}
