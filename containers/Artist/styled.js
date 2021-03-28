@@ -96,6 +96,10 @@ const Button = styled.button`
     cursor: pointer;
     border:1px solid #47ffbb;
     position: relative;
+
+    :hover{ 
+        background-color: rgb(10,10,10,0.5);
+    }
 `
 
 /////////////////////////////////////////////////////

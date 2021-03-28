@@ -351,11 +351,9 @@ const CurrentlyPlayingCard = props =>{
                   <div />
                 </SoundContainer>
                 {props.data.length !== 0 && (
-                  <a href={external_urls.spotify} target="_blank">
                     <ImageContainer>
                       <TrackImage src={album.images[1].url} alt="playing" />
                     </ImageContainer>
-                  </a>
                 )}
                 <TextContainer>
                   <Link
