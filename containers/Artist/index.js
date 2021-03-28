@@ -403,7 +403,7 @@ export default function Artist() {
                     {loadingTime ? 
                         <Grid colGap={30} rowGap={40}>
                             <Col desktop={12} tablet={6} mobile={12}>
-                                <Container>
+                                <Container> 
                                     <ContainerImage>
                                         {artist.images[2].url ?
                                             <ArtistImage src={artist.images[2].url} />

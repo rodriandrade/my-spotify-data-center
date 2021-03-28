@@ -521,7 +521,7 @@ export default function Album() {
                         {save && (
                           <Button onClick={handleSave}>
                             <Icon src={saveIcon} alt="save_button" />
-                            {save === "true" ? "unsave" : "save"}
+                            {save === "true" ? "Remove from Spotify saved" : "Save on Spotify"}
                           </Button>
                         )}
                       </RecommendationsButtonsContainer>

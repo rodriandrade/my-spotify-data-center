@@ -4,6 +4,7 @@ import Title from '../components/Title'
 import React,{useEffect, useState} from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
+import { useToken } from '../pages/TokenContext'
 
 export default function Home() {
 

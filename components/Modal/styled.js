@@ -128,6 +128,7 @@ const GeneralContainer = styled.div`
     flex-direction:row;
     width:1300px;
     background-color:rgba(10,10,10,1);
+    
 `
 
 const DataImageContainer = styled.div`
@@ -190,7 +191,7 @@ const MainArtistPosition = styled.h2`
     position:absolute;
     top:${(props) => (props.genre ? "0%" : "67%")};
     left:50%;
-    transform: ${(props) => (props.genre ? "translate(-50%, 0%)" : "translate(-50%, 10%)")};
+    transform: ${(props) => (props.genre ? "translate(-50%, -30%)" : "translate(-50%, 10%)")};
     
 `
 

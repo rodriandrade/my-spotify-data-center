@@ -137,7 +137,7 @@ const RecommendationsButtonsContainer = styled.div`
 
     @media (max-width: 480px) {
        flex-direction:column;
-       width:${(props) => (props.mobileSize ? "150px" : "100%")};
+       width:${(props) => (props.mobileSize ? "200px" : "100%")};
        margin-bottom:40px;
     }
 `
@@ -156,9 +156,12 @@ const Button = styled.button`
     border:1px solid #47ffbb;
     height:50px;
     position: relative;
+    display:flex;
+    align-items: center;
 
     :hover{
         background-color: rgb(10,10,10,1);
+        justify-content:center;
     }
 `
 
@@ -239,7 +242,7 @@ const LoadingContainerSection = styled.div`
 `
 
 const MasterContainer = styled.div`
-    width:93%;
+    width:94%;
     display:flex;
     justify-content:center;
     flex-direction:column;
@@ -256,7 +259,7 @@ const SuperContainer = styled.div`
 `
 
 const NavContainer = styled.div`
-    width:7%;
+    width:6%;
     height:100vh;
     position:relative;
 

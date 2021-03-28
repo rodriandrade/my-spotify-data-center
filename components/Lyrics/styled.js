@@ -3,10 +3,10 @@ import styled from "styled-components";
 const Container = styled.div`
     height:100vh;
     background-size:400%;
-    width:93%;
+    width:94%;
     position:fixed;
     top:0;
-    left:104px;
+    //left:114px;
     z-index:1000;
     overflow: scroll;
     background-color:rgba(0,0,0,0.8);

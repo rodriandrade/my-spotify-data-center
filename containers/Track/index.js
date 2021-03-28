@@ -347,13 +347,13 @@ export default function Track() {
               setPlaylistModalState(true);
               const user_id = responseUserProfile.data.id;
               const base_url = `https://api.spotify.com/v1/users/${user_id}/playlists`
-              setPlaylistName(`Recommendations based on ${track.name} - My Spotify Data Center`)
+              setPlaylistName(`${track.name} recommendations - My Spotify Data Center`)
               axios({
                 method: 'post',
                 url: base_url,
                 data: {
-                  name: `Recommendations based on ${track.name} - My Spotify Data Center`,
-                  description: 'New playlist description',
+                  name: `${track.name} recommendations - My Spotify Data Center`,
+                  description: `This playlist was created with recommendations based on "${track.name}" by ${artistsNames.join(", ")}. I hope you can find new amazings songs in it :)`,
                   public: false
                 },
                 headers: { 'Authorization': 'Bearer ' + newToken }
@@ -536,7 +536,7 @@ export default function Track() {
                   modalIsOpen={modalIsOpen} 
                   setModalIsOpen={setModalIsOpen} 
                   title={"Your playlist was created!"}
-                  text={"Check your Spotify account to find" + " " + playlistName + " " + "your new playlist based on your favorites tracks."}
+                  text={`Check your Spotify account to find "${playlistName}", your new playlist based on "${track.name}" by ${artistsNames.join(', ')} :).`}
                   buttonText={"Close"}
                 />}
 
@@ -563,7 +563,7 @@ export default function Track() {
                             <TrackName>{track.name}</TrackName> 
                             {!!artistsNames.length > 0 && <ArtistName margin>{artistsNames.join(", ")}</ArtistName>}
                             <RecommendationsButtonsContainer mobileSize>
-                              {save && <Button onClick={handleSave} margin><Icon src={saveIcon} alt="save_button" />{save === 'true' ? 'unsave' : 'save'}</Button> }
+                              {save && <Button onClick={handleSave} margin><Icon src={saveIcon} alt="save_button" />{save === 'true' ? 'Remove track' : 'Save track on Spotify'}</Button> }
                             </RecommendationsButtonsContainer> 
                         </ContainerInfo>
                     </Container>

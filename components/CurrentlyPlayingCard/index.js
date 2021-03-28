@@ -382,8 +382,9 @@ const CurrentlyPlayingCard = props =>{
                   )}
 
                   <TrackSave
+                    lyricsIcon
                     onClick={openLyrics}
-                    src="/subtitles.svg"
+                    src="/lyrics.svg"
                     alt="lyrics_icon"
                   />
                 </IconsContainer>

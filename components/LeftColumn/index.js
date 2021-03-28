@@ -139,7 +139,7 @@ const LeftColumn = props =>{
                 url: base_url,
                 data: {
                   name: playlistName[props.typeTerm],
-                  description: 'New playlist description',
+                  description: 'This playlist was created with your favorites tracks in the past 4 weeks!',
                   public: false
                 },
                 headers: { 'Authorization': 'Bearer ' + token }

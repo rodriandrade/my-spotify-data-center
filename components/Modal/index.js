@@ -180,8 +180,10 @@ const Modal = props => {
     };
 
     const saveImage = () =>{
+        console.log("holis")
         domtoimage.toPng(document.getElementById('content-to-be-copied'), { quality: 1 })
         .then(function (dataUrl) {
+            console.log("holanda")
             var link = document.createElement('a');
             link.download = `My top ${props.type} ${term}`;
             link.href = dataUrl;
@@ -275,7 +277,7 @@ const Modal = props => {
                                     <ButtonsContainer>  
                                         <InfoText>We prepared an image with your Top 5 {props.type}! You could save it in your device o share your fantastic taste on Twitter :)</InfoText>
                                         <MainButton onClick={saveImage}>Save as image</MainButton>
-                                        <MainButton onClick={ () => setTweetMenu(true)}>Share On Twitter</MainButton>
+                                        {/*<MainButton onClick={ () => setTweetMenu(true)}>Share On Twitter</MainButton>*/}
                                     </ButtonsContainer>
                                     :
                                     <ButtonsContainer> 

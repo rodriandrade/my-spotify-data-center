@@ -191,7 +191,7 @@ const LoadingContainerSection = styled.div`
 `
 
 const MasterContainer = styled.div`
-    width:93%;
+    width:94%;
     display:flex;
     justify-content:center;
     flex-direction:column;
@@ -208,7 +208,7 @@ const SuperContainer = styled.div`
 `
 
 const NavContainer = styled.div`
-    width:7%;
+    width:6%;
     height:100vh;
     position:relative;
 

@@ -14,14 +14,16 @@ const Container = styled.div`
     background-color: rgb(0,0,0);
     width:100%;
     */
+
    width:100vh;    
-  height:114px;
-  position:fixed;
-  z-index:1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;
-  background:rgba(5,5,5, 0.8);
-  border-bottom: 1px solid rgb(20, 20, 20);
-  -webkit-transform-origin: left top;
-  -webkit-transform:rotate(-90deg) translateX(-100%);
+    height:114px;
+    position:fixed;
+    z-index:1000000;
+    background:rgba(5,5,5, 0.8);
+    border-bottom: 1px solid rgb(20, 20, 20);
+    -webkit-transform-origin: left top;
+    -webkit-transform:rotate(-90deg) translateX(-100%);
+    
 
     @media (max-width: 480px) {
         display:none;
@@ -57,7 +59,7 @@ const List = styled.li`
     }
 
     a:hover{
-        text-decoration: underline 1px solid #47ffbb;
+        text-decoration: underline 3px solid #47ffbb;
     }
 
     /*
@@ -78,6 +80,9 @@ const List = styled.li`
 const Menu = styled.ul`
     list-style-type: none;
     text-decoration:none;
+    display: flex;
+    justify-content: center;
+    flex-flow: row-reverse;
 /*
     @media (max-width: 480px) {
         padding:0;

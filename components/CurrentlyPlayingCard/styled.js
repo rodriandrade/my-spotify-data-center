@@ -153,11 +153,12 @@ const TextContainer = styled.div`
 
     @media (max-width: 480px) {
         white-space: nowrap; 
-        max-width: 150px; 
+        max-width: 120px; 
         overflow: hidden;
         text-overflow: ellipsis; 
         display:inline-block;
         min-width: 0;
+        margin-left:5px;
     }
 `
 
@@ -244,8 +245,8 @@ const SoundContainer = styled.div`
 
 
 const TrackSave = styled.img`
-    max-width:18px;
-    max-height:18px;
+    max-width:${(props) => (props.lyricsIcon ? "22px" : "18px")};
+    max-height:${(props) => (props.lyricsIcon ? "22px" : "18px")};
     margin-right:20px;
     cursor:pointer;
 `

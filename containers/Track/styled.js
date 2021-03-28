@@ -63,7 +63,7 @@ const RecommendationsButtonsContainer = styled.div`
 
     @media (max-width: 480px) {
        flex-direction:column;
-       width:${(props) => (props.mobileSize ? "150px" : "100%")};
+       width:${(props) => (props.mobileSize ? "200px" : "100%")};
        margin-bottom:40px;
     }
 `
@@ -172,11 +172,14 @@ const Button = styled.button`
     height:50px;
     margin-left:${(props) => (props.margin ? "0px" : "20px")};
     position: relative;
+    display:flex;
+    align-items:center;
 
     @media (max-width: 480px) {
        width:100%;
        margin-left:0;
        margin-bottom:0px;
+       justify-content:center;
        /*
        display:none;
        */
@@ -311,7 +314,7 @@ const LoadingContainerSection = styled.div`
 `
 
 const MasterContainer = styled.div`
-    width:93%;
+    width:94%;
     display:flex;
     justify-content:center;
     flex-direction:column;
@@ -328,7 +331,7 @@ const SuperContainer = styled.div`
 `
 
 const NavContainer = styled.div`
-    width:7%;
+    width:6%;
     height:100vh;
     position:relative;
 
