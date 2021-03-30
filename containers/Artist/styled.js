@@ -38,6 +38,7 @@ const Container = styled.div`
     @media (max-width: 480px) {
         flex-direction:column;
         align-items:center;
+        margin:80px 0 40px 0;
     }
 `
 

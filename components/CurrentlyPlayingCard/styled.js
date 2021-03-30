@@ -84,6 +84,12 @@ const Container = styled.div`
        transform:${(props) => (props.showPlayer ? "translate(0%, 0px)" : "translate(0%, 70px)")};
        justify-content:flex-start;
     }
+
+    /*
+    @media (max-width: 1440px) {
+        width:92%;
+    }
+    */
 `
 
 

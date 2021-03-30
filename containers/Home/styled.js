@@ -144,6 +144,12 @@ const MasterContainer = styled.div`
     @media (max-width: 480px) {
         width:100%;
     }
+
+    /*
+    @media (max-width: 1440px) {
+        width:92%;
+    }
+    */
 `
 
 const SuperContainer = styled.div`
@@ -160,6 +166,12 @@ const NavContainer = styled.div`
     @media (max-width: 480px) {
         display:none;
     }
+
+    /*
+    @media (max-width: 1440px) {
+        width:8%;
+    }
+    */
 `
 
 const WelcomeContainer = styled.div`

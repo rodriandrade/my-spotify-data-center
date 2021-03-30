@@ -7,8 +7,8 @@ const Container = styled.div`
         display: flex;
         align-items: center;
         width:100%;
-        background-color: rgba(10,10,10,1);
-        height:100vh;
+        background-color: rgba(5,5,5,0.9);
+        height:100%;
         position:fixed;
         top:0;
         flex-direction: column;
@@ -16,6 +16,7 @@ const Container = styled.div`
         transition: transform 0.3s ease-in-out;
         transform: ${({ open }) => open ? 'translateX(0)' : 'translateX(-100%)'};
         z-index:3000;
+        backdrop-filter:blur(20px);
     }
 `
 

@@ -22,6 +22,7 @@ const ArtistImage = styled.img`
    min-width:180px;
    z-index:1;
    border-radius:200px;
+
 `
 
 const ArtistPosition = styled.p`
@@ -66,6 +67,7 @@ const ArtistName = styled.p`
 
     @media (max-width: 480px) {
        font-size:16px;
+       margin-top:30px;
     }
 `
 
@@ -82,6 +84,7 @@ const ImageContainer = styled.div`
     border-radius:200px;
     margin:0 auto;
     //background-color:yellow;
+    
 `
 
 export { ContainerArtist, ArtistName, TimePlayed, ArtistImage, ArtistPosition, Overlay, ImageContainer}

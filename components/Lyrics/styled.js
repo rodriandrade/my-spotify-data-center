@@ -15,6 +15,9 @@ const Container = styled.div`
     @media (max-width: 480px) {
         width:100%;
         left:0;
+        z-index:3002;
+        overflow-x:hidden;
+        height:100%;
     }
     /*
     animation: gradient-movement 5s alternate infinite;
@@ -88,33 +91,30 @@ const TrackArtist = styled.p`
 const TrackName = styled.h1`
     color:#47ffbb;
     font-size:48px;
-    padding:20px 0 0 0;
+    //padding:20px 0 0 0;
     margin:20px 0 0 0;
     font-weight:600px;
 
     @media (max-width: 480px) {
         padding:0;
         margin:0;
-        font-size:24px;
+        font-size:36px;
+        line-height:1.5;
     }
 `
 
 const CloseButton = styled.img`
     cursor: pointer;
-    width:20px;
+    width:25px;
     color: #fff;
-    position:absolute;
-    top:30px;
-    right:80px;
+    padding-top:20px;
 
     @media (max-width: 480px) {
-        top:0;
-        left:90%;
         position:relative;
         //padding:20px 0px;
         align-self:flex-end;
-        width:20px;
-        padding:20px;
+        width:25px;
+        padding:20px 0;
     }
 `
 
@@ -142,4 +142,10 @@ const LoadingText = styled.span`
     }
 `
 
-export {Container, TrackLyrics, CloseButton, Blur, TrackTitle, TrackArtist, TrackName, LoadingContainer, LoadingImage, LoadingText}
+const IconContainer = styled.div`
+    display:flex;
+    justify-content:flex-end;
+    width:100%;
+`
+
+export {Container, TrackLyrics, CloseButton, Blur, TrackTitle, TrackArtist, TrackName, LoadingContainer, LoadingImage, LoadingText, IconContainer}

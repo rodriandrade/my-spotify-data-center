@@ -888,7 +888,7 @@ const Home = props =>{
           <SuperContainer>
 
           <NavContainer>
-            {token && <NavMenu access_token={token} />}
+            {token && <NavMenu access_token={token} refresh_token={refreshToken} />}
           </NavContainer>
 
           <MasterContainer>

@@ -1,5 +1,5 @@
 import Inner from '../Inner'
-import {Container, TrackLyrics, CloseButton, TrackTitle, TrackName, TrackArtist, LoadingContainer, LoadingImage, LoadingText} from './styled'
+import {Container, TrackLyrics, CloseButton, TrackTitle, TrackName, TrackArtist, LoadingContainer, LoadingImage, LoadingText, IconContainer} from './styled'
 import ParticlesBackground from '../ParticlesBackground'
 import axios from 'axios'
 import React, {useEffect, useState} from 'react'
@@ -31,16 +31,20 @@ const Lyrics = props => {
     return(
         <Container>
                 <Inner>
-                    <CloseButton src="/cancel.svg" onClick={() => props.setAvailableLyrics(!props.availableLyrics)} />
+                    <IconContainer>
+                        <CloseButton src="/cancel.svg" onClick={() => props.setAvailableLyrics(!props.availableLyrics)} />
+                    </IconContainer>
                     <TrackName>{props.track}</TrackName>
                     <TrackArtist>{props.artist}</TrackArtist>
                     
                     {props.lyrics.data ? 
-                    <TrackLyrics>{props.lyrics.data}</TrackLyrics>
-                    : <LoadingContainer>
-                    <LoadingImage src="/loading.gif" alt="loading" />
-                    <LoadingText>Loading...</LoadingText>
-                  </LoadingContainer>}
+                        <TrackLyrics>{props.lyrics.data}</TrackLyrics>
+                    : 
+                        <LoadingContainer>
+                            <LoadingImage src="/loading.gif" alt="loading" />
+                            <LoadingText>Loading...</LoadingText>
+                        </LoadingContainer>
+                    }
                 </Inner>
         </Container>
     )

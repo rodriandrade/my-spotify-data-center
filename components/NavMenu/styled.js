@@ -23,6 +23,9 @@ const Container = styled.div`
     border-bottom: 1px solid rgb(20, 20, 20);
     -webkit-transform-origin: left top;
     -webkit-transform:rotate(-90deg) translateX(-100%);
+    display:flex;
+    justify-content:center;
+    align-items:center;
     
 
     @media (max-width: 480px) {
@@ -36,6 +39,10 @@ const Container = styled.div`
         top:0;
         padding:20px 0;
         */
+    }
+
+    @media (max-width: 1440px) {
+        height:107px;
     }
 `
 

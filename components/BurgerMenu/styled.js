@@ -45,15 +45,15 @@ const StyledBurger = styled.button`
 `;
 
 const MenuContainer = styled.div`
-/*
-    width:100%;
-    height:60px;
-    position:fixed;
-    top:0;
-    background-color:rgba(0,0,0,0.5);
-    z-index:70000000000000;
-    backdrop-filter:blur(20px);
-    */
+  @media (max-width: 480px) {
+      width:100%;
+      height:60px;
+      position:fixed;
+      top:0;
+      background-color:rgba(5,5,5,0.9);
+      z-index:3001;
+      backdrop-filter:blur(20px);
+  }
 `
 
 export { StyledBurger, MenuContainer }

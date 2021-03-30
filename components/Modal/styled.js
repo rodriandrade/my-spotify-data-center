@@ -3,7 +3,7 @@ import styled from 'styled-components'
 const InfoContainer = styled.div`
     background-color: rgb(10,10,10);
     width:450px;
-    padding:40px;
+    padding:40px 40px 60px 40px;
     border-radius:5px;
     display:flex;
     flex-direction:column;
@@ -12,32 +12,32 @@ const InfoContainer = styled.div`
     border-bottom:10px solid #47ffbb;
 
     @media (max-width: 480px) {
-        max-width:60%;
+        max-width:75%;
         display:flex;
         flex-direction:column;
-        padding:0 40px;
+        padding:0 30px 40px 30px;
     }
 `
 
 const InfoText = styled.p`
     text-align:${(props) => (props.align ? "left" : "center")};
-    font-size:14px;
+    font-size:16px;
     color:#fff;
     margin:30px 0;
 
     @media (max-width: 480px) {
-        
+        font-size:14px;
     }
 `
 
 const InfoTitle = styled.h3`
     text-align:${(props) => (props.align ? props.align : "center")};
-    font-size:18px;
+    font-size:22px;
     color:${(props) => (props.color ? "#fff" : "#47ffbb")};
     margin:${(props) => (props.margin ? "20px 0 10px 0" : "0")};
 
     @media (max-width: 480px) {
-        font-size:16px;
+        font-size:20px;
         margin:0;
         padding:0;
     }
@@ -50,12 +50,11 @@ const CloseButton = styled.img`
     position:absolute;
     top:30px;
     right:80px;
-
     @media (max-width: 480px) {
         top:-50px;
         right:20px;
         position:relative;
-        padding:20px 0px;
+        padding:10px 0px;
         align-self:flex-end;
         width:20px;
     }
@@ -191,7 +190,7 @@ const MainArtistPosition = styled.h2`
     position:absolute;
     top:${(props) => (props.genre ? "0%" : "67%")};
     left:50%;
-    transform: ${(props) => (props.genre ? "translate(-50%, -30%)" : "translate(-50%, 10%)")};
+    transform: ${(props) => (props.genre ? "translate(-50%, -50%)" : "translate(-50%, 10%)")};
     
 `
 
@@ -271,6 +270,7 @@ const ButtonsContainer = styled.div`
 const ArtistCardNameContainer = styled.div`
     display:flex;
     flex-direction:column;
+    margin-left: ${(props) => (props.genre ? "20px" : "")};
 `
 
 const Tweet = styled.textarea`
@@ -314,6 +314,12 @@ const TweetSent = styled.p`
     margin-top:30px;
 `
 
+const IconContainer = styled.div`
+    display:flex;
+    justify-content:flex-end;
+    width:100%;
+`
+
 // TWEET MENU
 
-export {Container, CloseButton, InfoContainer, InfoText, InfoTitle, Button, MainButton, DataImageContainer, DataImageTitle, MainArtistContainer, MainArtistImage, MainArtistName, MainArtistPosition, OtherArtistsContainer, DataTitleContainer, ArtistCardContainer, ArtistCardImage, ArtistCardName, ArtistCardPosition, ArtistCard, DataImageFooterText, GeneralContainer, MenuContainer, ArtistCardImageContainer, ButtonsContainer, MainArtistImageContainer, ArtistCardNameContainer, Tweet, Counter, TweetContainer, BtnContainer, TweetSent}
+export {Container, CloseButton, InfoContainer, InfoText, InfoTitle, Button, MainButton, DataImageContainer, DataImageTitle, MainArtistContainer, MainArtistImage, MainArtistName, MainArtistPosition, OtherArtistsContainer, DataTitleContainer, ArtistCardContainer, ArtistCardImage, ArtistCardName, ArtistCardPosition, ArtistCard, DataImageFooterText, GeneralContainer, MenuContainer, ArtistCardImageContainer, ButtonsContainer, MainArtistImageContainer, ArtistCardNameContainer, Tweet, Counter, TweetContainer, BtnContainer, TweetSent, IconContainer}

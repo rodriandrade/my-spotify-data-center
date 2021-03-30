@@ -15,6 +15,11 @@ const TrackImage = styled.img`
     max-width: 180px;
     cursor: pointer;    
     opacity:1;
+
+    @media (max-width: 480px) {
+        max-height: 100%;
+        max-width:100%;
+    }
 `
 
 const PlayOnSpotify = styled.p`
@@ -68,6 +73,10 @@ const ImageContainer = styled.div`
     &:hover ${TextContainer} {
         opacity: 1;
     }
+
+    @media (max-width: 480px) {
+        width:100%;
+    }
 `
 
 const TrackPosition = styled.p`
@@ -82,6 +91,10 @@ const TrackPosition = styled.p`
     left:50%;
     transform: translate(-50%, 25%);
     text-shadow: 0px 0px 11px rgba(0, 0, 0, 1);
+
+    @media (max-width:480px) {
+        transform: translate(-50%, 10%);
+    }
 
     /*
     ::after{
@@ -113,6 +126,7 @@ const TrackName = styled.p`
 
     @media (max-width: 480px) {
        font-size:16px;
+       margin: ${(props) => (props.margin ? "20px 0 5px 0" : "30px 0 5px 0")};
     }
 `
 

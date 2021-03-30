@@ -1,4 +1,4 @@
-import {Button, MainButton, Container, CloseButton, InfoContainer, InfoText, InfoTitle, DataImageContainer, DataImageTitle, MainArtistContainer, MainArtistImage, MainArtistName, MainArtistPosition, OtherArtistsContainer, DataTitleContainer, ArtistCardContainer, ArtistCardImage, ArtistCardName, ArtistCardPosition, ArtistCard, DataImageFooterText, GeneralContainer, MenuContainer, ArtistCardImageContainer, ButtonsContainer, MainArtistImageContainer, ArtistCardNameContainer, Tweet, Counter, TweetContainer, BtnContainer, TweetSent} from './styled'
+import {Button, MainButton, Container, CloseButton, InfoContainer, InfoText, InfoTitle, DataImageContainer, DataImageTitle, MainArtistContainer, MainArtistImage, MainArtistName, MainArtistPosition, OtherArtistsContainer, DataTitleContainer, ArtistCardContainer, ArtistCardImage, ArtistCardName, ArtistCardPosition, ArtistCard, DataImageFooterText, GeneralContainer, MenuContainer, ArtistCardImageContainer, ButtonsContainer, MainArtistImageContainer, ArtistCardNameContainer, Tweet, Counter, TweetContainer, BtnContainer, TweetSent, IconContainer} from './styled'
 import React, {useRef, useState, useEffect} from 'react'
 import ClientOnlyPortal from '../ClientOnlyPortal'
 import axios from 'axios'
@@ -22,6 +22,9 @@ const Modal = props => {
     // Images
     const [topArtistsImages, setTopArtistsImages] = useState('')
     const [firstArtistsImages, setFirstArtistsImages] = useState('')
+
+    // Genres
+    const [genres, setGenres] = useState(false)
 
     // Input
     const [count, setCount] = useState(0)
@@ -129,6 +132,7 @@ const Modal = props => {
 
             if(props.type === "genres"){
                 // NAMES
+                setGenres(true)
                 setMainName(firstArtistFilter[0])
                 const namesTopArtists = topArtistsFilter.map(genre =>{
                     return genre
@@ -225,45 +229,67 @@ const Modal = props => {
                                 <DataTitleContainer id="content-to-be-copied">
                                     {term && <DataImageTitle>My top {props.type} {term}</DataImageTitle>}
                                     <DataImageContainer>
-                                        {firstArtist && <MainArtistContainer>
-                                            <MainArtistImageContainer>
-                                                {props.type === "artists" ?
-                                                    <MainArtistImage src={firstArtistsImages}/>
-                                                : 
-                                                    <MainArtistImage track src={firstArtistsImages}/>
-                                                }
-                                                {firstArtistsImages ?
-                                                    <MainArtistPosition>1</MainArtistPosition>
-                                                :
+
+                                        {genres ? 
+                                            firstArtist && <MainArtistContainer>
+                                                <MainArtistImageContainer>
                                                     <MainArtistPosition genre>1</MainArtistPosition>
-                                                }
-                                            </MainArtistImageContainer>
-                                            <ArtistCardNameContainer>
-                                                <MainArtistName>{mainName}</MainArtistName>
-                                                {firstArtistsNames && <MainArtistName track>{firstArtistsNames.join(', ""')}</MainArtistName>}
-                                            </ArtistCardNameContainer>
-                                        </MainArtistContainer>}
+                                                </MainArtistImageContainer>
+                                                <ArtistCardNameContainer>
+                                                    <MainArtistName>{mainName.charAt(0).toUpperCase() + mainName.slice(1)}</MainArtistName>
+                                                </ArtistCardNameContainer>
+                                            </MainArtistContainer>
+                                        :
+                                            firstArtist && <MainArtistContainer>
+                                                <MainArtistImageContainer>
+                                                    {props.type === "artists" ?
+                                                        <MainArtistImage src={firstArtistsImages}/>
+                                                    : 
+                                                        <MainArtistImage track src={firstArtistsImages}/>
+                                                    }
+                                                    {firstArtistsImages ?
+                                                        <MainArtistPosition>1</MainArtistPosition>
+                                                    :
+                                                        <MainArtistPosition genre>1</MainArtistPosition>
+                                                    }
+                                                </MainArtistImageContainer>
+                                                <ArtistCardNameContainer>
+                                                    <MainArtistName>{mainName}</MainArtistName>
+                                                    {firstArtistsNames && <MainArtistName track>{firstArtistsNames.join(', ""')}</MainArtistName>}
+                                                </ArtistCardNameContainer>
+                                            </MainArtistContainer>
+                                        }
+
                                         <OtherArtistsContainer>
                                             <ArtistCard>
-                                                {topArtists && 
-                                                    topArtists.map((artist, index) => (
-                                                        <ArtistCardContainer>
-                                                            <ArtistCardPosition>{index + 2}</ArtistCardPosition>
-                                                            {artist.images ?
-                                                                <ArtistCardImageContainer>
-                                                                    <ArtistCardImage src={topArtistsImages[index]}/>
-                                                                </ArtistCardImageContainer>
-                                                            :
-                                                                <ArtistCardImageContainer track>
-                                                                    <ArtistCardImage track src={topArtistsImages[index]}/>
-                                                                </ArtistCardImageContainer>
-                                                            }
-                                                            <ArtistCardNameContainer>
-                                                                <ArtistCardName>{topNames[index]}</ArtistCardName>
-                                                                {topArtistsNames && <ArtistCardName track>{topArtistsNames[index]}</ArtistCardName>}
-                                                            </ArtistCardNameContainer>
-                                                        </ArtistCardContainer>  
-                                                    ))
+                                                {genres ? 
+                                                        topArtists.map((artist, index) => (
+                                                            <ArtistCardContainer>
+                                                                <ArtistCardPosition>{index + 2}</ArtistCardPosition>
+                                                                <ArtistCardNameContainer genre>
+                                                                    <ArtistCardName>{topNames[index].charAt(0).toUpperCase() + topNames[index].slice(1)}</ArtistCardName>
+                                                                </ArtistCardNameContainer>
+                                                            </ArtistCardContainer>  
+                                                        ))
+                                                    : 
+                                                        topArtists && topArtists.map((artist, index) => (
+                                                            <ArtistCardContainer>
+                                                                <ArtistCardPosition>{index + 2}</ArtistCardPosition>
+                                                                {artist.images ?
+                                                                    <ArtistCardImageContainer>
+                                                                        <ArtistCardImage src={topArtistsImages[index]}/>
+                                                                    </ArtistCardImageContainer>
+                                                                :
+                                                                    <ArtistCardImageContainer track>
+                                                                        <ArtistCardImage track src={topArtistsImages[index]}/>
+                                                                    </ArtistCardImageContainer>
+                                                                }
+                                                                <ArtistCardNameContainer>
+                                                                    <ArtistCardName>{topNames[index]}</ArtistCardName>
+                                                                    {topArtistsNames && <ArtistCardName track>{topArtistsNames[index]}</ArtistCardName>}
+                                                                </ArtistCardNameContainer>
+                                                            </ArtistCardContainer>  
+                                                        ))
                                                 }
                                             </ArtistCard>      
                                         </OtherArtistsContainer>
@@ -275,7 +301,7 @@ const Modal = props => {
                                 <MenuContainer>
                                     {!tweetMenu ?
                                     <ButtonsContainer>  
-                                        <InfoText>We prepared an image with your Top 5 {props.type}! You could save it in your device o share your fantastic taste on Twitter :)</InfoText>
+                                        <InfoText align>These are the {props.type} that made it into your Top 5 {props.type} in the {term}! You could always remember and share your fantastic taste by saving this image made for you :)</InfoText>
                                         <MainButton onClick={saveImage}>Save as image</MainButton>
                                         {/*<MainButton onClick={ () => setTweetMenu(true)}>Share On Twitter</MainButton>*/}
                                     </ButtonsContainer>

@@ -68,17 +68,23 @@ const LeftColumn = props =>{
             //console.log(responseUserProfile)
             const user_id = responseUserProfile.data.id;
             const base_url = `https://api.spotify.com/v1/users/${user_id}/playlists`
-            const playlistName = {
-              'tracks': 'Recommendations by your favorites tracks - My Spotify Data Center',
-              'artists': 'Recommendations by your favorites artists - My Spotify Data Center',
+            const playlistDescription = {
+              'short_term': 'past 4 weeks',
+              'medium_term': 'past 6 months',
+              'long_term': 'past several years',
             }
+            const playlistName = {
+              'tracks': `Recommendations - Tracks ${playlistDescription[props.typeTermRecommendations]} - My Spotify Data Center`,
+              'artists': `Recommendations - Artists ${playlistDescription[props.typeTermRecommendations]} - My Spotify Data Center`,
+            }
+            // props.setTypeTermRecommendations
             setPlaylistName(playlistName[props.typeTerm])
             axios({
               method: 'post',
               url: base_url,
               data: {
                 name: playlistName[props.typeTerm],
-                description: 'New playlist description',
+                description: `This playlist was created with recommendations about your most listened ${props.typeTerm} in the ${playlistDescription[props.typeTermRecommendations]}! Hope you can find something amazing here :) `,
                 public: false
               },
               headers: { 'Authorization': 'Bearer ' + token }
@@ -129,9 +135,14 @@ const LeftColumn = props =>{
               const user_id = responseUserProfile.data.id;
               const base_url = `https://api.spotify.com/v1/users/${user_id}/playlists`
               const playlistName = {
-                'short_term': 'My Favs 50 tracks - Past 4 weeks',
-                'medium_term': 'My Favs 50 tracks - Past 6 months',
-                'long_term': 'My Favs 50 tracks - Several Years',
+                'short_term': 'Past 4 weeks tracks - My Spotify Data Center',
+                'medium_term': 'Past 6 months tracks - My Spotify Data Center',
+                'long_term': 'Several years tracks - My Spotify Data Center',
+              }
+              const playlistDescription = {
+                'short_term': 'past 4 weeks',
+                'medium_term': 'past 6 months',
+                'long_term': 'past several years',
               }
               setPlaylistName(playlistName[props.typeTerm])
               axios({
@@ -139,7 +150,7 @@ const LeftColumn = props =>{
                 url: base_url,
                 data: {
                   name: playlistName[props.typeTerm],
-                  description: 'This playlist was created with your favorites tracks in the past 4 weeks!',
+                  description: `This playlist was created with your favorites tracks in the ${playlistDescription[props.typeTerm]}!`,
                   public: false
                 },
                 headers: { 'Authorization': 'Bearer ' + token }
@@ -205,7 +216,7 @@ const LeftColumn = props =>{
                     modalIsOpen={modalIsOpen} 
                     setModalIsOpen={setModalIsOpen} 
                     title={"Your playlist was created!"}
-                    text={"Check your account to find" + ' "' + playlistName + '", ' + "your new playlist based on your favorites tracks."}
+                    text={`Check your account to find "${playlistName}", your new playlist based on your favorites ${isRecommendation ? props.typeTerm : "tracks"}.`}
                     buttonText={"Close"}
             />}
             {dataImage && 

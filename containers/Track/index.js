@@ -549,8 +549,8 @@ export default function Track() {
                               <Modal 
                                   modalIsOpen={modalIsOpen} 
                                   setModalIsOpen={setModalIsOpen}
-                                  title={"No encontramos reproductores activos"}
-                                  text={"Para reproducir esta canción es necesario que tengas algún reproductor de Spotify abierto. Para que el dispositivo pueda ser detectado hay que empezar a reproducir una canción. Cuando lo hagas podés volver a intentar :)"}
+                                  title={"No active device detected"}
+                                  text={"In order to play a track, My Spotify Data Center has to detect an active device. Open Spotify in any device you like and start listening to something. After that, you could go back here to play the track you want! :)"}
                                   buttonText={"Try again"}
                               />
                             }

@@ -96,7 +96,7 @@ const Container = styled.div`
     @media (max-width: 480px) {
         flex-direction:column;
         align-items:center;
-        margin-bottom: 10px;
+        margin:50px 0 10px 0;
     }
 `
 

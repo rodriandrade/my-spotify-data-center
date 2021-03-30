@@ -413,7 +413,7 @@ export default function Artist() {
                                     </ContainerImage>
                                     <ContainerInfo>
                                         <ArtistName>{artist.name}</ArtistName>
-                                        {!!follow && <Button onClick={handleFollow}>{follow === 'true' ? 'following' : 'follow'}</Button> }  
+                                        {!!follow && <Button onClick={handleFollow}>{follow === 'true' ? 'Unfollow on Spotify' : 'Follow on Spotify'}</Button> }  
                                     </ContainerInfo>
                                 </Container>
                             </Col>
