@@ -12,7 +12,7 @@ const HomeWithoutData = () =>{
 
     return(
         <div> 
-            {/*<ParticlesBackground />*/}
+              <ParticlesBackground />
               <section id="home_section">
                 <Inner>
                 <Grid colGap={30} rowGap={40}>

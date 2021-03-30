@@ -10,6 +10,7 @@ const TrackCard = props =>{
     const {genres, name, album, external_urls, id, artists} = props.data
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [activeDevices, setActiveDevices] = useState(props.activeDevices);
+    const [showModal, setShowModal] = useState('');
 
     const [trackName, setTrackName] = useState(name)
     const [artistName, setArtistName] = useState(artists[0].name)
@@ -80,9 +81,11 @@ const TrackCard = props =>{
             if(devices.length == 0){
                 setActiveDevices(false)
                 //console.log("NO HAY DEVICES AMI")
+                setShowModal(false)
                 checkPlayTrack(responseUserDevices);
             } else{
                 setActiveDevices(true)
+                setShowModal(true)
                 //console.log("YAAAAY, HAY DEVICES")
                 checkPlayTrack(responseUserDevices);
             }
@@ -167,7 +170,7 @@ const TrackCard = props =>{
         <Col desktop={props.gridSize} tablet={6} mobile={6}>
             <ContainerTrack>
             <div>
-                {activeDevices == false && 
+                {!activeDevices && !showModal && 
                     <Modal 
                         modalIsOpen={modalIsOpen} 
                         setModalIsOpen={setModalIsOpen}

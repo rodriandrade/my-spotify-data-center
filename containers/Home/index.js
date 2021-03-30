@@ -26,6 +26,9 @@ import {Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshI
 const Home = props =>{
 
     const router = useRouter()
+    // Devices
+    const [activeDevices, setActiveDevices] = useState('');
+    
     const [token, setToken] = useState(props.token);
     const [refreshToken, setRefreshToken] = useState(props.refreshToken);
 
@@ -76,8 +79,7 @@ const Home = props =>{
       const [albums, setAlbums] = useState([]);
       const [totalAlbums, setTotalAlbums] = useState([]);
 
-      // Devices
-      const [activeDevices, setActiveDevices] = useState('');
+      
 
       // Player
       const [recentlyPlayed, setRecentlyPlayed] = useState([]);
@@ -127,10 +129,10 @@ const Home = props =>{
       // Get New Token (Refresh)
       const getNewToken = async () =>{
         let refresh_token = '';
-        if(props.refresh_token){
+        if(props.refreshToken){
           console.log("Entre al params.refreshToken")
           console.log(props.refreshToken)
-          refresh_token = props.refresh_token
+          refresh_token = props.refreshToken
         } else if(router.query.refresh_token){
           console.log("Entre al query.router")
           console.log(router.query.refresh_token)
@@ -767,6 +769,53 @@ const Home = props =>{
           checkCurrentlyPlaying()
          },3000)
          return()=>clearInterval(interval)
+      },[token])
+
+      // Check Active Devices
+      const checkActiveDevices = async () => {
+        if(token){
+          try{
+            console.log("vengo a buscar devices")
+            const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
+              headers: {
+              'Authorization': 'Bearer ' + token
+              }
+            });
+            const devices = responseUserDevices.data.devices;
+            if(devices.length == 0){
+                setActiveDevices(false)
+            } else{
+                setActiveDevices(true)
+            }
+          } catch (error){
+            console.error('este es mi error',error);
+            if (error.response.status === 401) {
+              getNewToken();
+              //console.log("???????????????????????????????????")
+            }
+            if (error.response.status === 500) {
+              console.log(error);
+            }
+            if (error.response.status === 503) {
+              console.log(error);
+            }
+            if (error.response.status === 504) {
+              console.log(error);
+            }
+          }
+        }
+      };
+      useEffect(()=>{
+          if(activeDevices){
+            console.log("hay devices activos!")
+            return
+          } else if(!activeDevices){
+            console.log("no hay devices activos")
+            const interval=setInterval(()=>{
+              checkActiveDevices()
+            },3000)
+            return()=>clearInterval(interval)
+          }
       },[token])
 
       // Create Playlist

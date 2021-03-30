@@ -378,6 +378,53 @@ export default function Artist() {
          return()=>clearInterval(interval)
       },[token, newToken])
 
+      // Check Active Devices
+      const checkActiveDevices = async () => {
+        if(token){
+          try{
+            console.log("vengo a buscar devices")
+            const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
+              headers: {
+              'Authorization': 'Bearer ' + token
+              }
+            });
+            const devices = responseUserDevices.data.devices;
+            if(devices.length == 0){
+                setActiveDevices(false)
+            } else{
+                setActiveDevices(true)
+            }
+          } catch (error){
+            console.error('este es mi error',error);
+            if (error.response.status === 401) {
+              getNewToken();
+              //console.log("???????????????????????????????????")
+            }
+            if (error.response.status === 500) {
+              console.log(error);
+            }
+            if (error.response.status === 503) {
+              console.log(error);
+            }
+            if (error.response.status === 504) {
+              console.log(error);
+            }
+          }
+        }
+      };
+      useEffect(()=>{
+          if(activeDevices){
+            console.log("hay devices activos!")
+            return
+          } else if(!activeDevices){
+            console.log("no hay devices activos")
+            const interval=setInterval(()=>{
+              checkActiveDevices()
+            },3000)
+            return()=>clearInterval(interval)
+          }
+      },[token, newToken])
+
     return (
         <div>
             
