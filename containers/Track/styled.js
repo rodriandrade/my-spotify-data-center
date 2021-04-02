@@ -175,6 +175,10 @@ const Button = styled.button`
     display:flex;
     align-items:center;
 
+    :hover{ 
+        background-color: rgb(10,10,10,0.5);
+    }
+
     @media (max-width: 480px) {
        width:100%;
        margin-left:0;

@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import axios from 'axios'
 import ArtistCard from '../../components/artistCard'
 import TrackCard from '../../components/trackCard'
@@ -25,6 +25,7 @@ import {Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshI
 
 const Home = props =>{
 
+    console.log("hola")
     const router = useRouter()
     // Devices
     const [activeDevices, setActiveDevices] = useState('');
@@ -46,7 +47,8 @@ const Home = props =>{
 
       var params = getHashParams();
 
-      const [playing, setPlaying] = useState([]);
+      const [playing, setPlaying] = useState('');
+      const [isPlaying, setIsPlaying] = useState('');
 
       const [selected, setSelected] = useState(false);
       const [timePeriodTracks, setTimePeriodTracks] = useState('You listen to these tracks for the most part in the past 4 weeks! You spend a lot of time listening to')
@@ -116,6 +118,26 @@ const Home = props =>{
       // Loading
       const [loadingTime, setLoadingTime] = useState(false)
 
+
+      // TEST /////////////////////////////
+
+      /*
+      const [currentTrack, setCurrentTrack] = useState('')
+      console.log(currentTrack)
+      const prevTrackRef = useRef();
+        useEffect(() => {
+          prevTrackRef.current = currentTrack;
+        });
+      const prevTrack = prevTrackRef.current;
+      console.log(prevTrack)
+
+      if(currentTrack != prevTrack){
+        console.log("SON DISTINTOS!!!!!!!!!!!!!!!!")
+      }
+      */
+
+      ////////////////////////////////////
+
       // Loading Text
       useEffect(() => {
         const randomLoadingText = () =>{
@@ -146,28 +168,6 @@ const Home = props =>{
         });
         setToken(responseRefreshToken.data.access_token)
       }
-
-      /*
-      // Get Token
-      useEffect(() => {
-        const getToken = () =>{
-          // token from URL
-          if(params.access_token){
-            const access_token = params.access_token;
-            const refresh_token = params.refresh_token;
-            setToken(access_token)
-            setRefreshToken(refresh_token)
-          } else if(router.query.access_token){
-            // token from query (link)
-            const token = router.query.access_token
-            const refreshToken = router.query.refresh_token
-            setToken(token)
-            setRefreshToken(refreshToken)
-          }
-        }
-        getToken();
-      }, [router.query.access_token])
-      */
 
       // Artists
       useEffect(() => {
@@ -279,58 +279,8 @@ const Home = props =>{
                   } else{
                       setActiveDevices(true)
                   }
-                  //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                  /*
-                  // PLAYLISTS DATA
-                  const responsePlaylists = await axios.get(`https://api.spotify.com/v1/me/playlists?limit=50`, {
-                    headers: {
-                      'Authorization': 'Bearer ' + token
-                    }
-                  });
-                  setPlaylists(responsePlaylists.data.items);
-                  //////////////////////////////////////////////////////////////////////////////////////////////////////
-                  // CURRENTLY PLAYING DATA
-                  const responsePlaying = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
-                    headers: {
-                      'Authorization': 'Bearer ' + token
-                    }
-                  });
-                  setPlaying(responsePlaying.data.item);
-                  setPlayingData(responsePlaying.data)
-                  //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                  
-                  // RECENTLY PLAYED DATA
-                  const responseRecentlyPlayed = await axios.get(`https://api.spotify.com/v1/me/player/recently-played?limit=50`, {
-                    headers: {
-                      'Authorization': 'Bearer ' + token
-                    }
-                  });
-                  setRecentlyPlayed(responseRecentlyPlayed.data.items);
-                  // Total days
-                  const findDay = responseRecentlyPlayed.data.items.map(song=>{
-                    return song.played_at.slice(0, 10);
-                  })
-                  const totalDay = findDay.reduce((acc, val, ind, array) => {
-                    if(array.lastIndexOf(val) === ind){
-                       return ++acc;
-                    };
-                    return acc;
-                  }, 0);
-                  setStreamsDay(totalDay);
-                  // Total minutes
-                  const durationTrack = responseRecentlyPlayed.data.items.map(song => {
-                    return song.track.duration_ms;
-                  })
-                  const totalDuration = durationTrack.reduce((acc, value)=>{
-                    return acc + value;
-                  }, 0);
-                  let minutesListenedToShow = (totalDuration / 60000).toFixed(0);
-                  setMinutesListened(minutesListenedToShow)
-                  */
-
-                  //////////////////////////////////////////////////////////////////////////////////////////////////////
+                  //////
 
                   // USER DATA
                   const responseUser = await axios.get(`https://api.spotify.com/v1/me`, {
@@ -719,32 +669,32 @@ const Home = props =>{
       // Check Currently Playing
       const checkCurrentlyPlaying = async () => {
         if(token){
-          try {
-            /*
-            const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
-                      headers: {
-                      'Authorization': 'Bearer ' + token
-                      }
-                  });
-                  const devices = responseUserDevices.data.devices;
-                  if(devices.length == 0){
-                      setActiveDevices(false)
-                  } else{
-                      setActiveDevices(true)
-                  }
-                  console.log("Esto es lo que seteo en home" + " " + activeDevices)
-            */      
+          try {   
+            console.log(playing)  
             const responsePlaying = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
               headers: {
                 'Authorization': 'Bearer ' + token
               }
             });
-            setPlaying(responsePlaying.data.item);
-            //console.log(responsePlaying.data)
-            setPlayingData(responsePlaying.data)
-            setBlink(true)
-            setPlayingRightNow(responsePlaying.data.item);
-            
+
+            if(playing){
+              if(playing.name != responsePlaying.data.item.name){
+                setPlaying(responsePlaying.data.item);
+                //console.log(responsePlaying.data)
+                setPlayingData(responsePlaying.data)
+                setBlink(true)
+                setPlayingRightNow(responsePlaying.data.item);
+              } else{
+                //console.log("El tema es el mismo");
+              }
+            } else{
+              setPlaying(responsePlaying.data.item);
+              //console.log(responsePlaying.data)
+              setPlayingData(responsePlaying.data)
+              setBlink(true)
+              setPlayingRightNow(responsePlaying.data.item);
+            }
+
           } catch (error) {
             console.error('este es mi error',error);
               if (error.response.status === 401) {
@@ -769,13 +719,13 @@ const Home = props =>{
           checkCurrentlyPlaying()
          },3000)
          return()=>clearInterval(interval)
-      },[token])
+      },[token, playing])
 
       // Check Active Devices
       const checkActiveDevices = async () => {
         if(token){
           try{
-            console.log("vengo a buscar devices")
+            //console.log("vengo a buscar devices")
             const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
               headers: {
               'Authorization': 'Bearer ' + token
@@ -807,10 +757,10 @@ const Home = props =>{
       };
       useEffect(()=>{
           if(activeDevices){
-            console.log("hay devices activos!")
+            //console.log("hay devices activos!")
             return
           } else if(!activeDevices){
-            console.log("no hay devices activos")
+            //console.log("no hay devices activos")
             const interval=setInterval(()=>{
               checkActiveDevices()
             },3000)

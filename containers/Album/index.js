@@ -442,8 +442,19 @@ export default function Album() {
               'Authorization': 'Bearer ' + token
             }
           });
-          setPlaying(responsePlaying.data.item);
-          setPlayingData(responsePlaying.data)
+          if(playing){
+            if(playing.name != responsePlaying.data.item.name){
+              //console.log("EL TEMA ES DIFERENTE!")
+              setPlaying(responsePlaying.data.item);
+              setPlayingData(responsePlaying.data)
+            } else{
+              //console.log("El tema es el mismo");
+            }
+          } else{
+            //console.log("No habia nada sonando")
+            setPlaying(responsePlaying.data.item);
+            setPlayingData(responsePlaying.data)
+          }
         } catch (error) {
           console.error('este es mi error',error);
             if (error.response.status === 401) {
@@ -465,7 +476,7 @@ export default function Album() {
         checkCurrentlyPlaying()
        },3000)
        return()=>clearInterval(interval)
-    },[token])
+    },[token, playing])
 
     // Check Active Devices
     const checkActiveDevices = async () => {

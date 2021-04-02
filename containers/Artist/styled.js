@@ -87,7 +87,7 @@ const ArtistGenres = styled.p`
 const Button = styled.button`
     padding:10px 50px;
     border: none;
-    color: #47ffbb;
+    color: #fff;
     font-family: Poppins;
     font-size: 14px;
     //font-weight: bold;

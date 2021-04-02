@@ -8,7 +8,7 @@ import Lyrics from '../Lyrics'
 const CurrentlyPlayingCard = props =>{
 
     const ref = useRef()
-    
+    console.log(props)
     const {name, artists, album, external_urls, id, uri, track_number} = props.data
     const [isPlaying, setIsPlaying] = useState(true)
     const [progress, setProgress] = useState('')
@@ -51,7 +51,7 @@ const CurrentlyPlayingCard = props =>{
     }
  
     const player = async () => {
-        console.log("Hi, I'm the player function")
+        //console.log("Hi, I'm the player function")
         /*
         const responsePlayingCheck = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
             headers: {
@@ -65,7 +65,7 @@ const CurrentlyPlayingCard = props =>{
         */
         if(isPlaying /*&& isPlayingCheck*/){
             try{
-                console.log("Si estoy acá es porque algo esta sonando y se tiene que pausar")
+                //console.log("Si estoy acá es porque algo esta sonando y se tiene que pausar")
                 setIsPlaying(false);
                 setIcon('/play.svg');
                 axios({
@@ -95,10 +95,10 @@ const CurrentlyPlayingCard = props =>{
             }
         } else{
             try{
-                console.log("Si estoy acá es porque no hay nada sonando")
+                //console.log("Si estoy acá es porque no hay nada sonando")
                 setIsPlaying(true);
                 setIcon('/pause.svg');
-                console.log(progress)
+                //console.log(progress)
                 axios({
                     method: "put",
                     url: `https://api.spotify.com/v1/me/player/play`,
@@ -136,16 +136,33 @@ const CurrentlyPlayingCard = props =>{
                     'Authorization': 'Bearer ' + token
                   }
                 });
-                console.log(isPlaying)
+                console.log(responsePlaying.data)
+                //console.log(isPlaying)
                 if(responsePlaying.data.is_playing === true){
-                  setIcon('/pause.svg');
-                  setIsPlaying(true)
-                  console.log("llegué a poner el icono de pausa")
-                }else{
-                  setIcon('/play.svg');
-                  console.log("llegué a poner el icono de play")
-                  setIsPlaying(false)
-                  setProgress(responsePlaying.data.progress_ms)
+                  /*
+                  console.log("Este es IsPlaying en TRUE" + " " + isPlaying)
+                  console.log("Este es el icon en TRUE" + " " + icon)
+                  if(icon === '/pause.svg'){
+                    console.log("No le puse el icono porque ya estaba puesto.")
+                  } else{
+                    */
+                    setIcon('/pause.svg');
+                    setIsPlaying(true)
+                  //}
+                  //console.log("llegué a poner el icono de pausa")
+                }else if(responsePlaying.data.is_playing === false){
+                  /*
+                  console.log("Este es IsPlaying en FALSE" + " " + isPlaying)
+                  console.log("Este es el icon en FALSE" + " " + icon)
+                  if(icon === '/play.svg'){
+                    console.log("No le puse el icono porque ya estaba puesto.")
+                  } else{
+                    */
+                    setIcon('/play.svg');
+                  //console.log("llegué a poner el icono de play")
+                    setIsPlaying(false)
+                    setProgress(responsePlaying.data.progress_ms)
+                  //}
                 }
               } catch (error) {
                 console.error('este es mi error',error);
@@ -167,7 +184,7 @@ const CurrentlyPlayingCard = props =>{
               checkCurrentlyPlaying()
              },2000)
              return()=>clearInterval(interval)
-          },[token])
+          },[token, props])
 
     // Check if track is saved
     useEffect(() => {
