@@ -3,7 +3,7 @@ import BurgerMenu from '../BurgerMenu'
 import React, {useState} from 'react'
 import Link from 'next/link'
 
-const NavMenuMobile = ({open, setOpen, access_token, refresh_token}) => {
+const NavMenuMobile = ({open, setOpen, access_token, refresh_token, page}) => {
 
     /*
     const access_token = props.access_token;
@@ -18,6 +18,28 @@ const NavMenuMobile = ({open, setOpen, access_token, refresh_token}) => {
                     {/*<Logo src="" alt="gabriel-piantanida-logo"/>*/}
                 </div>
                 <nav>
+                    {page ? 
+                    <Menu>
+                        <List onClick={() => setOpen(!open)}>
+                            <a href="#home_section">Home</a>
+                        </List>
+                        <List onClick={() => setOpen(!open)}>
+                            <a href="#artists_section">Artists</a>
+                        </List>
+                        <List onClick={() => setOpen(!open)}>
+                            <a href="#tracks_section">Tracks</a>
+                        </List>
+                        <List onClick={() => setOpen(!open)}>
+                            <a href="#albums_section">Albums</a>
+                        </List>
+                        <List onClick={() => setOpen(!open)}>
+                            <a href="#genres_section">Genres</a>
+                        </List>
+                        <List onClick={() => setOpen(!open)}>
+                            <a href="#recommendations_section">Recommendations</a>
+                        </List>
+                    </Menu>
+                    :
                     <Menu>
                         <List onClick={() => setOpen(!open)}>
                             <Link href={{pathname: `/`, query: { access_token: access_token, refresh_token: refresh_token }}}>
@@ -50,6 +72,7 @@ const NavMenuMobile = ({open, setOpen, access_token, refresh_token}) => {
                             </Link>
                         </List>
                     </Menu>
+                    }
                 </nav>
                     <ContainerSocial>
                         

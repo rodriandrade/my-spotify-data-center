@@ -31,6 +31,12 @@ const ContainerHero = styled.div`
     flex-direction:column;
     justify-content:center;
     align-items:center;
+    
+    a{
+        margin:0;
+        padding:0;
+        margin:0 auto;
+    }
 `
 
 const Text = styled.p`
@@ -184,6 +190,7 @@ const ScrollDown = styled.div`
     bottom:100px;
     animation: blink-cont 1s ;
     transition:1s;
+    margin:0 auto;
 
     span{
         display: block;

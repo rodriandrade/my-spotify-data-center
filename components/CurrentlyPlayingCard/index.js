@@ -9,12 +9,15 @@ const CurrentlyPlayingCard = props =>{
 
     const ref = useRef()
     console.log(props)
+
     const {name, artists, album, external_urls, id, uri, track_number} = props.data
     const [isPlaying, setIsPlaying] = useState(true)
     const [progress, setProgress] = useState('')
     const [showPlayer, setShowPlayer] = useState(true)
     const [icon, setIcon] = useState('/pause.svg');
+    const [checkPlaying, setCheckPlaying] = useState(props.isPlayingNow)
 
+    console.log(checkPlaying)
     // Save & unsave album
     const [saveIcon, setSaveIcon] = useState('');
     const [save, setSave] = useState();
@@ -49,6 +52,10 @@ const CurrentlyPlayingCard = props =>{
     const openLyrics = () =>{
       setAvailableLyrics(!availableLyrics)
     }
+
+    useEffect(() => {
+      setCheckPlaying(props.isPlayingNow)
+    }, [props.isPlayingNow])
  
     const player = async () => {
         //console.log("Hi, I'm the player function")
@@ -136,34 +143,32 @@ const CurrentlyPlayingCard = props =>{
                     'Authorization': 'Bearer ' + token
                   }
                 });
-                console.log(responsePlaying.data)
-                //console.log(isPlaying)
-                if(responsePlaying.data.is_playing === true){
-                  /*
-                  console.log("Este es IsPlaying en TRUE" + " " + isPlaying)
-                  console.log("Este es el icon en TRUE" + " " + icon)
-                  if(icon === '/pause.svg'){
-                    console.log("No le puse el icono porque ya estaba puesto.")
-                  } else{
-                    */
+
+                if(checkPlaying){
+                  setIcon('/pause.svg')
+                  setIsPlaying(true)
+                } else{
+                  setIcon('/play.svg')
+                  setIsPlaying(false)
+                  setProgress(responsePlaying.data.progress_ms)
+                }
+   
+                /*
+                console.log(isPlaying)
+                if(responsePlaying.data.is_playing === true && isPlaying === false){
                     setIcon('/pause.svg');
                     setIsPlaying(true)
-                  //}
-                  //console.log("llegué a poner el icono de pausa")
-                }else if(responsePlaying.data.is_playing === false){
-                  /*
-                  console.log("Este es IsPlaying en FALSE" + " " + isPlaying)
-                  console.log("Este es el icon en FALSE" + " " + icon)
-                  if(icon === '/play.svg'){
-                    console.log("No le puse el icono porque ya estaba puesto.")
-                  } else{
-                    */
+                    console.log(isPlaying)
+                    console.log(responsePlaying.data.is_playing)
+                    console.log("llegué a poner el icono de pausa")
+                }else if(responsePlaying.data.is_playing === false && isPlaying === true){
                     setIcon('/play.svg');
-                  //console.log("llegué a poner el icono de play")
+                    console.log("llegué a poner el icono de play")
                     setIsPlaying(false)
                     setProgress(responsePlaying.data.progress_ms)
-                  //}
                 }
+                */
+                
               } catch (error) {
                 console.error('este es mi error',error);
                   if (error.response.status === 401) {
@@ -180,11 +185,7 @@ const CurrentlyPlayingCard = props =>{
           };
           useEffect(()=>{
             checkCurrentlyPlaying()
-            const interval=setInterval(()=>{
-              checkCurrentlyPlaying()
-             },2000)
-             return()=>clearInterval(interval)
-          },[token, props])
+          },[token, checkPlaying])
 
     // Check if track is saved
     useEffect(() => {

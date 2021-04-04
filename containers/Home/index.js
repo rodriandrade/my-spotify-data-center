@@ -48,7 +48,7 @@ const Home = props =>{
       var params = getHashParams();
 
       const [playing, setPlaying] = useState('');
-      const [isPlaying, setIsPlaying] = useState('');
+      const [isPlayingNow, setIsPlayingNow] = useState('');
 
       const [selected, setSelected] = useState(false);
       const [timePeriodTracks, setTimePeriodTracks] = useState('You listen to these tracks for the most part in the past 4 weeks! You spend a lot of time listening to')
@@ -670,7 +670,7 @@ const Home = props =>{
       const checkCurrentlyPlaying = async () => {
         if(token){
           try {   
-            console.log(playing)  
+
             const responsePlaying = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
               headers: {
                 'Authorization': 'Bearer ' + token
@@ -685,7 +685,7 @@ const Home = props =>{
                 setBlink(true)
                 setPlayingRightNow(responsePlaying.data.item);
               } else{
-                //console.log("El tema es el mismo");
+                  setIsPlayingNow(responsePlaying.data.is_playing)
               }
             } else{
               setPlaying(responsePlaying.data.item);
@@ -892,10 +892,10 @@ const Home = props =>{
 
           <MasterContainer>
 
-          {playing && user && <CurrentlyPlayingCard data={playing} token={token} refreshToken={refreshToken} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink}/>}
+          {playing && user && <CurrentlyPlayingCard data={playing} token={token} refreshToken={refreshToken} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink} isPlayingNow={isPlayingNow}/>}
           
           <BurgerMenu open={open} setOpen={setOpen}/>
-          <NavMenuMobile open={open} setOpen={setOpen} access_token={token} refresh_token={refreshToken} />
+          <NavMenuMobile open={open} setOpen={setOpen} access_token={token} refresh_token={refreshToken} page="home" />
 
           <Inner>
 
@@ -906,10 +906,10 @@ const Home = props =>{
                 <ContainerHero>
                   <TypingEffect user={user}/>
                   <Text>Welcome to your Spotify Data Center</Text>
-                  <ScrollDown>
-                    <span></span>
-                    <span></span>
-                  </ScrollDown>
+                    <ScrollDown>
+                      <span></span>
+                      <span></span>
+                    </ScrollDown>
                 </ContainerHero>
               </Col>
             </Grid>
