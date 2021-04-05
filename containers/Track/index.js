@@ -71,6 +71,7 @@ export default function Track() {
     const [playingRightNow, setPlayingRightNow] = useState([]);
     const [blink, setBlink] = useState(false)
     const [playerTrackPage, setPlayerTrackPage] = useState([])
+    const [isPlayingNow, setIsPlayingNow] = useState('');
 
     // Track length
     const [trackLength, setTrackLength] = useState('');
@@ -492,6 +493,7 @@ export default function Track() {
               setPlayingData(responsePlaying.data)
             } else{
               //console.log("El tema es el mismo");
+              setIsPlayingNow(responsePlaying.data.is_playing)
             }
           } else{
             //console.log("No habia nada sonando")
@@ -581,7 +583,7 @@ export default function Track() {
             <MasterContainer>
 
             {loadingTime ? 
-              playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink} setBlink={setBlink} refreshToken={refresh_token} /> 
+              playing && <CurrentlyPlayingCard data={playing} token={token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink} setBlink={setBlink} refreshToken={refresh_token} isPlayingNow={isPlayingNow}/> 
             : null}
 
             <BurgerMenu open={open} setOpen={setOpen}/>

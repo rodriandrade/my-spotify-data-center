@@ -59,6 +59,7 @@ export default function Album() {
     const [playingStatus, setPlayingStatus] = useState([]);
     const [playerAlbumPage, setPlayerAlbumPage] = useState([])
     const [blink, setBlink] = useState(false)
+    const [isPlayingNow, setIsPlayingNow] = useState('');
 
     // Loading
     const [loadingTime, setLoadingTime] = useState(false)
@@ -449,6 +450,7 @@ export default function Album() {
               setPlayingData(responsePlaying.data)
             } else{
               //console.log("El tema es el mismo");
+              setIsPlayingNow(responsePlaying.data.is_playing)
             }
           } else{
             //console.log("No habia nada sonando")
@@ -540,7 +542,7 @@ export default function Album() {
 
           {loadingTime ? 
             playing && <CurrentlyPlayingCard data={playing} token={token} refreshToken={refresh_token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying}
-            blink={blink} setBlink={setBlink} />
+            blink={blink} setBlink={setBlink} isPlayingNow={isPlayingNow}/>
           : null}
 
             <BurgerMenu open={open} setOpen={setOpen}/>

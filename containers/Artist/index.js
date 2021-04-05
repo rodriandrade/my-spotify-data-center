@@ -43,6 +43,7 @@ export default function Artist() {
     const [playingRightNow, setPlayingRightNow] = useState([]);
     const [blink, setBlink] = useState(false)
     const [playerArtistPage, setPlayerArtistPage] = useState([])
+    const [isPlayingNow, setIsPlayingNow] = useState('');
 
     // Devices
     const [activeDevices, setActiveDevices] = useState('');
@@ -359,7 +360,7 @@ export default function Artist() {
                   setPlaying(responsePlaying.data.item);
                   setPlayingData(responsePlaying.data)
                 } else{
-                  //console.log("El tema es el mismo");
+                    setIsPlayingNow(responsePlaying.data.is_playing)
                 }
             } else{
                 //console.log("No habia nada sonando")
@@ -450,7 +451,7 @@ export default function Artist() {
                 <MasterContainer>
 
                 {loadingTime ? 
-                    playing && <CurrentlyPlayingCard data={playing} token={token} refreshToken={refresh_token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink} setBlink={setBlink} /> 
+                    playing && <CurrentlyPlayingCard data={playing} token={token} refreshToken={refresh_token} playingData={playingData} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setPlaying={setPlaying} blink={blink} setBlink={setBlink} isPlayingNow={isPlayingNow}/> 
                 : null}
 
                 <BurgerMenu open={open} setOpen={setOpen}/>
