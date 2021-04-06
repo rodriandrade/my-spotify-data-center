@@ -403,6 +403,7 @@ export default function Artist() {
             const devices = responseUserDevices.data.devices;
             if(devices.length == 0){
                 setActiveDevices(false)
+                setPlaying('')
             } else{
                 setActiveDevices(true)
             }

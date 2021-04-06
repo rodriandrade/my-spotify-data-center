@@ -225,8 +225,11 @@ const CurrentlyPlayingCard = props =>{
     useEffect(() => {
       const checkLyrics = async () =>{
           try{
-            if(props.playingRightNow && artists){
+            console.log((artists))
+            if(/*props.playingRightNow && */artists){
               setLyrics('')
+              console.log(artists[0].name)
+              console.log(name)
               const getLyrics = await axios.get('/api/lyrics', {
                 params: {
                   'artist': artists[0].name,
