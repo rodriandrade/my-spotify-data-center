@@ -906,10 +906,13 @@ const Home = props =>{
                 <ContainerHero>
                   <TypingEffect user={user}/>
                   <Text>Welcome to your Spotify Data Center</Text>
+                  <a>
+
                     <ScrollDown>
                       <span></span>
                       <span></span>
                     </ScrollDown>
+                    </a>
                 </ContainerHero>
               </Col>
             </Grid>

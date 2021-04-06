@@ -465,7 +465,7 @@ export default function Artist() {
                                 <Container> 
                                     <ContainerImage>
                                         {artist.images[2].url ?
-                                            <ArtistImage src={artist.images[2].url} />
+                                            <ArtistImage src={artist.images[1].url} />
                                             : 
                                             <ArtistImage src={artist.images[1].url} />
                                         }

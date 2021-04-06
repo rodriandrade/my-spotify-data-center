@@ -162,6 +162,10 @@ const MainArtistContainer = styled.div`
     align-items:center;
     padding:50px;
     position:relative;
+
+    @media (max-width: 1400px) {
+        padding:0;
+    }
 `
 
 const MainArtistImageContainer = styled.div`
@@ -171,6 +175,10 @@ const MainArtistImageContainer = styled.div`
 const MainArtistImage = styled.img`
     max-width: 225px;
     border-radius:${(props) => (props.track ? "0" : "225px")};
+
+    @media (max-width: 1400px) {
+        max-width:180px;
+    }
 `
 
 const MainArtistName = styled.h2`
@@ -191,6 +199,10 @@ const MainArtistPosition = styled.h2`
     top:${(props) => (props.genre ? "0%" : "67%")};
     left:50%;
     transform: ${(props) => (props.genre ? "translate(-50%, -50%)" : "translate(-50%, 10%)")};
+
+    @media (max-width: 1400px) {
+        transform: ${(props) => (props.genre ? "translate(-50%, -50%)" : "translate(-50%, -2%)")};
+    }
     
 `
 
@@ -218,6 +230,10 @@ const ArtistCardContainer = styled.div`
 
     :last-child {
         border-bottom:none;
+    }
+
+    @media (max-width: 1400px) {
+        padding:15px;
     }
 `
 

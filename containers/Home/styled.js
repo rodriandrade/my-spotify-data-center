@@ -147,6 +147,10 @@ const MasterContainer = styled.div`
     justify-content:center;
     flex-direction:column;
 
+    @media (max-width: 1400px) {
+        width:92%;
+    }
+
     @media (max-width: 480px) {
         width:100%;
     }
@@ -168,6 +172,10 @@ const NavContainer = styled.div`
     width:6%;
     height:100vh;
     position:relative;
+
+    @media (max-width: 1400px) {
+        width:8%;
+    }
 
     @media (max-width: 480px) {
         display:none;
@@ -191,6 +199,7 @@ const ScrollDown = styled.div`
     animation: blink-cont 1s ;
     transition:1s;
     margin:0 auto;
+    background-color:rgba(0,0,0,0);
 
     span{
         display: block;

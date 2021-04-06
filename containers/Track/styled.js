@@ -323,9 +323,19 @@ const MasterContainer = styled.div`
     justify-content:center;
     flex-direction:column;
 
+    @media (max-width: 1400px) {
+        width:92%;
+    }
+
     @media (max-width: 480px) {
         width:100%;
     }
+
+    /*
+    @media (max-width: 1440px) {
+        width:92%;
+    }
+    */
 `
 
 const SuperContainer = styled.div`
@@ -339,9 +349,19 @@ const NavContainer = styled.div`
     height:100vh;
     position:relative;
 
+    @media (max-width: 1400px) {
+        width:8%;
+    }
+
     @media (max-width: 480px) {
         display:none;
     }
+
+    /*
+    @media (max-width: 1440px) {
+        width:8%;
+    }
+    */
 `
 
 const AudioFeaturesContainer = styled.div`

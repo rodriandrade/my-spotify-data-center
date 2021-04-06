@@ -32,9 +32,9 @@ const Lyrics = props => {
         <Container>
                 <Inner>
                     <IconContainer>
+                        <TrackName>{props.track}</TrackName>
                         <CloseButton src="/cancel.svg" onClick={() => props.setAvailableLyrics(!props.availableLyrics)} />
                     </IconContainer>
-                    <TrackName>{props.track}</TrackName>
                     <TrackArtist>{props.artist}</TrackArtist>
                     
                     {props.lyrics.data ? 

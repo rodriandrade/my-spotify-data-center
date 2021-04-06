@@ -79,6 +79,10 @@ const Container = styled.div`
     background-color:rgba(0,0,0,0.8);
     backdrop-filter:blur(20px);
 
+    @media (max-width: 1400px) {
+        width:92%;
+    }
+
     @media (max-width: 480px) {
        width:100%;
        transform:${(props) => (props.showPlayer ? "translate(0%, 0px)" : "translate(0%, 70px)")};

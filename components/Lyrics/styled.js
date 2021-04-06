@@ -96,10 +96,11 @@ const TrackName = styled.h1`
     font-weight:600px;
 
     @media (max-width: 480px) {
-        padding:0;
+        padding:20px 0 0 0;
         margin:0;
         font-size:36px;
         line-height:1.5;
+        width:90%;
     }
 `
 
@@ -107,14 +108,17 @@ const CloseButton = styled.img`
     cursor: pointer;
     width:25px;
     color: #fff;
-    padding-top:20px;
+    padding-top:0px;
+    position:relative;
+    top:40px;
 
     @media (max-width: 480px) {
         position:relative;
         //padding:20px 0px;
-        align-self:flex-end;
+        align-self:flex-start;
         width:25px;
-        padding:20px 0;
+        padding:0 0;
+        top:35px;
     }
 `
 
@@ -144,8 +148,9 @@ const LoadingText = styled.span`
 
 const IconContainer = styled.div`
     display:flex;
-    justify-content:flex-end;
+    justify-content:space-between;
     width:100%;
+    align-items:flex-start;
 `
 
 export {Container, TrackLyrics, CloseButton, Blur, TrackTitle, TrackArtist, TrackName, LoadingContainer, LoadingImage, LoadingText, IconContainer}

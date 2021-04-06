@@ -50,7 +50,7 @@ const MenuContainer = styled.div`
       height:60px;
       position:fixed;
       top:0;
-      background-color:rgba(5,5,5,0.9);
+      background-color:${({ open }) => open ? 'rgba(5,5,5,0.0)' : 'rgba(5,5,5,0.9)'};
       z-index:3001;
       backdrop-filter:blur(20px);
   }
