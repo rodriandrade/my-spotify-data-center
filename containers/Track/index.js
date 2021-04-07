@@ -487,6 +487,7 @@ export default function Track() {
             }
           });
           if(playing){
+            setBlink(false)
             if(playing.name != responsePlaying.data.item.name){
               //console.log("EL TEMA ES DIFERENTE!")
               setPlaying(responsePlaying.data.item);

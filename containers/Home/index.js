@@ -25,7 +25,6 @@ import {Text, ContainerLeftColumn, ContainerHero, Button, MostListened, RefreshI
 
 const Home = props =>{
 
-    console.log("hola")
     const router = useRouter()
     // Devices
     const [activeDevices, setActiveDevices] = useState('');
@@ -152,15 +151,18 @@ const Home = props =>{
       const getNewToken = async () =>{
         let refresh_token = '';
         if(props.refreshToken){
+          /*
           console.log("Entre al params.refreshToken")
           console.log(props.refreshToken)
+          */
           refresh_token = props.refreshToken
         } else if(router.query.refresh_token){
+          /*
           console.log("Entre al query.router")
           console.log(router.query.refresh_token)
+          */
           refresh_token = router.query.refresh_token
         }
-        console.log("No entro en ninguno de los dos IF")
         const responseRefreshToken = await axios.get(`https://my-spotify-data-center-server.vercel.app/refresh_token`, {
             params: {
               'refresh_token': refresh_token
@@ -678,6 +680,7 @@ const Home = props =>{
             });
 
             if(playing){
+              setBlink(false)
               if(playing.name != responsePlaying.data.item.name){
                 setPlaying(responsePlaying.data.item);
                 //console.log(responsePlaying.data)

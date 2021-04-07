@@ -8,16 +8,14 @@ import Lyrics from '../Lyrics'
 const CurrentlyPlayingCard = props =>{
 
     const ref = useRef()
-    console.log(props)
-
     const {name, artists, album, external_urls, id, uri, track_number} = props.data
     const [isPlaying, setIsPlaying] = useState(true)
     const [progress, setProgress] = useState('')
     const [showPlayer, setShowPlayer] = useState(true)
     const [icon, setIcon] = useState('/pause.svg');
     const [checkPlaying, setCheckPlaying] = useState(props.isPlayingNow)
+    const [playerBlink, setPlayerBlink] = useState(props.blink)
 
-    console.log(checkPlaying)
     // Save & unsave album
     const [saveIcon, setSaveIcon] = useState('');
     const [save, setSave] = useState();
@@ -56,6 +54,10 @@ const CurrentlyPlayingCard = props =>{
     useEffect(() => {
       setCheckPlaying(props.isPlayingNow)
     }, [props.isPlayingNow])
+
+    useEffect(() => {
+      setPlayerBlink(props.blink)
+    }, [props.blink])
  
     const player = async () => {
         //console.log("Hi, I'm the player function")
@@ -225,11 +227,8 @@ const CurrentlyPlayingCard = props =>{
     useEffect(() => {
       const checkLyrics = async () =>{
           try{
-            console.log((artists))
             if(/*props.playingRightNow && */artists){
               setLyrics('')
-              console.log(artists[0].name)
-              console.log(name)
               const getLyrics = await axios.get('/api/lyrics', {
                 params: {
                   'artist': artists[0].name,
@@ -237,7 +236,6 @@ const CurrentlyPlayingCard = props =>{
                 }
               });
               setLyrics(getLyrics)
-              console.log(getLyrics)
             }
           } catch(error){
               console.error('este es mi error',error);
@@ -359,9 +357,9 @@ const CurrentlyPlayingCard = props =>{
           <Container showPlayer={showPlayer}>
             <CurrentlyPlayingCont
               onClick={() => setShowPlayer(!showPlayer)}
-              blink={props.blink}
+              blink={playerBlink}
             >
-              <TimePlayed blink={props.blink}>Currently Playing</TimePlayed>
+              <TimePlayed blink={playerBlink}>Currently Playing</TimePlayed>
             </CurrentlyPlayingCont>
             
             <Cont>
