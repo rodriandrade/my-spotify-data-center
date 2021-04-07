@@ -1,5 +1,6 @@
 import Particles from 'react-particles-js';
 import ParticlesCont from './styled'
+import React, {useState, useEffect} from 'react'
 
 const ParticlesBackground = ({children, ...props}) =>{
 
@@ -116,6 +117,20 @@ const ParticlesBackground = ({children, ...props}) =>{
                 "retina_detect": true
             }} />
         */
+
+    const [particlesValue, setParticlesValue] = useState(300)
+    let particles = 300;
+
+    useEffect(() => {
+        const mediaQuery = window.matchMedia('(max-width: 480px)')
+        if (mediaQuery.matches) {
+            particles = 600;
+            //setParticlesValue(600)
+        } else{
+            particles = 300;
+            //setParticlesValue(300)
+        }
+    }, [])
     
     return(
         <ParticlesCont>
@@ -123,7 +138,7 @@ const ParticlesBackground = ({children, ...props}) =>{
             params={{
                 "particles": {
                     "number": {
-                        "value": 300,
+                        "value": particles,
                         "density": {
                             "enable": true,
                             "value_area": 1803.4120608655228
