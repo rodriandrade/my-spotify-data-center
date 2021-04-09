@@ -88,7 +88,7 @@ export default function Track() {
               'refresh_token': refresh_token
             }
           });
-        console.log(responseRefreshToken.data.access_token);
+        console.log("SE GENERO UN NUEVO TOKEN");
         setNewToken(responseRefreshToken.data.access_token)
       }
 
@@ -233,6 +233,7 @@ export default function Track() {
                 console.error('este es mi error',error);
                 if (error.response.status === 401) {
                     getNewToken();
+                    console.log("Error en el fetch de data. Primer UseEffect")
                 }
                 if (error.response.status === 500) {
                   console.log(error);
@@ -253,6 +254,7 @@ export default function Track() {
       const fetchRecommendations = async () =>{
         if(newToken){
           try{
+            /*
             console.log(playing)
             const responsePlaying = await axios.get(
               `https://api.spotify.com/v1/me/player/currently-playing`,
@@ -264,6 +266,7 @@ export default function Track() {
             );
             setPlaying(responsePlaying.data.item);
             setPlayingData(responsePlaying.data);
+            */
           } catch (error){
             console.error("este es mi error", error);
             if (error.response.status === 401) {
@@ -304,6 +307,7 @@ export default function Track() {
             console.error("este es mi error", error);
             if (error.response.status === 401) {
               getNewToken();
+              console.log("Error en el fetch de Recomendaciones. Segundo UseEffect")
             }
             if (error.response.status === 500) {
               console.log(error);
@@ -479,11 +483,11 @@ export default function Track() {
 
     // Check Currently Playing
     const checkCurrentlyPlaying = async () => {
-      if(token){
+      if(newToken){
         try {
           const responsePlaying = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
             headers: {
-              'Authorization': 'Bearer ' + token
+              'Authorization': 'Bearer ' + newToken
             }
           });
           if(playing){
@@ -505,6 +509,7 @@ export default function Track() {
         } catch (error) {
           console.error('este es mi error',error);
             if (error.response.status === 401) {
+              console.log("useEffect playing")
               getNewToken();
             }
             if (error.response.status === 500) {
@@ -522,16 +527,16 @@ export default function Track() {
         checkCurrentlyPlaying()
        },3000)
        return()=>clearInterval(interval)
-    },[token, playing])
+    },[newToken, playing])
 
     // Check Active Devices
       const checkActiveDevices = async () => {
-        if(token){
+        if(newToken){
           try{
             console.log("vengo a buscar devices")
             const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
               headers: {
-              'Authorization': 'Bearer ' + token
+              'Authorization': 'Bearer ' + newToken
               }
             });
             const devices = responseUserDevices.data.devices;
@@ -549,6 +554,7 @@ export default function Track() {
             }
             if (error.response.status === 500) {
               console.log(error);
+              console.log("useEffect devices")
             }
             if (error.response.status === 503) {
               console.log(error);
@@ -570,7 +576,7 @@ export default function Track() {
             },3000)
             return()=>clearInterval(interval)
           }
-      },[token])
+      },[newToken])
 
     return (
         <div>
@@ -678,12 +684,12 @@ export default function Track() {
 
                 {loadingTime && (tracksFourWeeks || tracksSixMonths || tracksSeveralYears) ? 
                   <section>
-                  <Title size="h4" margin="data-subtitle">{track.name} appeareances in your artist ranking</Title>
+                  <Title size="h4" margin="data-subtitle">{track.name} appeareances in your tracks ranking</Title>
                   <Grid colGap={30} rowGap={40}>
                       {tracksFourWeeks ?
                         <Col desktop={4} tablet={6} mobile={12}>
                             <Position>#<strong>{tracksFourWeeks}</strong></Position> 
-                            <TrackInfo>In your most listened artists list for the <strong>past 4 weeks</strong>.</TrackInfo>  
+                            <TrackInfo>In your most listened tracks list for the <strong>past 4 weeks</strong>.</TrackInfo>  
                         </Col>
                         : 
                         <Col desktop={4} tablet={6} mobile={12}>
@@ -696,7 +702,7 @@ export default function Track() {
                       {tracksSixMonths ?
                         <Col desktop={4} tablet={6} mobile={12}>
                             <Position>#<strong>{tracksSixMonths}</strong></Position>   
-                            <TrackInfo>In your most listened artists list for the <strong>past 6 months</strong>.</TrackInfo>
+                            <TrackInfo>In your most listened tracks list for the <strong>past 6 months</strong>.</TrackInfo>
                         </Col>
                         : 
                         <Col desktop={4} tablet={6} mobile={12}>
@@ -709,7 +715,7 @@ export default function Track() {
                       {tracksSeveralYears ?
                         <Col desktop={4} tablet={6} mobile={12}>
                             <Position>#<strong>{tracksSeveralYears}</strong></Position>   
-                            <TrackInfo>In your most listened artists list for the <strong>past several years</strong>.</TrackInfo>
+                            <TrackInfo>In your most listened tracks list for the <strong>past several years</strong>.</TrackInfo>
                         </Col>
                         : 
                         <Col desktop={4} tablet={6} mobile={12}>

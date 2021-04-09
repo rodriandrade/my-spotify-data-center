@@ -110,7 +110,7 @@ export default function Artist() {
 
     useEffect(() => {
         const fetchData = async () => {
-            if(newToken || token){
+            if(newToken){
                 try {
 
                     setArtistFourWeeks('')
@@ -122,7 +122,7 @@ export default function Artist() {
                     setLoadingTime(false)
                     const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
                       headers: {
-                      'Authorization': 'Bearer ' + token
+                      'Authorization': 'Bearer ' + newToken
                       }
                     });
                     const devices = responseUserDevices.data.devices;
@@ -293,6 +293,7 @@ export default function Artist() {
                     })
                     setTracksRecentlyPlayed(artistRepetitionRecentlyPlayed);
                     
+                    /*
                     const responsePlaying = await axios.get(
                         `https://api.spotify.com/v1/me/player/currently-playing`,
                         {
@@ -303,6 +304,7 @@ export default function Artist() {
                     );
                     setPlaying(responsePlaying.data.item);
                     setPlayingData(responsePlaying.data);
+                    */
 
                     setLoadingTime(true);
 
@@ -347,11 +349,11 @@ export default function Artist() {
 
     // Check Currently Playing
     const checkCurrentlyPlaying = async () => {
-        if(newToken || token){
+        if(newToken){
           try {
             const responsePlaying = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
               headers: {
-                'Authorization': 'Bearer ' + token
+                'Authorization': 'Bearer ' + newToken
               }
             });
             if(playing){
@@ -389,16 +391,16 @@ export default function Artist() {
           checkCurrentlyPlaying()
          },3000)
          return()=>clearInterval(interval)
-      },[token, newToken, playing])
+      },[newToken, playing])
 
       // Check Active Devices
       const checkActiveDevices = async () => {
-        if(token){
+        if(newToken){
           try{
             console.log("vengo a buscar devices")
             const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
               headers: {
-              'Authorization': 'Bearer ' + token
+              'Authorization': 'Bearer ' + newToken
               }
             });
             const devices = responseUserDevices.data.devices;
@@ -437,7 +439,7 @@ export default function Artist() {
             },3000)
             return()=>clearInterval(interval)
           }
-      },[token, newToken])
+      },[newToken])
 
     return (
         <div>

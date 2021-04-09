@@ -191,6 +191,7 @@ export default function Album() {
       const fetchRecommendations = async () =>{
         if(newToken){
           try{
+            /*
             const responsePlaying = await axios.get(
               `https://api.spotify.com/v1/me/player/currently-playing`,
               {
@@ -201,9 +202,11 @@ export default function Album() {
             );
             setPlaying(responsePlaying.data.item);
             setPlayingData(responsePlaying.data);
+            */
           } catch (error){
             console.error("este es mi error", error);
             if (error.response.status === 401) {
+              console.log("Estoy en el 401")
               getNewToken();
             }
             if (error.response.status === 500) {
@@ -274,6 +277,7 @@ export default function Album() {
           } catch (error){
             console.error("este es mi error", error);
             if (error.response.status === 401) {
+              console.log("Estoy en el 401")
               getNewToken();
             }
             if (error.response.status === 500) {
@@ -436,31 +440,34 @@ export default function Album() {
 
     // Check Currently Playing
     const checkCurrentlyPlaying = async () => {
-      if(token){
+      if(newToken){
         try {
           const responsePlaying = await axios.get(`https://api.spotify.com/v1/me/player/currently-playing`, {
             headers: {
-              'Authorization': 'Bearer ' + token
+              'Authorization': 'Bearer ' + newToken
             }
           });
-          if(playing){
-            setBlink(false)
-            if(playing.name != responsePlaying.data.item.name){
-              //console.log("EL TEMA ES DIFERENTE!")
+          if(responsePlaying.data.item != ""){
+            if(playing){
+              setBlink(false)
+              if(playing.name != responsePlaying.data.item.name){
+                //console.log("EL TEMA ES DIFERENTE!")
+                setPlaying(responsePlaying.data.item);
+                setPlayingData(responsePlaying.data)
+              } else{
+                //console.log("El tema es el mismo");
+                setIsPlayingNow(responsePlaying.data.is_playing)
+              }
+            } else{
+              //console.log("No habia nada sonando")
               setPlaying(responsePlaying.data.item);
               setPlayingData(responsePlaying.data)
-            } else{
-              //console.log("El tema es el mismo");
-              setIsPlayingNow(responsePlaying.data.is_playing)
             }
-          } else{
-            //console.log("No habia nada sonando")
-            setPlaying(responsePlaying.data.item);
-            setPlayingData(responsePlaying.data)
           }
         } catch (error) {
           console.error('este es mi error',error);
             if (error.response.status === 401) {
+              console.log("Estoy en el 401")
               getNewToken();
             }
             if (error.response.status === 500) {
@@ -479,16 +486,16 @@ export default function Album() {
         checkCurrentlyPlaying()
        },3000)
        return()=>clearInterval(interval)
-    },[token, playing])
-
+    },[newToken, playing])
+  
     // Check Active Devices
     const checkActiveDevices = async () => {
-      if(token){
+      if(newToken){
         try{
           console.log("vengo a buscar devices")
           const responseUserDevices = await axios.get(`https://api.spotify.com/v1/me/player/devices`, {
             headers: {
-            'Authorization': 'Bearer ' + token
+            'Authorization': 'Bearer ' + newToken
             }
           });
           const devices = responseUserDevices.data.devices;
@@ -501,6 +508,7 @@ export default function Album() {
         } catch (error){
           console.error('este es mi error',error);
           if (error.response.status === 401) {
+            console.log("Estoy en el 401")
             getNewToken();
             //console.log("???????????????????????????????????")
           }
@@ -527,7 +535,7 @@ export default function Album() {
           },3000)
           return()=>clearInterval(interval)
         }
-    },[token])
+    },[newToken])
 
     return (
       <div>

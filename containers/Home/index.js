@@ -80,8 +80,6 @@ const Home = props =>{
       const [albums, setAlbums] = useState([]);
       const [totalAlbums, setTotalAlbums] = useState([]);
 
-      
-
       // Player
       const [recentlyPlayed, setRecentlyPlayed] = useState([]);
       
@@ -116,26 +114,6 @@ const Home = props =>{
       const [pickLoadingText, setPickLoadingText] = useState('');
       // Loading
       const [loadingTime, setLoadingTime] = useState(false)
-
-
-      // TEST /////////////////////////////
-
-      /*
-      const [currentTrack, setCurrentTrack] = useState('')
-      console.log(currentTrack)
-      const prevTrackRef = useRef();
-        useEffect(() => {
-          prevTrackRef.current = currentTrack;
-        });
-      const prevTrack = prevTrackRef.current;
-      console.log(prevTrack)
-
-      if(currentTrack != prevTrack){
-        console.log("SON DISTINTOS!!!!!!!!!!!!!!!!")
-      }
-      */
-
-      ////////////////////////////////////
 
       // Loading Text
       useEffect(() => {

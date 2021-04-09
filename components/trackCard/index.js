@@ -169,7 +169,6 @@ const TrackCard = props =>{
     return(
         <Col desktop={props.gridSize} tablet={6} mobile={6}>
             <ContainerTrack>
-            <div>
                 {!activeDevices && !showModal && 
                     <Modal 
                         modalIsOpen={modalIsOpen} 
@@ -194,7 +193,6 @@ const TrackCard = props =>{
                     <TrackName margin={props.margin}>{name}</TrackName>
                 </Link>
                 <ArtistName>{artistsNames.join(", ")}</ArtistName>
-            </div>
             </ContainerTrack>
         </Col>
     )
