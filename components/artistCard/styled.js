@@ -23,6 +23,11 @@ const ArtistImage = styled.img`
    z-index:1;
    border-radius:200px;
 
+   @media (max-width: 480px) {
+        max-height: 100%;
+        max-width:100%;
+    }
+
 `
 
 const ArtistPosition = styled.p`
@@ -84,7 +89,10 @@ const ImageContainer = styled.div`
     border-radius:200px;
     margin:0 auto;
     //background-color:yellow;
-    
+    @media (max-width: 480px) {
+        height:100%;
+        width:100%;
+    }
 `
 
 export { ContainerArtist, ArtistName, TimePlayed, ArtistImage, ArtistPosition, Overlay, ImageContainer}
