@@ -23,6 +23,17 @@ const ArtistImage = styled.img`
    z-index:1;
    border-radius:200px;
 
+   @media (max-width: 768px) {
+        min-height: 100%;
+        min-width: 100%;
+        border-radius: unset;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index:0;
+    }
+
    @media (max-width: 480px) {
         min-height: 100%;
         min-width: 100%;
@@ -48,6 +59,11 @@ const ArtistPosition = styled.p`
     left:50%;
     transform: translate(-50%, 25%);
     text-shadow: 0px 0px 11px rgba(0, 0, 0, 1);
+
+    @media (max-width: 768px) {
+        transform: translate(-50%,5%);
+        font-size:48px;
+    }
 
     @media (max-width: 480px) {
         transform: translate(-50%,11%);
@@ -83,6 +99,11 @@ const ArtistName = styled.p`
        font-size:16px;
        margin-top:30px;
     }
+
+    @media (max-width: 480px) {
+       font-size:16px;
+       margin-top:40px;
+    }
 `
 
 const TimePlayed = styled.p`
@@ -98,6 +119,13 @@ const ImageContainer = styled.div`
     border-radius:200px;
     margin:0 auto;
     //background-color:yellow;
+    @media (max-width: 768px) {
+        height: 130px;
+        width: 130px;
+        border-radius: 100%;
+        position: relative;
+    }
+
     @media (max-width: 480px) {
         height: 150px;
         width: 150px;

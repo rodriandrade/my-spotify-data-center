@@ -141,6 +141,12 @@ const LoadingContainerSection = styled.div`
     flex-direction:column;;
 `
 
+const SuperContainer = styled.div`
+    width:100%;
+    display:flex;
+    flex-direction:row;
+`
+
 const MasterContainer = styled.div`
     width:94%;
     display:flex;
@@ -151,21 +157,13 @@ const MasterContainer = styled.div`
         width:92%;
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 768px) {
         width:100%;
     }
 
-    /*
-    @media (max-width: 1440px) {
-        width:92%;
+    @media (max-width: 480px) {
+        width:100%;
     }
-    */
-`
-
-const SuperContainer = styled.div`
-    width:100%;
-    display:flex;
-    flex-direction:row;
 `
 
 const NavContainer = styled.div`
@@ -177,15 +175,13 @@ const NavContainer = styled.div`
         width:8%;
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 768px) {
         display:none;
     }
 
-    /*
-    @media (max-width: 1440px) {
-        width:8%;
+    @media (max-width: 480px) {
+        display:none;
     }
-    */
 `
 
 const WelcomeContainer = styled.div`

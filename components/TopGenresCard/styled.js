@@ -17,6 +17,10 @@ const GenreTitle = styled.h1`
     color: #47ffbb;
     position:relative;
 
+    @media (max-width: 768px) {
+        font-size:20px;
+    }
+
     @media (max-width: 480px) {
         text-align:center;
     }
@@ -29,6 +33,11 @@ const GenrePosition = styled.h1`
     color: #fff;
     margin-right:20px;
     position:relative;
+
+    @media (max-width: 768px) {
+        margin-right:0;
+        font-size:48px;
+    }
 
     @media (max-width: 480px) {
         margin-right:0;

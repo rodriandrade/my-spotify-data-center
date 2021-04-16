@@ -7,6 +7,12 @@ const ParticlesCont = styled.div`
     width: 100%;
     height: 100vh;
 
+    @media (max-width: 768px) {
+        #tsparticles canvas{
+            min-height: 100vh;
+        }
+    }
+
     @media (max-width: 480px) {
         #tsparticles canvas{
             min-height: 100vh;

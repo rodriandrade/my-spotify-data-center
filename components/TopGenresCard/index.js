@@ -26,7 +26,7 @@ const TopGenresCard = props =>{
     </Container>               */
 
      return(
-        <Col desktop={props.gridSize} tablet={6} mobile={6}>
+        <Col desktop={props.gridSize} tablet={4} mobile={6}>
             <Container>
                 <GenrePosition>{position}</GenrePosition>
                 <GenreTitle>{genre.charAt(0).toUpperCase() + genre.slice(1)}</GenreTitle>

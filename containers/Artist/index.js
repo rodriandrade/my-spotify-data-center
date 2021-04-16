@@ -6,7 +6,7 @@ import TrackCard from '../../components/trackCard'
 import {Grid, Col} from '../../components/Grid'
 import Title from '../../components/Title'
 import Inner from '../../components/Inner'
-import {Container, ContainerInfo, ContainerImage, ArtistImage, ArtistName, ArtistGenres, Position, ArtistInfo, ArtistInfoCont, Button, GenresContainer, NoDataContainer, NoDataInfo, NoDataTitle, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer} from './styled'
+import {Container, ContainerInfo, ContainerImage, ArtistImage, ArtistName, ArtistGenres, Position, ArtistInfo, ArtistInfoCont, Button, GenresContainer, NoDataContainer, NoDataInfo, NoDataTitle, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer, TypeName} from './styled'
 import NavMenu from '../../components/NavMenu'
 import Footer from '../../components/Footer'
 import ParticlesBackground from '../../components/ParticlesBackground'
@@ -467,7 +467,7 @@ export default function Artist() {
 
                     {loadingTime ? 
                         <Grid colGap={30} rowGap={40}>
-                            <Col desktop={12} tablet={6} mobile={12}>
+                            <Col desktop={12} tablet={12} mobile={12}>
                                 <Container> 
                                     <ContainerImage>
                                         {artist.images[2].url ?
@@ -477,6 +477,7 @@ export default function Artist() {
                                         }
                                     </ContainerImage>
                                     <ContainerInfo>
+                                        <TypeName>Artist</TypeName>
                                         <ArtistName>{artist.name}</ArtistName>
                                         {!!follow && <Button onClick={handleFollow}>{follow === 'true' ? 'Unfollow on Spotify' : 'Follow on Spotify'}</Button> }  
                                     </ContainerInfo>
@@ -490,22 +491,20 @@ export default function Artist() {
                         </LoadingContainer>
                     }
 
-                  
-
                     {loadingTime ? 
                         <section>
                             <Grid colGap={30} rowGap={40}>
-                                <Col desktop={4} tablet={6} mobile={12}>
+                                <Col desktop={4} tablet={4} mobile={12}>
                                     <Title size="h4" margin="none">Genres</Title>
                                     <GenresContainer>
                                         {artist.genres && artist.genres.map(genre => <ArtistGenres>{genre}</ArtistGenres>)}
                                     </GenresContainer>
                                 </Col>
-                                <Col desktop={4} tablet={6} mobile={12}>
+                                <Col desktop={4} tablet={4} mobile={12}>
                                     <Title size="h4" margin="none">Popularity</Title>
                                     {artist.popularity && <Position><strong>{artist.popularity} / 100</strong></Position>}
                                 </Col>
-                                <Col desktop={4} tablet={6} mobile={12}>
+                                <Col desktop={4} tablet={4} mobile={12}>
                                     <Title size="h4" margin="none">Followers</Title>
                                     {artist.genres && <Position><strong>{artist.followers.total}</strong></Position>}
                                 </Col>
@@ -517,7 +516,7 @@ export default function Artist() {
                         <section>
                             <Title size="h4" margin="data-subtitle">{artist.name} appeareances in your artist ranking</Title>
                             <Grid colGap={30} rowGap={40}>
-                                <Col desktop={4} tablet={6} mobile={12}>
+                                <Col desktop={4} tablet={4} mobile={12}>
                                     {artistFourWeeks ? 
                                         <ArtistInfoCont>
                                             <Position>#<strong>{artistFourWeeks}</strong></Position>
@@ -530,7 +529,7 @@ export default function Artist() {
                                     </NoDataContainer>
                                     }
                                 </Col>
-                                <Col desktop={4} tablet={6} mobile={12}>
+                                <Col desktop={4} tablet={4} mobile={12}>
                                     {artistSixMonths ? 
                                         <ArtistInfoCont>
                                             <Position>#<strong>{artistSixMonths}</strong></Position>
@@ -543,7 +542,7 @@ export default function Artist() {
                                     </NoDataContainer>
                                     }
                                 </Col>
-                                <Col desktop={4} tablet={6} mobile={12}>
+                                <Col desktop={4} tablet={4} mobile={12}>
                                     {artistSeveralYears ? 
                                         <ArtistInfoCont>
                                             <Position>#<strong>{artistSeveralYears}</strong></Position>
@@ -566,10 +565,10 @@ export default function Artist() {
                         <section>
                             <Title size="h4" margin="data-subtitle">{artist.name}'s tracks appeareances in your tracks ranking</Title>
                             <Grid colGap={30} rowGap={40}>
-                                    <Col desktop={4} tablet={6} mobile={12}>
+                                    <Col desktop={4} tablet={4} mobile={12}>
                                         {tracksFourWeeks.length > 0 ?<ArtistInfoCont>
                                             <Position><strong>{tracksFourWeeks.length}</strong></Position>
-                                            <ArtistInfo>{tracksFourWeeks.length > 1 ? 'times' : 'time'} appeared in your top 50 tracks from the <strong>past 4 weeks</strong>.</ArtistInfo>
+                                            <ArtistInfo>{tracksFourWeeks.length > 1 ? 'times' : 'time'} appeared in your ranking from the <strong>past 4 weeks</strong>.</ArtistInfo>
                                         </ArtistInfoCont>
                                         : 
                                         <NoDataContainer>
@@ -578,10 +577,10 @@ export default function Artist() {
                                         </NoDataContainer>
                                         }
                                     </Col>
-                                    <Col desktop={4} tablet={6} mobile={12}>
+                                    <Col desktop={4} tablet={4} mobile={12}>
                                         {tracksSixMonths.length > 0 ? <ArtistInfoCont>
                                             <Position><strong>{tracksSixMonths.length}</strong></Position>
-                                            <ArtistInfo>{tracksSixMonths.length > 1 ? 'times' : 'time'} appeared in your top 50 tracks from the <strong>past 6 months</strong>.</ArtistInfo>
+                                            <ArtistInfo>{tracksSixMonths.length > 1 ? 'times' : 'time'} appeared in your ranking from the <strong>past 6 months</strong>.</ArtistInfo>
                                         </ArtistInfoCont>
                                         : 
                                         <NoDataContainer>
@@ -590,10 +589,10 @@ export default function Artist() {
                                         </NoDataContainer>
                                         }
                                     </Col>
-                                    <Col desktop={4} tablet={6} mobile={12}>
+                                    <Col desktop={4} tablet={4} mobile={12}>
                                         {tracksSeveralYears.length > 0 ? <ArtistInfoCont>
                                             <Position><strong>{tracksSeveralYears.length}</strong></Position>
-                                            <ArtistInfo>{tracksSeveralYears.length > 1 ? 'times' : 'time'} appeared in your top 50 tracks <strong>lifetime</strong>.</ArtistInfo>
+                                            <ArtistInfo>{tracksSeveralYears.length > 1 ? 'times' : 'time'} appeared in your ranking tracks <strong>lifetime</strong>.</ArtistInfo>
                                         </ArtistInfoCont>
                                         : 
                                         <NoDataContainer>

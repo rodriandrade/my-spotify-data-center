@@ -89,6 +89,16 @@ text{
   }
 }
 
+@media (max-width: 768px) {
+  .ityped-cursor {
+    font-size:36px;
+  }
+
+  .generateImageButton{
+    display:none;
+  }
+}
+
 @media (max-width: 480px) {
   .ityped-cursor {
     font-size:36px;

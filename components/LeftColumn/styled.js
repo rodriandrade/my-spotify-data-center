@@ -5,6 +5,10 @@ const ContainerLeftColumn = styled.div`
     top:20px;
     width:100%;
 
+    @media (max-width: 768px) {
+       top:70px;
+    }
+
     &.isSticky{
         margin:20px 0 20px 0;
         padding:20px 0 20px 0;

@@ -5,7 +5,7 @@ import TrackCard from '../../components/trackCard'
 import {Grid, Col} from '../../components/Grid'
 import Title from '../../components/Title'
 import Inner from '../../components/Inner'
-import { TrackImage, TrackName, TrackGenres, Container, ContainerImage, ContainerInfo, ArtistName, RecommendationsContainer, Button, RecommendationsButtonsContainer, Icon, Position, TrackInfo, TrackInfoCont, ContainerAlbum, ContainerAlbumImage, ContainerAlbumInfo, Text, TextContainer, NoDataContainer, NoDataInfo, NoDataTitle, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer, AudioFeaturesContainer} from './styled'
+import { TrackImage, TrackName, TrackGenres, Container, ContainerImage, ContainerInfo, ArtistName, RecommendationsContainer, Button, RecommendationsButtonsContainer, Icon, Position, TrackInfo, TrackInfoCont, ContainerAlbum, ContainerAlbumImage, ContainerAlbumInfo, Text, TextContainer, NoDataContainer, NoDataInfo, NoDataTitle, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer, AudioFeaturesContainer, TypeName} from './styled'
 import BarChart from "../../components/BarChart";
 import NavMenu from '../../components/NavMenu'
 import Modal from '../../components/Modal'
@@ -632,6 +632,7 @@ export default function Track() {
                             </TextContainer>
                         </ContainerImage>
                         <ContainerInfo>
+                            <TypeName>Track</TypeName>
                             <TrackName>{track.name}</TrackName> 
                             {!!artistsNames.length > 0 && <ArtistName margin>{artistsNames.join(", ")}</ArtistName>}
                             <RecommendationsButtonsContainer mobileSize>
@@ -649,7 +650,7 @@ export default function Track() {
 
                 {loadingTime ?
                 <Grid colGap={30} rowGap={40}>
-                    <Col desktop={4} tablet={6} mobile={12}>
+                    <Col desktop={4} tablet={4} mobile={12}>
                         <Title size="h4" margin="none">Album</Title>
                         <ContainerAlbum>
                           <ContainerAlbumImage>
@@ -674,11 +675,11 @@ export default function Track() {
                           </Link>
                         </ContainerAlbum>
                     </Col>
-                    <Col desktop={4} tablet={6} mobile={12}>
+                    <Col desktop={4} tablet={4} mobile={12}>
                         <Title size="h4" margin="none">Popularity</Title>
                         {track.popularity && <Position><strong>{track.popularity} / 100</strong></Position>}
                     </Col>
-                    <Col desktop={4} tablet={6} mobile={12}>
+                    <Col desktop={4} tablet={4} mobile={12}>
                         <Title size="h4" margin="none">Lenght</Title>
                         <Position><strong>{trackLength}</strong></Position>
                     </Col>
@@ -691,12 +692,12 @@ export default function Track() {
                   <Title size="h4" margin="data-subtitle">{track.name} appeareances in your tracks ranking</Title>
                   <Grid colGap={30} rowGap={40}>
                       {tracksFourWeeks ?
-                        <Col desktop={4} tablet={6} mobile={12}>
+                        <Col desktop={4} tablet={4} mobile={12}>
                             <Position>#<strong>{tracksFourWeeks}</strong></Position> 
                             <TrackInfo>In your most listened tracks list for the <strong>past 4 weeks</strong>.</TrackInfo>  
                         </Col>
                         : 
-                        <Col desktop={4} tablet={6} mobile={12}>
+                        <Col desktop={4} tablet={4} mobile={12}>
                           <NoDataContainer>
                             <NoDataTitle><strong>:(</strong></NoDataTitle> 
                             <NoDataInfo>Not in your past 4 weeks ranking</NoDataInfo>  
@@ -704,12 +705,12 @@ export default function Track() {
                         </Col>
                       }
                       {tracksSixMonths ?
-                        <Col desktop={4} tablet={6} mobile={12}>
+                        <Col desktop={4} tablet={4} mobile={12}>
                             <Position>#<strong>{tracksSixMonths}</strong></Position>   
                             <TrackInfo>In your most listened tracks list for the <strong>past 6 months</strong>.</TrackInfo>
                         </Col>
                         : 
-                        <Col desktop={4} tablet={6} mobile={12}>
+                        <Col desktop={4} tablet={4} mobile={12}>
                           <NoDataContainer>
                             <NoDataTitle><strong>:(</strong></NoDataTitle> 
                             <NoDataInfo>Not in your past 6 months ranking</NoDataInfo>  
@@ -717,12 +718,12 @@ export default function Track() {
                         </Col>
                       }
                       {tracksSeveralYears ?
-                        <Col desktop={4} tablet={6} mobile={12}>
+                        <Col desktop={4} tablet={4} mobile={12}>
                             <Position>#<strong>{tracksSeveralYears}</strong></Position>   
                             <TrackInfo>In your most listened tracks list for the <strong>past several years</strong>.</TrackInfo>
                         </Col>
                         : 
-                        <Col desktop={4} tablet={6} mobile={12}>
+                        <Col desktop={4} tablet={4} mobile={12}>
                           <NoDataContainer>
                             <NoDataTitle><strong>:(</strong></NoDataTitle> 
                             <NoDataInfo>Not in your lifetime ranking</NoDataInfo>  
@@ -738,7 +739,7 @@ export default function Track() {
                     <AudioFeaturesContainer>
                       <Title size="h3" margin="subtitle">Audio features</Title>
                       <Grid colGap={30} rowGap={40}>
-                          <Col desktop={12} tablet={6} mobile={12}>
+                          <Col desktop={12} tablet={12} mobile={12}>
                               {audioFeatures != '' && <BarChart audioFeatures={audioFeatures} />}
                           </Col>
                       </Grid>
@@ -749,7 +750,7 @@ export default function Track() {
                 {loadingTime ? 
                   <section>
                     <Grid colGap={30} rowGap={40}>
-                        <Col desktop={12} tablet={6} mobile={12}>
+                        <Col desktop={12} tablet={12} mobile={12}>
                           <RecommendationsContainer>
                             <Title size="h3" margin="subtitle">Tracks recommendations</Title>
                             <RecommendationsButtonsContainer>

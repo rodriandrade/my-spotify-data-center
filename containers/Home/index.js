@@ -872,7 +872,7 @@ const Home = props =>{
           <SuperContainer>
 
           <NavContainer>
-            {token && <NavMenu access_token={token} refresh_token={refreshToken} />}
+            {token && <NavMenu access_token={token} refresh_token={refreshToken} />} 
           </NavContainer>
 
           <MasterContainer>
@@ -887,17 +887,14 @@ const Home = props =>{
           {user ? 
             <section id="home_section">
             <Grid colGap={30} rowGap={40}>
-              <Col desktop={12} tablet={6} mobile={12}>
+              <Col desktop={12} tablet={12} mobile={12}>
                 <ContainerHero>
                   <TypingEffect user={user}/>
                   <Text>Welcome to your Spotify Data Center</Text>
-                  <a>
-
                     <ScrollDown>
                       <span></span>
                       <span></span>
                     </ScrollDown>
-                    </a>
                 </ContainerHero>
               </Col>
             </Grid>
@@ -914,13 +911,12 @@ const Home = props =>{
           {user ?
           <section id="artists_section">             
             <Grid colGap={30} rowGap={40}>
-              <Col desktop={6} tablet={6} mobile={12}>
+              <Col desktop={6} tablet={10} mobile={12}>
                   <Title size="extra-large" margin="title">These are your favorites artists</Title>
               </Col>
             </Grid>
             <Grid colGap={30} rowGap={40}>
-              <Col desktop={3} tablet={6} mobile={12}>
-                
+              <Col desktop={3} tablet={4} mobile={12}>
                 <LeftColumn 
                   description={timePeriodArtists}
                   showBy="Show artists by"
@@ -933,7 +929,7 @@ const Home = props =>{
                   type="artists"
                 />
               </Col>
-              <Col desktop={9} tablet={6} mobile={12}>
+              <Col desktop={9} tablet={8} mobile={12}>
                 <Grid colGap={30} rowGap={40}>
                   {artists ? 
                     artists && artists.map((artist, index) => (<ArtistCard key={artist.id} data={artist} index={index} token={token} gridSize={3} refreshToken={refreshToken}/>))
@@ -957,12 +953,12 @@ const Home = props =>{
           {user ?
           <section id="tracks_section">             
             <Grid colGap={30} rowGap={40}>
-              <Col desktop={6} tablet={6} mobile={12}>
+              <Col desktop={6} tablet={10} mobile={12}>
                   <Title size="extra-large" margin="title">These are your favorites tracks</Title>
               </Col>
             </Grid>
             <Grid colGap={30} rowGap={40}>
-              <Col desktop={3} tablet={6} mobile={12}>
+              <Col desktop={3} tablet={4} mobile={12}>
                 <LeftColumn 
                   description={timePeriodTracks}
                   showBy="Show tracks by"
@@ -979,7 +975,7 @@ const Home = props =>{
                   type="tracks"
                 />
               </Col>
-              <Col desktop={9} tablet={6} mobile={12}>
+              <Col desktop={9} tablet={8} mobile={12}>
                 <Grid colGap={30} rowGap={40}>
                   {tracks ? 
                     tracks && tracks.map((track, index) => (<TrackCard key={track.id} data={track} index={index} token={token} refreshToken={refreshToken} gridSize={3} setToken={setToken} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} blink={blink} setBlink={setBlink} activeDevices={activeDevices}/>))
@@ -1002,12 +998,12 @@ const Home = props =>{
           {user ?
           <section id="albums_section">             
             <Grid colGap={30} rowGap={40}>
-              <Col desktop={7} tablet={6} mobile={12}>
+              <Col desktop={7} tablet={10} mobile={12}>
                   <Title size="extra-large" margin="title">These are your favorites albums</Title>
               </Col>
             </Grid>
             <Grid colGap={30} rowGap={40}>
-              <Col desktop={3} tablet={6} mobile={12}>
+              <Col desktop={3} tablet={4} mobile={12}>
                 <LeftColumn 
                     description={timePeriodAlbums}
                     showBy="Show albums by"
@@ -1020,7 +1016,7 @@ const Home = props =>{
                     type="albums"
                   />
               </Col>
-              <Col desktop={9} tablet={6} mobile={12}>
+              <Col desktop={9} tablet={8} mobile={12}>
                 <Grid colGap={30} rowGap={40}>
                   {albums ? 
                     albums.map((album, index) => (<AlbumCard key={album.id} data={album} index={index} token={token} gridSize={3} imageSizeLarge refreshToken={refreshToken} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} setBlink={setBlink} blink={blink} activeDevices={activeDevices} />))
@@ -1043,12 +1039,12 @@ const Home = props =>{
           {user ?
           <section id="genres_section">             
             <Grid colGap={30} rowGap={40}>
-              <Col desktop={7} tablet={6} mobile={12}>
+              <Col desktop={7} tablet={10} mobile={12}>
                   <Title size="extra-large" margin="title">These are your favorites genres</Title>
               </Col>
             </Grid>
             <Grid colGap={30} rowGap={40}>
-              <Col desktop={3} tablet={6} mobile={12}>
+              <Col desktop={3} tablet={4} mobile={12}>
                 <LeftColumn 
                     description={timePeriodGenres}
                     showBy="Show genres by"
@@ -1063,7 +1059,7 @@ const Home = props =>{
                     refreshToken={refreshToken}
                 />
               </Col>
-              <Col desktop={9} tablet={6} mobile={12}>
+              <Col desktop={9} tablet={8} mobile={12}>
                 <Grid colGap={30} rowGap={40}>
                   {genres ?
                     genres && genres.map((genre, index) => (<TopGenresCard key={genre} genre={genre} token={token} index={index} gridSize={3} refreshToken={refreshToken} />))
@@ -1086,12 +1082,12 @@ const Home = props =>{
           {user ?
           <section id="recommendations_section">             
             <Grid colGap={30} rowGap={40}>
-              <Col desktop={6} tablet={6} mobile={12}>
+              <Col desktop={6} tablet={10} mobile={12}>
                   <Title size="extra-large" margin="title">Recommendations</Title>
               </Col>
             </Grid>
             <Grid colGap={30} rowGap={40}>
-              <Col desktop={3} tablet={6} mobile={12}>
+              <Col desktop={3} tablet={4} mobile={12}>
                 <LeftColumn 
                     description={recommendationsDescription}
                     showBy="Show recommendations by"
@@ -1112,7 +1108,7 @@ const Home = props =>{
                     handlerButtonRecommendations={handleRecommendationsTermButton}
                 />
               </Col>
-              <Col desktop={9} tablet={6} mobile={12}>
+              <Col desktop={9} tablet={8} mobile={12}>
                 <Grid colGap={30} rowGap={40}>
                   {recommendations ?
                     recommendations.map((track, index) => (<TrackCard key={track.id} data={track} token={token} gridSize={3} playingRightNow={playingRightNow} setPlayingRightNow={setPlayingRightNow} margin="20px 0 5px 0" blink={blink} setBlink={setBlink} refreshToken={refreshToken} activeDevices={activeDevices}/>))

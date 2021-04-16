@@ -2,6 +2,22 @@ import styled from 'styled-components'
 
 const Container = styled.div`
     display:none;
+
+    @media (max-width: 768px) {
+        display: flex;
+        align-items: center;
+        width:100%;
+        background-color: rgba(5,5,5,0.9);
+        height:100%;
+        position:fixed;
+        top:0;
+        flex-direction: column;
+        justify-content: center;
+        transition: transform 0.3s ease-in-out;
+        transform: ${({ open }) => open ? 'translateX(0)' : 'translateX(-100%)'};
+        z-index:3000;
+        backdrop-filter:blur(20px);
+    }
     
     @media (max-width: 480px) {
         display: flex;
@@ -33,6 +49,21 @@ const List = styled.li`
         text-decoration: underline 1px solid black;
     }
 
+    @media (max-width: 768px) {
+        display:block;
+        text-align:center;
+        padding:20px 0;
+        border-bottom: 1px solid rgb(20, 20, 20);
+        font-size:36px;
+
+        a{
+            color:#fff;
+        }
+
+        :last-child{
+            border-bottom: none
+        }
+    }
 
     @media (max-width: 480px) {
         display:block;
@@ -55,6 +86,14 @@ const List = styled.li`
 
 const MenuContainer = styled.div`
 
+    @media (max-width: 768px) {
+            height:70vh;
+            display:flex;
+            flex-direction:column;
+            justify-content:space-around;
+            align-items:center;
+        }
+
     @media (max-width: 480px) {
         height:70vh;
         display:flex;
@@ -66,6 +105,10 @@ const MenuContainer = styled.div`
 `
 
 const Menu = styled.ul`
+
+    @media (max-width: 768px) {
+        padding:0;
+    }
 
     @media (max-width: 480px) {
         padding:0;

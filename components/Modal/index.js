@@ -7,6 +7,8 @@ import {Grid, Col} from '../../components/Grid/index'
 
 const Modal = props => {
 
+    const [topArtistsNames, setTopArtistsNames] = useState('')
+
     const [topArtists, setTopArtists] = useState('')
     const [firstArtist, setFirstArtist] = useState('')
     const [term, setTerm] = useState('')
@@ -17,7 +19,7 @@ const Modal = props => {
 
     // Artists Names (tracks, albums)
     const [firstArtistsNames, setFirstArtistsNames] = useState('')
-    const [topArtistsNames, setTopArtistsNames] = useState('')
+    
 
     // Images
     const [topArtistsImages, setTopArtistsImages] = useState('')
@@ -79,10 +81,13 @@ const Modal = props => {
                 setTopNames(namesTopArtists)
                 // NAMES
                 const artistsNames = topArtistsFilter.map(track =>{
+                    /*
                     const boca = track.artists.map(artist =>{
                         return artist.name
                     })
                     return boca
+                    */
+                   return track.artists[0].name
                 })
                 setTopArtistsNames(artistsNames)
                 const topArtistNames = firstArtistFilter.map(track =>{

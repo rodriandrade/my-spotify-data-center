@@ -38,6 +38,11 @@ const StyledBurger = styled.button`
     }
   }
 
+  @media (max-width: 768px) {
+      display:flex;
+      z-index: 3001;
+  }
+
   @media (max-width: 480px) {
       display:flex;
       z-index: 3001;
@@ -45,6 +50,16 @@ const StyledBurger = styled.button`
 `;
 
 const MenuContainer = styled.div`
+
+  @media (max-width: 768px) {
+      width:100%;
+      height:60px;
+      position:fixed;
+      top:0;
+      background-color:${({ open }) => open ? 'rgba(5,5,5,0.0)' : 'rgba(5,5,5,0.9)'};
+      z-index:3001;
+      backdrop-filter:blur(20px);
+  }
   @media (max-width: 480px) {
       width:100%;
       height:60px;

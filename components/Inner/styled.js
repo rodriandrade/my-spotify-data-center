@@ -6,6 +6,10 @@ const InnerContainer = styled.div`
     margin: 0 auto;
     //margin-left:200px;
 
+    @media (max-width: 768px) {
+        width:90%;
+    }
+
     @media (max-width: 480px) {
         width:90%;
     }

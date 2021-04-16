@@ -57,6 +57,11 @@ const TrackImage = styled.img`
     cursor: pointer;    
     opacity:1;
 
+    @media (max-width: 768px) {
+        max-height: 100%;
+        max-width:100%;
+    }
+
     @media (max-width: 480px) {
         max-height: 100%;
         max-width:100%;
@@ -84,6 +89,11 @@ const ImageContainer = styled.div`
     margin:0 auto;
     &:hover ${TextContainer} {
         opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+        height:100%;
+        width:100%;
     }
 
     @media (max-width: 480px) {
@@ -116,6 +126,11 @@ const TrackPosition = styled.p`
     left:50%;
     transform: translate(-50%, 25%);
     text-shadow: 0px 0px 11px rgba(0, 0, 0, 1);
+
+    @media (max-width:768px) {
+        transform: translate(-50%, 4%);
+        font-size:48px;
+    }
 
     @media (max-width:480px) {
         transform: translate(-50%, 16%);
@@ -151,6 +166,10 @@ const TrackName = styled.p`
 
     :hover{
         text-decoration: underline 3px solid #47ffbb;
+    }
+
+    @media (max-width:768px) {
+        margin: ${(props) => (props.margin ? props.margin : "30px 0 5px 0")};
     }
 
     @media (max-width: 480px) {

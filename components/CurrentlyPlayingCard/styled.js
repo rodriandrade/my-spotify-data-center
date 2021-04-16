@@ -83,6 +83,12 @@ const Container = styled.div`
         width:92%;
     }
 
+    @media (max-width: 768px) {
+       width:100%;
+       transform:${(props) => (props.showPlayer ? "translate(0%, 0px)" : "translate(0%, 70px)")};
+       justify-content:flex-start;
+    }
+
     @media (max-width: 480px) {
        width:100%;
        transform:${(props) => (props.showPlayer ? "translate(0%, 0px)" : "translate(0%, 70px)")};
@@ -185,6 +191,10 @@ const Cont = styled.div`
     display:flex;
     justify-content:space-between;
     position:relative;
+
+    @media (max-width: 768px) {
+       width:90%;
+    }
 
     @media (max-width: 480px) {
        width:90%;

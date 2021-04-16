@@ -12,6 +12,14 @@ const Container = styled.div`
     background-color:rgba(0,0,0,0.8);
     backdrop-filter:blur(20px);
 
+    @media (max-width: 768px) {
+        width:100%;
+        left:0;
+        z-index:3002;
+        overflow-x:hidden;
+        height:100%;
+    }
+
     @media (max-width: 480px) {
         width:100%;
         left:0;

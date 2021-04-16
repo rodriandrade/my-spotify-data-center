@@ -39,6 +39,10 @@ const ContainerAlbum = styled.div`
     position:sticky;
     top:0;
 
+    @media (max-width: 768px) {
+        top:70px;
+    }
+
     @media (max-width: 480px) {
         padding:0;
 
@@ -104,6 +108,10 @@ const Container = styled.div`
     flex-direction: row;
     padding-top:50px;
 
+    @media (max-width: 768px) {
+        margin:50px 0 10px 0;
+    }
+
     @media (max-width: 480px) {
         flex-direction:column;
         align-items:center;
@@ -125,9 +133,24 @@ const TrackName = styled.h1`
     margin:0;
     position: relative;
 
+    @media (max-width: 768px) {
+        font-size:36px;
+        text-align:center;
+    }
+
     @media (max-width: 480px) {
         font-size:36px;
     }
+`
+
+const TypeName = styled.p`
+    font-size: 14px;
+    color: rgb(100,100,100);
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform:uppercase;
+    position:relative;
+    margin:0;
 `
 
 const RecommendationsButtonsContainer = styled.div`
@@ -190,6 +213,12 @@ const ArtistName = styled.p`
     margin:0;
     position: relative;
 
+    @media (max-width: 768px) {
+        font-size:16px;
+        margin: 10px 0;
+        color: #47ffbb;
+    }
+
     @media (max-width: 480px) {
         font-size:16px;
         margin: 10px 0;
@@ -244,6 +273,11 @@ const LoadingContainerSection = styled.div`
     justify-content:center;
     flex-direction:column;
 `
+const SuperContainer = styled.div`
+    width:100%;
+    display:flex;
+    flex-direction:row;
+`
 
 const MasterContainer = styled.div`
     width:94%;
@@ -255,21 +289,13 @@ const MasterContainer = styled.div`
         width:92%;
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 768px) {
         width:100%;
     }
 
-    /*
-    @media (max-width: 1440px) {
-        width:92%;
+    @media (max-width: 480px) {
+        width:100%;
     }
-    */
-`
-
-const SuperContainer = styled.div`
-    width:100%;
-    display:flex;
-    flex-direction:row;
 `
 
 const NavContainer = styled.div`
@@ -281,15 +307,13 @@ const NavContainer = styled.div`
         width:8%;
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 768px) {
         display:none;
     }
 
-    /*
-    @media (max-width: 1440px) {
-        width:8%;
+    @media (max-width: 480px) {
+        display:none;
     }
-    */
 `
 
 const TracklistContainer = styled.div`
@@ -308,4 +332,4 @@ const TracklistContainer = styled.div`
     }
 `
 
-export {ContainerAlbum, Subtitle, AlbumInfo, ContainerInfo, ContainerImage, ContainerAlbumName, Button, TrackImage, RecommendationsButtonsContainer, TrackName, Container, ArtistName, Icon, Text, TextContainer, RecommendationsContainer, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer, TracklistContainer}
+export {ContainerAlbum, Subtitle, AlbumInfo, ContainerInfo, ContainerImage, ContainerAlbumName, Button, TrackImage, RecommendationsButtonsContainer, TrackName, Container, ArtistName, Icon, Text, TextContainer, RecommendationsContainer, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer, TracklistContainer, TypeName}

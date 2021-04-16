@@ -5,7 +5,7 @@ import TrackCard from '../../components/trackCard'
 import {Grid, Col} from '../../components/Grid'
 import Title from '../../components/Title'
 import Inner from '../../components/Inner'
-import {ContainerAlbum, Subtitle, AlbumInfo, ContainerInfo, ContainerImage, ContainerAlbumName, Button, TrackImage, RecommendationsButtonsContainer, TrackName, Container, ArtistName, Icon, TextContainer, Text, RecommendationsContainer, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer, TracklistContainer} from './styled'
+import {ContainerAlbum, Subtitle, AlbumInfo, ContainerInfo, ContainerImage, ContainerAlbumName, Button, TrackImage, RecommendationsButtonsContainer, TrackName, Container, ArtistName, Icon, TextContainer, Text, RecommendationsContainer, LoadingImage, LoadingText, LoadingContainer, LoadingContainerSection, MasterContainer, SuperContainer, NavContainer, TracklistContainer, TypeName} from './styled'
 import BarChart from "../../components/BarChart";
 import NavMenu from '../../components/NavMenu'
 import Modal from '../../components/Modal'
@@ -589,6 +589,7 @@ export default function Album() {
                       </a>
                     </ContainerImage>
                     <ContainerAlbumName>
+                      <TypeName>Album</TypeName>
                       <TrackName>{album.name}</TrackName>
                       <ArtistName>{artistName.join(", ")}</ArtistName>
                       <RecommendationsButtonsContainer mobileSize>
@@ -612,7 +613,7 @@ export default function Album() {
               {loadingTime ? (
                 <section>
                   <Grid colGap={30} rowGap={40}>
-                    <Col desktop={2} tablet={6} mobile={12}>
+                    <Col desktop={2} tablet={3} mobile={12}>
                       <ContainerAlbum>
                         <ContainerInfo>
                           <Subtitle>Type</Subtitle>
@@ -637,7 +638,7 @@ export default function Album() {
                         </ContainerInfo>
                       </ContainerAlbum>
                     </Col>
-                    <Col desktop={10} tablet={6} mobile={12}>
+                    <Col desktop={10} tablet={9} mobile={12}>
                       <TracklistContainer>
                         {tracks &&
                           tracks.map((track) => (
@@ -661,7 +662,7 @@ export default function Album() {
               {loadingTime ? (
                 <section>
                   <Grid colGap={30} rowGap={40}>
-                    <Col desktop={12} tablet={6} mobile={12}>
+                    <Col desktop={12} tablet={12} mobile={12}>
                       <RecommendationsContainer>
                         <Title size="h3" margin="subtitle">
                           Albums recommendations

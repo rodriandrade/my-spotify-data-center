@@ -3,6 +3,10 @@ import styled from "styled-components";
 const ChartContainer = styled.div`
     height: 400px;
     margin-bottom: 0px;
+
+    @media (max-width: 768px) {
+        width:100%;
+    }
 `
 
 const BarDescription = styled.div`

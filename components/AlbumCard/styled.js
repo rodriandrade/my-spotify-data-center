@@ -16,6 +16,11 @@ const TrackImage = styled.img`
     cursor: pointer;    
     opacity:1;
 
+    @media (max-width: 768px) {
+        max-height: 100%;
+        max-width:100%;
+    }
+
     @media (max-width: 480px) {
         max-height: 100%;
         max-width:100%;
@@ -74,6 +79,11 @@ const ImageContainer = styled.div`
         opacity: 1;
     }
 
+    @media (max-width: 768px) {
+        width:100%;
+        height:170px;
+    }
+
     @media (max-width: 480px) {
         width:100%;
     }
@@ -91,6 +101,10 @@ const TrackPosition = styled.p`
     left:50%;
     transform: translate(-50%, 25%);
     text-shadow: 0px 0px 11px rgba(0, 0, 0, 1);
+
+    @media (max-width:768px) {
+        transform: translate(-50%, -28%);
+    }
 
     @media (max-width:480px) {
         transform: translate(-50%, 10%);
@@ -122,6 +136,10 @@ const TrackName = styled.p`
 
     :hover{
         text-decoration: underline 3px solid #47ffbb;
+    }
+
+    @media (max-width: 768px) {
+        margin:0 0 5px 0;
     }
 
     @media (max-width: 480px) {
