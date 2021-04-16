@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router'
+import Head from 'next/head'
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import ArtistCard from '../../components/artistCard'
@@ -444,6 +445,10 @@ export default function Artist() {
     return (
         <div>
             
+            <Head>
+                <title>My Spotify Data Center</title>
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
             <ParticlesBackground />
 
             <div id="background"></div>
