@@ -24,8 +24,14 @@ const ArtistImage = styled.img`
    border-radius:200px;
 
    @media (max-width: 480px) {
-        max-height: 100%;
-        max-width:100%;
+        min-height: 100%;
+        min-width: 100%;
+        border-radius: unset;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index:0;
     }
 
 `
@@ -43,6 +49,9 @@ const ArtistPosition = styled.p`
     transform: translate(-50%, 25%);
     text-shadow: 0px 0px 11px rgba(0, 0, 0, 1);
 
+    @media (max-width: 480px) {
+        transform: translate(-50%,11%);
+    }
 /*
     ::after{
         content: "";
@@ -90,8 +99,10 @@ const ImageContainer = styled.div`
     margin:0 auto;
     //background-color:yellow;
     @media (max-width: 480px) {
-        height:100%;
-        width:100%;
+        height: 150px;
+        width: 150px;
+        border-radius: 100%;
+        position: relative;
     }
 `
 

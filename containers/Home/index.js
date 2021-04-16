@@ -858,14 +858,14 @@ const Home = props =>{
 
       return (
         
-        <div>
+        <div id="try">
           
           <Head>
             <title>My Spotify Data Center</title>
             <link rel="icon" href="/favicon.ico" />
           </Head>
           <ParticlesBackground />
-
+          <div id="background"></div>
           <SuperContainer>
 
           <NavContainer>
@@ -1138,6 +1138,9 @@ const Home = props =>{
           </MasterContainer>
           
           </SuperContainer>
+
+          
+
         </div>
       )
 }

@@ -118,6 +118,10 @@ const TrackPosition = styled.p`
     text-shadow: 0px 0px 11px rgba(0, 0, 0, 1);
 
     @media (max-width:480px) {
+        transform: translate(-50%, 16%);
+    }
+
+    @media (max-width:375px) {
         transform: translate(-50%, 10%);
     }
 
