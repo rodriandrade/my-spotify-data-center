@@ -25,7 +25,7 @@ export default function Track() {
 
     ////////// STATES //////////
 
-    const [playing, setPlaying] = useState([]);
+    const [playing, setPlaying] = useState('');
     const [open, setOpen] = useState(false)
 
     // State información a mostrar: track, audioFeatures y recommendations
@@ -108,6 +108,7 @@ export default function Track() {
                 const devices = responseUserDevices.data.devices;
                 if(devices.length == 0){
                     setActiveDevices(false)
+                    setPlaying('')
                 } else{
                     setActiveDevices(true)
                 }
@@ -582,6 +583,9 @@ export default function Track() {
         <div>
            
            <ParticlesBackground />
+
+           <div id="background"></div>
+
            <SuperContainer>
 
             <NavContainer>

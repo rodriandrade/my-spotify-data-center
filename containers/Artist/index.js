@@ -38,7 +38,7 @@ export default function Artist() {
     const [tracksSixMonths, setTracksSixMonths] = useState('');
     const [tracksSeveralYears, setTracksSeveralYears] = useState('');
 
-    const [playing, setPlaying] = useState([]);
+    const [playing, setPlaying] = useState('')
     const [playingData, setPlayingData] = useState([]);
     const [playingRightNow, setPlayingRightNow] = useState([]);
     const [blink, setBlink] = useState(false)
@@ -445,6 +445,8 @@ export default function Artist() {
         <div>
             
             <ParticlesBackground />
+
+            <div id="background"></div>
 
             <SuperContainer>
 

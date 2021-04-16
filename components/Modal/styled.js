@@ -182,7 +182,7 @@ const MainArtistImage = styled.img`
 `
 
 const MainArtistName = styled.h2`
-    font-size:${(props) => (props.track ? "20px" : "26px")};
+    font-size:${(props) => (props.track ? "20px" : "20px")};
     color: ${(props) => (props.track ? "rgba(100,100,100,1)" : "#fff")};
     margin:0;
     margin-top:${(props) => (props.track ? "5px" : "40px")};

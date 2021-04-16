@@ -25,6 +25,8 @@ export default function Album() {
     const refresh_token = router.query.refreshToken;
     const id = router.query.id;
 
+    const [playing, setPlaying] = useState('');
+    const [activeDevices, setActiveDevices] = useState('');
     const [open, setOpen] = useState(false)
     
     // Album
@@ -38,7 +40,7 @@ export default function Album() {
     const [save, setSave] = useState()
 
     // Play track from album
-    const [activeDevices, setActiveDevices] = useState('');
+    
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
     // Get new token
@@ -53,7 +55,7 @@ export default function Album() {
     const [newRec, setNewRec] = useState(false);
 
     // Player
-    const [playing, setPlaying] = useState([]);
+    
     const [playingData, setPlayingData] = useState([]);
     const [playingRightNow, setPlayingRightNow] = useState([]);
     const [playingStatus, setPlayingStatus] = useState([]);
@@ -541,6 +543,8 @@ export default function Album() {
       <div>
         
         <ParticlesBackground />
+
+        <div id="background"></div>
 
         <SuperContainer>
         

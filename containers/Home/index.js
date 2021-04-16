@@ -713,6 +713,7 @@ const Home = props =>{
               }
             });
             const devices = responseUserDevices.data.devices;
+            console.log(devices)
             if(devices.length == 0){
                 setActiveDevices(false)
                 setPlaying('')
@@ -865,7 +866,9 @@ const Home = props =>{
             <link rel="icon" href="/favicon.ico" />
           </Head>
           <ParticlesBackground />
+          
           <div id="background"></div>
+          
           <SuperContainer>
 
           <NavContainer>
