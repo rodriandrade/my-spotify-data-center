@@ -232,7 +232,7 @@ const Modal = props => {
                             <Col desktop={9} tablet={6} mobile={12}>
                                 <CloseButton src="/cancel.svg" onClick={ () => props.setModalIsOpen(!props.modalIsOpen)} />
                                 <DataTitleContainer id="content-to-be-copied">
-                                    {term && <DataImageTitle>My top {props.type} {term}</DataImageTitle>}
+                                    {term && <DataImageTitle>My top {props.type} - {term.charAt(0).toUpperCase() + term.slice(1)}</DataImageTitle>}
                                     <DataImageContainer>
 
                                         {genres ? 
@@ -299,7 +299,7 @@ const Modal = props => {
                                             </ArtistCard>      
                                         </OtherArtistsContainer>
                                     </DataImageContainer>
-                                    <DataImageFooterText>Data from My Spotify Data Center</DataImageFooterText>
+                                    <DataImageFooterText>Data from www.my-spotify-data-center.vercel.app</DataImageFooterText>
                                 </DataTitleContainer>
                             </Col>
                             <Col desktop={3} tablet={6} mobile={12}>

@@ -32,7 +32,7 @@ const TitleText = styled.h1`
             case "subtitle":
               return "90px 0 60px 0";
             case "bigger-subtitle":
-              return "120px 0 20px 0";
+              return "90px 0 20px 0";
             case "data-subtitle":
               return "60px 0 0 0";
             case "title":

@@ -241,15 +241,18 @@ const ArtistCardImageContainer = styled.div`
     max-height:62px;
     max-width:62px;
     //overflow:hidden;
-    border-radius:${(props) => (props.track ? "0" : "62px")};
+    border-radius:${(props) => (props.track ? "0" : "100%")};
     margin:0 20px;
+    overflow:hidden;
 `
 
 const ArtistCardImage = styled.img`
-    max-height: 62px;
+    height: 100%;
     max-width:62px;
-    border-radius:${(props) => (props.track ? "0" : "62px")};
+    max-height:62px;
+   // border-radius:${(props) => (props.track ? "0" : "62px")};
 `
+
 
 const ArtistCardName = styled.h2`
     font-size:${(props) => (props.track ? "14px" : "18px")};
@@ -266,8 +269,8 @@ const ArtistCardPosition = styled.h2`
 `
 
 const DataImageFooterText = styled.p`
-    font-size:16px;
-    color: #fff;
+    font-size:14px;
+    color: rgb(62,62,62);
     text-align:center;
 `
 
